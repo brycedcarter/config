@@ -1,0 +1,4 @@
+vimrc
+zshrc
+warprc
+gitconfig
