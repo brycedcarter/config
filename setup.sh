@@ -18,3 +18,6 @@ git pull
 else
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $DIR/oh-my-zsh/custom/plugins/zsh-syntax-highlighting
 fi
+
+brew tap caskroom/fonts
+brew cask install font-hack-nerd-font
