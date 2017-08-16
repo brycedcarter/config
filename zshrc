@@ -4,8 +4,10 @@ export ZSH=~/.oh-my-zsh
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
 ZSH_THEME="powerlevel9k/powerlevel9k"
-POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(dir rbenv vcs)
+POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(dir dir_writable rbenv vcs)
 POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status root_indicator background_jobs history time)
+POWERLEVEL9K_SHORTEN_DIR_LENGTH=1
+POWERLEVEL9K_SHORTEN_DELIMITER=""
 
 # autocomplete will treat hythens and underscores the same
 HYPHEN_INSENSITIVE="true"
@@ -33,3 +35,8 @@ source ~/config/source_sub_zsh_configs.sh
 # Aliases for starting and stopping dhcp server on mac
 alias dhcp-start='sudo /bin/launchctl load -w /System/Library/LaunchDaemons/bootps.plist'
 alias dhcp-stop='sudo /bin/launchctl unload -w /System/Library/LaunchDaemons/bootps.plist'
+
+# shorthand for finding text in files in current dir
+function myfind() {
+       find . -name \* -print0 | xargs -0 grep --color -n "$1"
+}
