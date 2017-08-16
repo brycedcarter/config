@@ -1,7 +1,7 @@
 # this script is responsible for sourcing sub zsh configs
 
 
-declare -a sub_zshrc=('~/config-work/zshrc.sub' '~/vm-zshrc.sub');
+declare -a sub_zshrc=("$HOME/config-work/zshrc.sub" "$HOME/vm-zshrc.sub");
 for filename in "${sub_zshrc[@]}"
 do
 if [ -f $filename ]; then
