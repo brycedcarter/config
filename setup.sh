@@ -19,5 +19,14 @@ else
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $DIR/oh-my-zsh/custom/plugins/zsh-syntax-highlighting
 fi
 
+
+if git -C ~/.vim/bundle/Vundle.vim;
+then
+cd ~/.vim/bundle/Vundle.vim
+git pull
+else
+git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+fi
+
 brew tap caskroom/fonts
 brew cask install font-hack-nerd-font
