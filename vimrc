@@ -32,7 +32,7 @@ set hlsearch
 set incsearch
 set backspace=2
 inoremap jk <esc>
-colorscheme onedark
+colorscheme brycedcarter
 syntax enable
 set clipboard=unnamed
 let mapleader=","

@@ -20,13 +20,17 @@ git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $DIR/oh-my-zs
 fi
 
 
-if git -C ~/.vim/bundle/Vundle.vim;
+if git -C ~/.vim/bundle/Vundle.vim rev-parse;
 then
 cd ~/.vim/bundle/Vundle.vim
 git pull
 else
 git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 fi
+
+
+# install the vim theme
+ln -f -s $DIR/vim/colors/brycedcarter.vim ~/.vim/colors/brycedcarter.vim
 
 brew tap caskroom/fonts
 brew cask install font-hack-nerd-font
