@@ -2,3 +2,4 @@ vimrc
 zshrc
 warprc
 gitconfig
+editorconfig
