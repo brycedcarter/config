@@ -1,59 +1,120 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 current_time=$(date "+%Y.%m.%d-%H.%M.%S")
 
-# check that vim is installed
-if ! command -v vim;
+# determine some info about the run envrionment and the arguments
+CONFIGURE_VIM=false
+CONFIGURE_ZSH=false
+
+if [ $# -eq 0 ];
 then
-	echo "Please install vim and rerun the setup script"
-	exit
+     CONFIGURE_VIM=true
+     CONFIGURE_ZSH=true
+fi 
+while test $# != 0
+do
+    case "$1" in
+    -v) CONFIGURE_VIM=true ;;
+    -z) CONFIGURE_ZSH=true ;;
+    -vz|-zv) CONFIGURE_VIM=true 
+             CONFIGURE_ZSH=true ;;
+    *) echo "Unknown arument: $1";;
+    esac
+    shift
+  done
+
+echo "Configure VIM: $CONFIGURE_VIM"
+echo "Configure ZSH: $CONFIGURE_ZSH"
+
+unameOut="$(uname -s)"
+case "${unameOut}" in
+    Linux*)     MACHINE_TYPE=Linux;;
+    Darwin*)    MACHINE_TYPE=Mac;;
+    CYGWIN*)    MACHINE_TYPE=Cygwin;;
+    MINGW*)     MACHINE_TYPE=MinGw;;
+    *)          MACHINE_TYPE="UNKNOWN:${unameOut}"
+esac
+echo "Running on: $MACHINE_TYPE"
+
+  
+# check that vim is installed
+if $CONFIGURE_VIM;
+then
+  if ! command -v vim;
+  then
+    echo "Please install vim and rerun the setup script"
+    exit
+  fi
 fi
 
 # check that zsh is installed
-if ! command -v zsh;
-then
-	echo "Please install zsh and rerun the setup script"
-	exit
+if $CONFIGURE_ZSH;
+  then
+  if ! command -v zsh;
+  then
+    echo "Please install zsh and rerun the setup script"
+    exit
+  fi
 fi
 
-if command -v wget;
+# ========================== PERFORM ACTIONS ====================================
+
+if $CONFIGURE_ZSH;
 then
-	sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
-elif command -v curl;
-then
-	sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+  # use whichever internet fetching command is availble to get and in stall oh-my-zsh
+  if command -v wget;
+  then
+	  sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
+  elif command -v curl;
+  then
+	  sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+  fi
 fi
 
 cd ~
 mkdir -p config-backups
 
+# back up existing config files and replace them with links to the config repo files
 while read filename;
 do 
 	echo "Backing up and linking $filename"
-	cp -L .$filename config-backups/$filename-$current_time
+  backup_filename="$filename-$current_time"
+	cp -L .$filename config-backups/$backup_filename
 	ln -fs config/$filename ./.$filename
+  ln -fs config-backups/$backup_filename config-backups/$filename-latest
 done < $DIR/managed_files.txt
 
-if git -C $DIR/oh-my-zsh/custom/plugins/zsh-syntax-highlighting rev-parse;
+use_repo()
+{
+  repo_url=$1
+  repo_location=$2
+
+  if git -C $repo_location rev-parse;
+  then
+    cd $repo_location 
+    git pull
+  else
+    git clone $repo_url $repo_location 
+  fi
+}
+
+
+
+
+if $CONFIGURE_ZSH;
 then
-cd $DIR/oh-my-zsh/custom/plugins/zsh-syntax-highlighting
-git pull
-else
-git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $DIR/oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+  # install zsh syntax highlighting
+  use_repo https://github.com/zsh-users/zsh-syntax-highlighting.git $DIR/oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+
+  # install the vim theme
+  mkdir ~/.vim/colors
+  ln -f -s $DIR/vim/colors/brycedcarter.vim ~/.vim/colors/brycedcarter.vim
 fi
 
-
-if git -C ~/.vim/bundle/Vundle.vim rev-parse;
+if $CONFIGURE_VIM;
 then
-cd ~/.vim/bundle/Vundle.vim
-git pull
-else
-git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+  # Install bundle
+  use_repo https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 fi
 
-
-# install the vim theme
-mkdir ~/.vim/colors
-ln -f -s $DIR/vim/colors/brycedcarter.vim ~/.vim/colors/brycedcarter.vim
-
-brew tap caskroom/fonts
-brew cask install font-hack-nerd-font
+use_repo git@github.com:ryanoasis/nerd-fonts.git $DIR/fonts/nerd-fonts
+bash $DIR/fonts/nerd-fonts/install.sh Hack
