@@ -35,7 +35,8 @@ case "${unameOut}" in
 esac
 echo "Running on: $MACHINE_TYPE"
 
-  
+# ========================= PERFORM PRE-RUN ACTIONS =========================== 
+
 # check that vim is installed
 if $CONFIGURE_VIM;
 then
@@ -60,13 +61,16 @@ fi
 
 if $CONFIGURE_ZSH;
 then
-  # use whichever internet fetching command is availble to get and in stall oh-my-zsh
-  if command -v wget;
-  then
-	  sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
-  elif command -v curl;
-  then
-	  sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+  if [ ! -d "~/.oh-my-zsh" ]; then
+
+    # use whichever internet fetching command is availble to get and install oh-my-zsh
+    if command -v wget;
+    then
+      sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
+    elif command -v curl;
+    then
+      sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+    fi
   fi
 fi
 
@@ -104,16 +108,16 @@ if $CONFIGURE_ZSH;
 then
   # install zsh syntax highlighting
   use_repo https://github.com/zsh-users/zsh-syntax-highlighting.git $DIR/oh-my-zsh/custom/plugins/zsh-syntax-highlighting
-
-  # install the vim theme
-  mkdir ~/.vim/colors
-  ln -f -s $DIR/vim/colors/brycedcarter.vim ~/.vim/colors/brycedcarter.vim
 fi
 
 if $CONFIGURE_VIM;
 then
   # Install bundle
   use_repo https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+
+  # install the vim theme
+  mkdir ~/.vim/colors
+  ln -f -s $DIR/vim/colors/brycedcarter.vim ~/.vim/colors/brycedcarter.vim
 fi
 
 use_repo git@github.com:ryanoasis/nerd-fonts.git $DIR/fonts/nerd-fonts
