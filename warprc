@@ -3,3 +3,4 @@ p:~/personal
 config:~/config
 at:~/zoox/driving/scripts/ansible/roles/toad
 t:~/zoox/toad
+d:~/zoox/driving

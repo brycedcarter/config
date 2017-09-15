@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>bootp_enabled</key>
+	<false/>
+	<key>detect_other_dhcp_server</key>
+	<false/>
+	<key>dhcp_enabled</key>
+	<false/>
+	<key>dhcp_ignore_client_identifier</key>
+	<true/>
+	<key>use_server_config_for_dhcp_options</key>
+	<false/>
+</dict>
+</plist>

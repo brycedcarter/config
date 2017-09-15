@@ -83,8 +83,35 @@ source ~/config/source_sub_zsh_configs.sh
 # =======================================================================================
 
 # Aliases for starting and stopping dhcp server on mac
-alias dhcp-start='sudo /bin/launchctl load -w /System/Library/LaunchDaemons/bootps.plist'
-alias dhcp-stop='sudo /bin/launchctl unload -w /System/Library/LaunchDaemons/bootps.plist'
+function dhcp-start() {
+  if [ -z "$1" -o -z "$2" ]; then
+    echo "Usage: $1 [interface] [subnet]"
+  else
+
+  sudo ipconfig set "$1" INFORM "192.168.$2.1"
+  sed -e "s/\${interface}/$1/g" -e "s/\${subnet}/$2/g" ~/config/bootpd.plist.on | sudo tee /etc/bootpd.plist > /dev/null
+  
+  sudo /bin/launchctl unload -w /System/Library/LaunchDaemons/bootps.plist
+  sudo /bin/launchctl load -w /System/Library/LaunchDaemons/bootps.plist
+  fi
+
+}
+
+function dhcp-stop() {
+  if [ -z "$1" ]; then
+    echo "Usage: $1 [interface]"
+  else
+
+  sudo ipconfig set "$1" DHCP
+
+  sudo cp ~/config/bootpd.plist.off /etc/bootpd.plist
+
+  sudo /bin/launchctl unload -w /System/Library/LaunchDaemons/bootps.plist
+  fi
+}
+
+#alias dhcp-start='sudo /bin/launchctl load -w /System/Library/LaunchDaemons/bootps.plist'
+#alias dhcp-stop='sudo /bin/launchctl unload -w /System/Library/LaunchDaemons/bootps.plist'
 
 # shorthand for finding text in files in current dir
 function myfind() {
