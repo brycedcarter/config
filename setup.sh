@@ -91,14 +91,16 @@ use_repo()
 {
   repo_url=$1
   repo_location=$2
-
-  if git -C $repo_location rev-parse;
-  then
-    cd $repo_location 
-    git pull
-  else
-    git clone $repo_url $repo_location 
+  if [ -d $repo_location ]
+  then 
+    if git -C $repo_location rev-parse;
+    then
+      cd $repo_location 
+      git pull
+      return
+    fi
   fi
+  git clone $repo_url $repo_location 
 }
 
 
@@ -116,9 +118,12 @@ then
   use_repo https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 
   # install the vim theme
-  mkdir ~/.vim/colors
+  if [ ! -d ~/.vim/colors ]
+  then
+    mkdir ~/.vim/colors
+  fi
   ln -f -s $DIR/vim/colors/brycedcarter.vim ~/.vim/colors/brycedcarter.vim
 fi
 
-use_repo git@github.com:ryanoasis/nerd-fonts.git $DIR/fonts/nerd-fonts
+use_repo https://github.com/ryanoasis/nerd-fonts.git $DIR/fonts/nerd-fonts
 bash $DIR/fonts/nerd-fonts/install.sh Hack
