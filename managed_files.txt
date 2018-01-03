@@ -3,3 +3,4 @@ zshrc
 warprc
 gitconfig
 editorconfig
+bashrc

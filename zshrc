@@ -1,3 +1,9 @@
+######################################################################################
+################ MANAGED FILE ########################################################
+######################################################################################
+# This file should not be edited except in its original location of ~/config/zshrc
+######################################################################################
+
 LANG="en_US.UTF-8"
 LC_COLLATE="en_US.UTF-8"
 LC_CTYPE="en_US.UTF-8"
@@ -112,9 +118,11 @@ function dhcp-stop() {
 
 #alias dhcp-start='sudo /bin/launchctl load -w /System/Library/LaunchDaemons/bootps.plist'
 #alias dhcp-stop='sudo /bin/launchctl unload -w /System/Library/LaunchDaemons/bootps.plist'
+alias git='~/config/custom_git.sh'
 
 # shorthand for finding text in files in current dir
 function myfind() {
        find . -name \* -print0 | xargs -0 grep --color -n "$1"
 }
 
+source ~/driving/scripts/shell/zooxrc.sh
