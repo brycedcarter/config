@@ -127,3 +127,5 @@ fi
 
 use_repo https://github.com/ryanoasis/nerd-fonts.git $DIR/fonts/nerd-fonts
 bash $DIR/fonts/nerd-fonts/install.sh Hack
+
+mkdir ~/config/tmp

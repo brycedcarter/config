@@ -1,4 +1,4 @@
 *.swp
 oh-my-zsh/custom/plugins/zsh-syntax-highlighting/
 fonts/nerd-fonts/
-
+tmp/
