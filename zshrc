@@ -3,6 +3,7 @@
 ######################################################################################
 # This file should not be edited except in its original location of ~/config/zshrc
 ######################################################################################
+export TERM="xterm-256color"
 
 LANG="en_US.UTF-8"
 LC_COLLATE="en_US.UTF-8"
@@ -125,4 +126,7 @@ function myfind() {
        find . -name \* -print0 | xargs -0 grep --color -n "$1"
 }
 
-source ~/driving/scripts/shell/zooxrc.sh
+if [ -f ~/driving/scripts/zooxrc.sh ]; then
+	source ~/driving/scripts/shell/zooxrc.sh
+fi
+
