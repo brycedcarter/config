@@ -117,6 +117,21 @@ function dhcp-stop() {
   fi
 }
 
+# ssh-agent config
+if [ -z "$(pgrep ssh-agent)" ]; then
+  rm -rf /tmp/ssh-*
+  eval $(ssh-agent -s) > /dev/null
+else
+  export SSH_AGENT_PID=$(pgrep ssh-agent)
+  export SSH_AUTH_SOCK=$(find /tmp/ssh-* -name 'agent.*')
+fi
+
+
+
+if [ "$(ssh-add -l)" = "The agent has no identities." ]; then
+  ssh-add
+fi
+
 #alias dhcp-start='sudo /bin/launchctl load -w /System/Library/LaunchDaemons/bootps.plist'
 #alias dhcp-stop='sudo /bin/launchctl unload -w /System/Library/LaunchDaemons/bootps.plist'
 alias git='~/config/custom_git.sh'
