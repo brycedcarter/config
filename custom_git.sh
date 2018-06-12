@@ -34,7 +34,10 @@ then
   fi
 elif [ -t 1 ];
 then 
-  echo "Using forwarded ssh key"
+  if [[ $1 =~ ^(fetch|pull|push|remote|submodule|daemon|update-server-info)$ ]];
+  then
+    echo "Using agent ssh key"
+  fi
 fi
 
 git "$@"
