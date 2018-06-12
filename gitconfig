@@ -10,6 +10,9 @@
 	name = Bryce Carter
 [core]
 	excludesfile = /Users/bryce/.gitignore_global
+	autocrlf = true
+	fscache = true
+	preloadindex = true
 [difftool "sourcetree"]
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
 	path = 
