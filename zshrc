@@ -30,6 +30,10 @@ POWERLEVEL9K_FOLDER_ICON=""
 #POWERLEVEL9K_HOME_SUB_ICON="%F{black} $(print $'\uE0B1') %F{black}" 
 #POWERLEVEL9K_DIR_PATH_SEPARATOR="%F{black} $(print $'\uE0B1') %F{black}"
 
+
+# this is a workaround for super slow "git stash list" command found here: https://github.com/bhilburn/powerlevel9k/issues/323
+#POWERLEVEL9K_VCS_GIT_HOOKS=(git-tagname vcs-detect-changes git-untracked git-aheadbehind git-remotebranch)
+
 POWERLEVEL9K_COMMAND_EXECUTION_TIME_THRESHOLD=0
 
 POWERLEVEL9K_DIR_OMIT_FIRST_CHARACTER=true
