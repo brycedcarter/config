@@ -125,7 +125,7 @@ then
   ln -f -s $DIR/vim/colors/brycedcarter.vim ~/.vim/colors/brycedcarter.vim
 fi
 
-use_repo https://github.com/ryanoasis/nerd-fonts.git $DIR/fonts/nerd-fonts
-bash $DIR/fonts/nerd-fonts/install.sh Hack
+wget https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/DejaVuSansMono/Regular/complete/DejaVu%20Sans%20Mono%20Nerd%20Font%20Complete%20Mono.ttf
+sudo cp "DejaVu Sans Mono Nerd Font Complete Mono.ttf" /usr/share/fonts/truetype
 
 mkdir ~/config/tmp
