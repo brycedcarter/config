@@ -10,7 +10,7 @@
 	name = Bryce Carter
 [core]
 	excludesfile = /Users/bryce/.gitignore_global
-	autocrlf = true
+	autocrlf = input
 	fscache = true
 	preloadindex = true
 [difftool "sourcetree"]
