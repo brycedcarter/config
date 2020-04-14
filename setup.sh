@@ -1,3 +1,4 @@
+#!/bin/bash
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 current_time=$(date "+%Y.%m.%d-%H.%M.%S")
 

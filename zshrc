@@ -149,3 +149,5 @@ if [ -f ~/driving/scripts/zooxrc.sh ]; then
 	source ~/driving/scripts/shell/zooxrc.sh
 fi
 
+bindkey '\e[A' history-beginning-search-backward 
+bindkey '\e[B' history-beginning-search-forward
