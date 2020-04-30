@@ -9,6 +9,7 @@
 "
 " <leader> = <space>
 "
+" exit edit mode: jk 
 " toggle comment: <leader>ci
 " tiggle folding: <leader><space>
 " get docs for function <leader>d
@@ -92,13 +93,13 @@ let NERDTreeIgnore=['\.pyc$', '\~$']
 
 " add pep8 support for .py files
 au BufNewFile,BufRead *.py
-    set tabstop=4
-    set softtabstop=4
-    set shiftwidth=4
-    set textwidth=79
-    set expandtab
-    set autoindent
-    set fileformat=unix
+      \ set tabstop=4 |
+      \ set softtabstop=4 |
+      \ set shiftwidth=4 |
+      \ set textwidth=79 |
+      \ set expandtab |
+      \ set autoindent |
+      \ set fileformat=unix |
 
 " better pane navigation
 nnoremap <C-J> <C-W><C-J>
