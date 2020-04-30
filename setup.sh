@@ -35,27 +35,26 @@ case "${unameOut}" in
     *)          MACHINE_TYPE="UNKNOWN:${unameOut}"
 esac
 echo "Running on: $MACHINE_TYPE"
-
 # ========================= PERFORM PRE-RUN ACTIONS =========================== 
 
 # check that vim is installed
 if $CONFIGURE_VIM;
 then
-  if ! command -v vim;
-  then
-    echo "Please install vim and rerun the setup script"
-    exit
-  fi
+    case $MACHINE_TYPE in
+      Linux) sudo apt-get install build-essentials cmake python3-dev python-dev vim;;
+      Mac) sudo brew install cmake macvim python;;
+      *) echo "Platform unsupported. Please manualy install the following and re-run this script: compiler toochain, cmake, pyhton dev symbols, vim"; exit ;;
+    esac
 fi
 
 # check that zsh is installed
 if $CONFIGURE_ZSH;
   then
-  if ! command -v zsh;
-  then
-    echo "Please install zsh and rerun the setup script"
-    exit
-  fi
+    case $MACHINE_TYPE in
+      Linux) sudo apt-get install zsh;;
+      Mac) sudo brew install zsh;;
+      *) echo "Platform unsupported. Please manualy install the following and re-run this script: zsh"; exit ;;
+    esac
 fi
 
 # ========================== PERFORM ACTIONS ====================================
@@ -73,6 +72,13 @@ then
       sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
     fi
   fi
+fi
+
+if $CONFIGURE_VIM ;
+then
+    # compile ycm
+    cd ~/.vim/bundle/YouCompleteMe
+    python3 install.py --all
 fi
 
 cd ~

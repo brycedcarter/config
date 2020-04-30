@@ -62,7 +62,7 @@ HYPHEN_INSENSITIVE="true"
 COMPLETION_WAITING_DOTS="true"
 
 # plugins to load
-plugins=(git history common-aliases osx wd colored-man colorize zsh-syntax-highlighting)
+plugins=(git history common-aliases osx wd colored-man-pages colorize zsh-syntax-highlighting)
 
 # User configuration
 
@@ -139,6 +139,7 @@ fi
 #alias dhcp-start='sudo /bin/launchctl load -w /System/Library/LaunchDaemons/bootps.plist'
 #alias dhcp-stop='sudo /bin/launchctl unload -w /System/Library/LaunchDaemons/bootps.plist'
 alias git='~/config/custom_git.sh'
+alias cmd=/mnt/c/Windows/System32/cmd.exe
 
 # shorthand for finding text in files in current dir
 function myfind() {
