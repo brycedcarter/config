@@ -27,6 +27,7 @@ then
       echo "$idFile_expanded does not exist."
       exit 1
     else
+      touch $idFile_expanded
       echo $idFile_expanded > ~/config/tmp/last_git_ssh_id
     fi 
     echo Using $idFile_expanded for ssh id...
