@@ -42,7 +42,7 @@ if $CONFIGURE_VIM;
 then
     case $MACHINE_TYPE in
       Linux) sudo apt-get install build-essentials cmake python3-dev python-dev vim;;
-      Mac) sudo brew install cmake macvim python;;
+      Mac) brew remove vim; brew install cmake macvim python;;
       *) echo "Platform unsupported. Please manualy install the following and re-run this script: compiler toochain, cmake, pyhton dev symbols, vim"; exit ;;
     esac
 fi
@@ -52,7 +52,7 @@ if $CONFIGURE_ZSH;
   then
     case $MACHINE_TYPE in
       Linux) sudo apt-get install zsh;;
-      Mac) sudo brew install zsh;;
+      Mac) brew install zsh;;
       *) echo "Platform unsupported. Please manualy install the following and re-run this script: zsh"; exit ;;
     esac
 fi
@@ -134,5 +134,8 @@ fi
 
 wget https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/DejaVuSansMono/Regular/complete/DejaVu%20Sans%20Mono%20Nerd%20Font%20Complete%20Mono.ttf
 sudo mv "DejaVu Sans Mono Nerd Font Complete Mono.ttf" /usr/share/fonts/truetype
-sudo apt install language-pack-en
+if [ $MACHINE_TYPE -eq "Linux" ]
+then
+  sudo apt install language-pack-en
+fi
 mkdir ~/config/tmp
