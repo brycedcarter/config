@@ -138,8 +138,8 @@ fi
 
 #alias dhcp-start='sudo /bin/launchctl load -w /System/Library/LaunchDaemons/bootps.plist'
 #alias dhcp-stop='sudo /bin/launchctl unload -w /System/Library/LaunchDaemons/bootps.plist'
-alias git='~/config/custom_git.sh'
 alias cmd=/mnt/c/Windows/System32/cmd.exe
+#alias git='~/config/custom_git.sh'
 
 # shorthand for finding text in files in current dir
 function myfind() {
