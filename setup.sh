@@ -51,8 +51,8 @@ fi
 if $CONFIGURE_ZSH;
   then
     case $MACHINE_TYPE in
-      Linux) sudo apt-get install zsh;;
-      Mac) brew install zsh;;
+      Linux) sudo apt-get install zsh python-pygments;;
+      Mac) brew install zsh python-pygments ;;
       *) echo "Platform unsupported. Please manualy install the following and re-run this script: zsh"; exit ;;
     esac
 fi
@@ -72,8 +72,9 @@ then
       sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
     fi
   fi
+  
 fi
-
+I
 if $CONFIGURE_VIM ;
 then
     # compile ycm
@@ -117,6 +118,7 @@ if $CONFIGURE_ZSH;
 then
   # install zsh syntax highlighting
   use_repo https://github.com/zsh-users/zsh-syntax-highlighting.git $DIR/oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+  use_repo https://github.com/romkatv/powerlevel10k.git $DIR/oh-my-zsh/custom/themes/powerlevel10k
 fi
 
 if $CONFIGURE_VIM;
@@ -133,9 +135,12 @@ then
 fi
 
 wget https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/DejaVuSansMono/Regular/complete/DejaVu%20Sans%20Mono%20Nerd%20Font%20Complete%20Mono.ttf
-sudo mv "DejaVu Sans Mono Nerd Font Complete Mono.ttf" /usr/share/fonts/truetype
-if [ $MACHINE_TYPE -eq "Linux" ]
+if [ $MACHINE_TYPE = "Linux" ]
 then
+  sudo mv "DejaVu Sans Mono Nerd Font Complete Mono.ttf" /usr/share/fonts/truetype
   sudo apt install language-pack-en
+else
+  echo "Please install the font that was just downloaded to your home directory: DejaVu Sans Mono Nerd Font Complete Mono.ttf"
+
 fi
 mkdir ~/config/tmp

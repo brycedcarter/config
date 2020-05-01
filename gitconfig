@@ -20,4 +20,4 @@
 	cmd = /Users/bryce/Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
 	trustExitCode = true
 [commit]
-	template = /Users/bryce/.stCommitMsg
+	template = ~/config/git-commit-template.md
