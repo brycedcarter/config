@@ -132,6 +132,8 @@ then
     mkdir ~/.vim/colors
   fi
   ln -f -s $DIR/vim/colors/brycedcarter.vim ~/.vim/colors/brycedcarter.vim
+
+  vim +'PlugInstall --sync' +qa
 fi
 
 wget https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/DejaVuSansMono/Regular/complete/DejaVu%20Sans%20Mono%20Nerd%20Font%20Complete%20Mono.ttf
