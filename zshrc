@@ -63,7 +63,7 @@ POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
   prompt_char             # prompt symbol
 )
   # The list of segments shown on the right. Fill it with less important segments.
-  typeset -g POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(
+POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(
     # =========================[ Line #1 ]=========================
     status                  # exit code of the last command
     newline
@@ -81,6 +81,8 @@ POWERLEVEL9K_MULTILINE_FIRST_PROMPT_GAP_FOREGROUND=238
 
 POWERLEVEL9K_TRANSIENT_PROMPT=always # dont show the promp on every line
 
+# updated icons:
+POWERLEVEL9K_SSH_ICON='\uf489'
 
 
 #==================================================================================
