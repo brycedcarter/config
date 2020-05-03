@@ -45,6 +45,7 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 
 POWERLEVEL9K_OS_ICON_FOREGROUND=15 # setting backgrounds for all so that they do not cause problems with hyper termal
 POWERLEVEL9K_OS_ICON_BACKGROUND=237
+POWERLEVEL9K_SSH_BACKGROUND=237
 POWERLEVEL9K_PROMPT_CHAR_BACKGROUND=234
 POWERLEVEL9K_STATUS_OK_BACKGROUND=234
 
@@ -62,7 +63,7 @@ POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
   prompt_char             # prompt symbol
 )
   # The list of segments shown on the right. Fill it with less important segments.
-  typeset -g POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(
+POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(
     # =========================[ Line #1 ]=========================
     status                  # exit code of the last command
     newline
@@ -80,6 +81,8 @@ POWERLEVEL9K_MULTILINE_FIRST_PROMPT_GAP_FOREGROUND=238
 
 POWERLEVEL9K_TRANSIENT_PROMPT=always # dont show the promp on every line
 
+# updated icons:
+POWERLEVEL9K_SSH_ICON='\uf489'
 
 
 #==================================================================================
