@@ -16,9 +16,11 @@
   },
   "Use Italic Font" : true,
   "Foreground Color" : {
-    "Green Component" : 0.50962930917739868,
-    "Red Component" : 0.44058024883270264,
-    "Blue Component" : 0.51685798168182373
+    "Red Component" : 0.80000000000000004,
+    "Color Space" : "sRGB",
+    "Blue Component" : 0.80000000000000004,
+    "Alpha Component" : 1,
+    "Green Component" : 0.80000000000000004
   },
   "Right Option Key Sends" : 0,
   "Show Status Bar" : true,
@@ -29,6 +31,7 @@
     "Blue Component" : 0.19370138645172119
   },
   "Mouse Reporting" : true,
+  "Cursor Boost" : 0,
   "Ansi 4 Color" : {
     "Green Component" : 0.46265947818756104,
     "Red Component" : 0.12754884362220764,
@@ -153,11 +156,11 @@
   },
   "Flashing Bell" : false,
   "Cursor Guide Color" : {
-    "Red Component" : 0.13505997252741508,
+    "Red Component" : 0,
     "Color Space" : "sRGB",
-    "Blue Component" : 0.20401380714516107,
-    "Alpha Component" : 0.086141824722290039,
-    "Green Component" : 0.8556828498840332
+    "Blue Component" : 0,
+    "Alpha Component" : 0.42024946212768555,
+    "Green Component" : 0
   },
   "BM Growl" : true,
   "Ansi 3 Color" : {
@@ -180,7 +183,7 @@
     "Red Component" : 0.50599193572998047,
     "Blue Component" : 0.56363654136657715
   },
-  "Use Cursor Guide" : true,
+  "Use Cursor Guide" : false,
   "Unlimited Scrollback" : true,
   "Custom Command" : "Yes",
   "Keyboard Map" : {
@@ -365,9 +368,9 @@
   "Ansi 9 Color" : {
     "Red Component" : 1,
     "Color Space" : "sRGB",
-    "Blue Component" : 0.047388553619384766,
+    "Blue Component" : 0.15887641906738281,
     "Alpha Component" : 1,
-    "Green Component" : 0.15094721926152488
+    "Green Component" : 0.25031520126047668
   },
   "Use Bold Font" : true,
   "Silence Bell" : false,
@@ -403,11 +406,11 @@
   "Guid" : "06FC50EC-19C3-451F-9EBE-C735CECCEF4C",
   "Idle Code" : 0,
   "Ansi 10 Color" : {
-    "Red Component" : 0.54303291718247237,
+    "Red Component" : 0.32868347376478768,
     "Color Space" : "sRGB",
-    "Blue Component" : 0.19073581695556641,
+    "Blue Component" : 0,
     "Alpha Component" : 1,
-    "Green Component" : 1
+    "Green Component" : 0.75502109527587891
   },
   "Ansi 8 Color" : {
     "Green Component" : 0.11783610284328461,
@@ -433,7 +436,7 @@
   },
   "Blur" : true,
   "Vertical Spacing" : 1,
-  "Normal Font" : "KnackNerdFontC-Regular 12",
+  "Normal Font" : "OverpassMonoNerdFontComplete-Regular 12",
   "Ansi 7 Color" : {
     "Green Component" : 0.89001238346099854,
     "Red Component" : 0.91611063480377197,

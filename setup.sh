@@ -36,6 +36,13 @@ case "${unameOut}" in
 esac
 echo "Running on: $MACHINE_TYPE"
 # ========================= PERFORM PRE-RUN ACTIONS =========================== 
+# generally usefully stuff
+case $MACHINE_TYPE in
+  Linux) sudo apt-get update; sudo apt-get install wget;;
+  Mac) brew update; brew install wget;;
+  *) echo "Platform unsupported. Please manualy install the following and re-run this script: wget"; exit ;;
+esac
+
 
 # check that vim is installed
 if $CONFIGURE_VIM;
@@ -63,14 +70,7 @@ if $CONFIGURE_ZSH;
 then
   if [ ! -d "~/.oh-my-zsh" ]; then
 
-    # use whichever internet fetching command is availble to get and install oh-my-zsh
-    if command -v wget;
-    then
-      sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
-    elif command -v curl;
-    then
-      sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-    fi
+    sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
   fi
   
 fi
@@ -136,12 +136,17 @@ then
   vim +'PlugInstall --sync' +qa
 fi
 
-wget https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/DejaVuSansMono/Regular/complete/DejaVu%20Sans%20Mono%20Nerd%20Font%20Complete%20Mono.ttf
 if [ $MACHINE_TYPE = "Linux" ]
 then
-  sudo mv "DejaVu Sans Mono Nerd Font Complete Mono.ttf" /usr/share/fonts/truetype
+  wget https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/Overpass/Mono/Regular/complete/Overpass%20Mono%20Regular%20Nerd%20Font%20Complete%20Mono.otf
+  sudo mv "Overpass Mono Regular Nerd Font Complete Mono.otf" /usr/share/fonts/truetype
   sudo apt install language-pack-en
+elif [ $MACHINE_TYPE = "Mac" ]
+then
+  brew tap homebrew/cask-fonts
+  brew install --cask font-overpass-nerd-font
 else
+  wget https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/Overpass/Mono/Regular/complete/Overpass%20Mono%20Regular%20Nerd%20Font%20Complete%20Mono.otf
   echo "Please install the font that was just downloaded to your home directory: DejaVu Sans Mono Nerd Font Complete Mono.ttf"
 
 fi
