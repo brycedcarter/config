@@ -122,6 +122,9 @@ nnoremap <leader>w :w<cr>
 " quick quit
 nnoremap <leader>q :q<cr>
 
+"quick save and quit
+nnoremap <leader>wq :wq<cr>
+
 " add find and replace
 vnoremap <silent> <leader>r :call VisualSelection('replace')<CR>
 
