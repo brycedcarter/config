@@ -43,6 +43,7 @@ Plugin 'nvie/vim-flake8'
 Plugin 'preservim/nerdtree'
 Plugin 'Xuyuanp/nerdtree-git-plugin'
 Plugin 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
+Plugin 'mbbill/undotree'
 call vundle#end()            " required
 filetype plugin indent on    " required
  "to ignore plugin indent changes, instead use:
@@ -100,6 +101,9 @@ let g:SimpylFold_docstring_preview=1
 
 "ignore files in NERDTree
 let NERDTreeIgnore=['\.pyc$', '\~$']
+
+" better undo mapping
+nnoremap <leader>u :UndotreeToggle<cr>
 
 " better pane navigation and creation 
 nnoremap <C-J> <C-W><C-J>
