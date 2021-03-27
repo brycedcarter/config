@@ -134,6 +134,11 @@ nnoremap <silent> <leader><cr> :noh<cr>
 nnoremap <leader>f /
 nnoremap <leader>F ?
 
+" quick buffer search
+nnoremap <leader>b :b 
+" quick buffer list 
+nnoremap <leader>l :ls<cr>
+
 if &term =~ '256color'
       " COMES FROM" https://superuser.com/questions/457911/in-vim-background-color-changes-on-scrolling/588243
       " Disable Background Color Erase (BCE) so that color schemes
