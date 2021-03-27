@@ -91,16 +91,6 @@ let g:SimpylFold_docstring_preview=1
 "ignore files in NERDTree
 let NERDTreeIgnore=['\.pyc$', '\~$']
 
-" add pep8 support for .py files
-au BufNewFile,BufRead *.py
-      \ set tabstop=4 |
-      \ set softtabstop=4 |
-      \ set shiftwidth=4 |
-      \ set textwidth=79 |
-      \ set expandtab |
-      \ set autoindent |
-      \ set fileformat=unix |
-
 " better pane navigation
 nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
