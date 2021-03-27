@@ -70,6 +70,9 @@ set clipboard=unnamed
 let mapleader=" "
 set timeout timeoutlen=1500
 set cursorline
+set relativenumber
+set laststatus=2
+set history=1000
 
 " ycm customization
 let g:ycm_autoclose_preview_window_after_completion=1
@@ -91,11 +94,45 @@ let g:SimpylFold_docstring_preview=1
 "ignore files in NERDTree
 let NERDTreeIgnore=['\.pyc$', '\~$']
 
-" better pane navigation
+" better pane navigation and creation 
 nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
+
+nnoremap <leader>s :split<cr>
+nnoremap <leader>vs :vsplit<cr>
+
+" quick file writing
+nnoremap <leader>w :w<cr>
+
+" quick quit
+nnoremap <leader>q :q<cr>
+
+" add find and replace
+vnoremap <silent> <leader>r :call VisualSelection('replace')<CR>
+
+" paren/wrapping tools
+vnoremap <leader>( <esc>`>a)<esc>`<i(<esc>
+vnoremap <leader>[ <esc>`>a]<esc>`<i[<esc>
+vnoremap <leader>{ <esc>`>a}<esc>`<i{<esc>
+vnoremap <leader>" <esc>`>a"<esc>`<i"<esc>
+vnoremap <leader>' <esc>`>a'<esc>`<i'<esc>
+vnoremap <leader>` <esc>`>a`<esc>`<i`<esc>
+
+inoremap (( ()<esc>i
+inoremap [[ []<esc>i
+inoremap {{ {}<esc>i
+inoremap "" ""<esc>i
+inoremap '' ''<esc>i
+inoremap `` ``<esc>i
+
+" highligh clear
+nnoremap <silent> <leader><cr> :noh<cr>
+
+" search 
+nnoremap <leader>f /
+nnoremap <leader>F ?
 
 if &term =~ '256color'
       " COMES FROM" https://superuser.com/questions/457911/in-vim-background-color-changes-on-scrolling/588243
