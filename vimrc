@@ -72,7 +72,14 @@ set timeout timeoutlen=1500
 set cursorline
 set relativenumber
 set laststatus=2
-set history=1000
+set history=1000 " remember losts of commands
+set undolevels=1000 " keep lots of undo
+set hidden " allow hiding modified bufferes without saving
+set smartcase " case insensitive search if search pattern is all lowercase
+set list " show visual whitespace 
+set listchars=tab:>.,trail:.,extends:#,nbsp:.
+
+
 
 " ycm customization
 let g:ycm_autoclose_preview_window_after_completion=1
@@ -102,6 +109,8 @@ nnoremap <C-H> <C-W><C-H>
 
 nnoremap <leader>s :split<cr>
 nnoremap <leader>vs :vsplit<cr>
+
+
 
 " quick file writing
 nnoremap <leader>w :w<cr>
