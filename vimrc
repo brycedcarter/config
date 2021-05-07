@@ -79,6 +79,7 @@ set hidden " allow hiding modified bufferes without saving
 set smartcase " case insensitive search if search pattern is all lowercase
 set list " show visual whitespace 
 set listchars=tab:>.,trail:.,extends:#,nbsp:.
+let g:syntastic_python_checkers = ['flake8'] " use flake8 as the python syntax checker
 
 
 
