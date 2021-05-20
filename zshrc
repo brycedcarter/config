@@ -240,12 +240,12 @@ bindkey '\e[B' history-beginning-search-forward
 function copytosega()
 {
   DIR=$(pwd)
-  cd /home/bryce/zhat/hw_tests/sega2/simple-check
-  ./run_on_dut.sh -p 'Inf!n1tyisenough' sega-toolbox 192.168.128.1 -z
+  cd /Users/bryce/zoox/zhat/hw_tests/sega2/simple-check
+  ./run_on_dut.sh -p 'Inf!n1tyisenough' sega-toolbox sega-local -z
   cd $DIR
 }
 
-alias sshsega1='sshpass -p Inf!n1tyisenough ssh zoox@192.168.128.1'
+alias sshsega1='sshpass -p Inf!n1tyisenough ssh zoox@sega-local'
 alias uartsega1='sudo picocom -b 115200 /dev/ttyUSB0'
 
 
