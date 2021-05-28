@@ -75,13 +75,15 @@ set relativenumber
 set laststatus=2
 set history=1000 " remember losts of commands
 set undolevels=1000 " keep lots of undo
+set colorcolumn=80 " show the 80th column as a guide
 set hidden " allow hiding modified bufferes without saving
 set smartcase " case insensitive search if search pattern is all lowercase
 set list " show visual whitespace 
 set listchars=tab:>.,trail:.,extends:#,nbsp:.
+
+" syntastic customization
 let g:syntastic_python_checkers = ['flake8'] " use flake8 as the python syntax checker
-
-
+let g:syntastic_python_flake8_args = '--per-file-ignores="__init__.py:F401"'
 
 " ycm customization
 let g:ycm_autoclose_preview_window_after_completion=1
