@@ -4,3 +4,4 @@ warprc
 gitconfig
 editorconfig
 bashrc
+spellfile.utf-8.add

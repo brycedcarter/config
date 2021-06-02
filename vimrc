@@ -44,6 +44,8 @@ Plugin 'preservim/nerdtree'
 Plugin 'Xuyuanp/nerdtree-git-plugin'
 Plugin 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
 Plugin 'mbbill/undotree'
+Plugin 'kamykn/spelunker.vim'
+
 call vundle#end()            " required
 filetype plugin indent on    " required
  "to ignore plugin indent changes, instead use:
@@ -80,6 +82,10 @@ set hidden " allow hiding modified bufferes without saving
 set smartcase " case insensitive search if search pattern is all lowercase
 set list " show visual whitespace 
 set listchars=tab:>.,trail:.,extends:#,nbsp:.
+
+" spelunker setup
+set nospell
+set spellfile=~/.spellfile.utf-8.add
 
 " syntastic customization
 let g:syntastic_python_checkers = ['flake8'] " use flake8 as the python syntax checker
