@@ -21,3 +21,7 @@
 	trustExitCode = true
 [commit]
 	template = ~/config/git-commit-template.md
+[diff]
+	tool = vimdiff
+[difftool]
+	prompt = false
