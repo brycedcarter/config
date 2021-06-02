@@ -246,6 +246,6 @@ function copytosega()
 }
 
 alias sshsega1='sshpass -p Inf!n1tyisenough ssh zoox@sega-local'
-alias uartsega1='sudo picocom -b 115200 /dev/ttyUSB0'
+alias uartsega1='sudo picocom -b 115200 /usr/local/dev/sega-main-uart'
 
 
