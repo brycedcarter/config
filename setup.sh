@@ -48,9 +48,9 @@ esac
 if $CONFIGURE_VIM;
 then
     case $MACHINE_TYPE in
-      Linux) sudo apt-get install build-essentials; sudo apt-get install cmake python3-dev python-dev vim;;
-      Mac) brew remove vim; brew install cmake macvim python;;
-      *) echo "Platform unsupported. Please manualy install the following and re-run this script: compiler toochain, cmake, pyhton dev symbols, vim"; exit ;;
+      Linux) sudo apt-get install build-essentials; sudo apt-get install cmake python3-dev python-dev vim universal-ctags;;
+      Mac) brew remove vim; brew install cmake macvim python; brew install --HEAD universal-ctags/universal-ctags/universal-ctags;;
+      *) echo "Platform unsupported. Please manualy install the following and re-run this script: compiler toochain, cmake, pyhton dev symbols, vim, universal ctags"; exit ;;
     esac
 fi
 
