@@ -20,7 +20,6 @@
 " toggle file tree view ctrl+n 
 " just back to previous buffer <tab>
 " open the outliner <leader>o
-"
 
 
 
@@ -174,22 +173,46 @@ inoremap `` ``<esc>i
 nnoremap <silent> <leader><cr> :noh<cr>
 
 " search 
-nnoremap <leader>f /
-nnoremap <leader>F ?
+nnoremap <leader>f /\v
+nnoremap <leader>F ?\v
 
 " quick edit
 nnoremap <leader>e :e<Space>
 
-" quick buffer list 
-nnoremap <leader>l :ls<cr>
-" quick buffer switch to previous buffer
 nnoremap <tab> :b#<cr>
 " quick cycle through buffers
 nnoremap <S-tab> :bn<cr>
+
+" shortcut for adding docstring
+nnoremap <leader>ds i"""<cr><cr>"""<esc>ki
+" shortcut for adding a short docstring (on one line)
+nnoremap <leader>sd i""""""<esc>hhi
+
+" quick relace
+nnoremap <leader>r :%sno/
+
+
+" ===================== Auto commands ================
+augroup headers
+  au BufNewFile *.py so ~/config/headers/python.txt
+  au bufnewfile *.py exe "1," . 7 . "g/Filename:.*/s//Filename: " .expand("%")
+  au bufnewfile *.py exe "1," . 7 . "g/Date Created:.*/s//Date Created: " .strftime("%Y-%m-%d")
+  au bufnewfile *.py exe "normal! /\\V[Description]\<cr>vf]"
+  " trim bad whitespace
+  au BufWritePre,FileWritePre *.py exe "%s/\\v(\\S|^)\\zs\\s+\\ze$//g"
+  " trim trailing newlines
+  au BufWritePre,FileWritePre *.py exe "%s/\\v\\n*%$//g"
+augroup END
+
+
 
 if &term =~ '256color'
       " COMES FROM" https://superuser.com/questions/457911/in-vim-background-color-changes-on-scrolling/588243
       " Disable Background Color Erase (BCE) so that color schemes
       "     " work properly when Vim is used inside tmux and GNU screen.
       set t_ut=
+
+
+
+
 endif
