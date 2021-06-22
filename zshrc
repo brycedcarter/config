@@ -224,6 +224,9 @@ alias cmd=/mnt/c/Windows/System32/cmd.exe
 # map the cat to colorized cat
 alias cat=ccat
 
+# quick acces to searching running processes
+alias pss='ps -ax | grep ' 
+
 
 # shorthand for finding text in files in current dir
 function myfind() {
