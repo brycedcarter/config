@@ -47,6 +47,7 @@ Plugin 'universal-ctags/ctags'
 Plugin 'majutsushi/tagbar'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'kien/ctrlp.vim'
+Plugin 'voldikss/vim-floaterm'
 call vundle#end()            " required
 filetype plugin indent on    " required
  "to ignore plugin indent changes, instead use:
@@ -132,6 +133,13 @@ let NERDTreeIgnore=['\.pyc$', '\~$']
 " better undo mapping
 nnoremap <leader>u :UndotreeToggle<cr>
 
+" floatterm setup
+nnoremap   <silent>   <F12>   :FloatermToggle<CR>
+tnoremap   <silent>   <F12>   <C-\><C-n>:FloatermToggle<CR>
+let g:floaterm_width = 0.9
+let g:floaterm_height = 0.9
+let g:floaterm_autoclose = 2
+
 " better pane navigation and creation 
 nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
@@ -192,6 +200,7 @@ nnoremap <leader>r :%sno/
 
 " Quick open terminal
 nnoremap <leader>t :terminal<cr>
+tnoremap <C-t> exit<cr>
 
 
 " ===================== Auto commands ================
@@ -200,18 +209,20 @@ augroup headers
   au bufnewfile *.py exe "1," . 7 . "g/Filename:.*/s//Filename: " .expand("%")
   au bufnewfile *.py exe "1," . 7 . "g/Date Created:.*/s//Date Created: " .strftime("%Y-%m-%d")
   au bufnewfile *.py exe "normal! /\\V[Description]\<cr>vf]"
+
+augroup END
+
+augroup cleanup
   " when saving
   " remember current cursor location
-  "au BufWritePre,FileWritePre * exe "normal mq"
+  au BufWritePre,FileWritePre * exe "normal mq"
   " trim bad whitespace
   au BufWritePre,FileWritePre *.py silent! exe "%s/\\v(\\S|^)\\zs\\s+\\ze$//g"
   " trim trailing newlines
   au BufWritePre,FileWritePre *.py silent! exe "%s/\\v\\n*%$//g"
-  " return to cursor postion
-  "au BufWritePre,FileWritePre * silent! exe "normal `q"
-  "au BufWritePre,FileWritePre * silent! exe ":delmarks q"
-  au BufWritePre,FileWritePre * silent! exe "normal! ``"
-
+  " return to cursor position
+  au BufWritePre,FileWritePre * silent! exe "normal `q"
+  au BufWritePre,FileWritePre * silent! exe ":delmarks q"
 augroup END
 
 
@@ -226,3 +237,4 @@ if &term =~ '256color'
 
 
 endif
+
