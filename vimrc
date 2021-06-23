@@ -30,11 +30,8 @@ filetype off                  " required
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
-"Plugin 'wikitopian/hardmode'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'Valloric/YouCompleteMe'
-Plugin 'kshenoy/vim-signature'
-"Plugin 'jewes/Conque-Shell'
 Plugin 'editorconfig/editorconfig-vim'
 Plugin 'tmhedberg/SimpylFold'
 Plugin 'vim-scripts/indentpython.vim'
@@ -48,6 +45,8 @@ Plugin 'kamykn/spelunker.vim'
 Plugin 'jeetsukumaran/vim-buffergator'
 Plugin 'universal-ctags/ctags'
 Plugin 'majutsushi/tagbar'
+Plugin 'airblade/vim-gitgutter'
+Plugin 'kien/ctrlp.vim'
 call vundle#end()            " required
 filetype plugin indent on    " required
  "to ignore plugin indent changes, instead use:
@@ -191,6 +190,9 @@ nnoremap <leader>sd i""""""<esc>hhi
 " quick relace
 nnoremap <leader>r :%sno/
 
+" Quick open terminal
+nnoremap <leader>t :terminal<cr>
+
 
 " ===================== Auto commands ================
 augroup headers
@@ -198,10 +200,18 @@ augroup headers
   au bufnewfile *.py exe "1," . 7 . "g/Filename:.*/s//Filename: " .expand("%")
   au bufnewfile *.py exe "1," . 7 . "g/Date Created:.*/s//Date Created: " .strftime("%Y-%m-%d")
   au bufnewfile *.py exe "normal! /\\V[Description]\<cr>vf]"
+  " when saving
+  " remember current cursor location
+  "au BufWritePre,FileWritePre * exe "normal mq"
   " trim bad whitespace
-  au BufWritePre,FileWritePre *.py exe "%s/\\v(\\S|^)\\zs\\s+\\ze$//g"
+  au BufWritePre,FileWritePre *.py silent! exe "%s/\\v(\\S|^)\\zs\\s+\\ze$//g"
   " trim trailing newlines
-  au BufWritePre,FileWritePre *.py exe "%s/\\v\\n*%$//g"
+  au BufWritePre,FileWritePre *.py silent! exe "%s/\\v\\n*%$//g"
+  " return to cursor postion
+  "au BufWritePre,FileWritePre * silent! exe "normal `q"
+  "au BufWritePre,FileWritePre * silent! exe ":delmarks q"
+  au BufWritePre,FileWritePre * silent! exe "normal! ``"
+
 augroup END
 
 
