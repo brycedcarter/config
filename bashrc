@@ -121,3 +121,5 @@ fi
 
 source ~/driving/scripts/shell/zooxrc.sh
 alias git='~/config/custom_git.sh'
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash

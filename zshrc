@@ -32,6 +32,8 @@ LC_ALL="en_US.UTF-8"
 export ZSH=~/.oh-my-zsh
 export ZSH_CUSTOM=~/config/oh-my-zsh/custom
 
+# setup fzf
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 #========================= POWERLEVEL 10K SETTINGS ================================
 #==================================================================================
@@ -142,7 +144,21 @@ HYPHEN_INSENSITIVE="true"
 COMPLETION_WAITING_DOTS="true"
 
 # plugins to load
-plugins=(git history common-aliases osx wd colored-man-pages colorize zsh-syntax-highlighting command-not-found ssh-agent vundle pip)
+plugins=(
+  git
+  history
+  common-aliases
+  osx
+  wd
+  colored-man-pages
+  colorize
+  zsh-syntax-highlighting
+  command-not-found
+  ssh-agent
+  vundle 
+  pip
+  fzf
+)
 
 # User configuration
 
@@ -250,5 +266,6 @@ function copytosega()
 
 alias sshsega1='sshpass -p Inf!n1tyisenough ssh zoox@sega-local'
 alias uartsega1='sudo picocom -b 115200 /usr/local/dev/sega-main-uart'
+
 
 
