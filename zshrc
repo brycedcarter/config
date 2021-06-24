@@ -267,5 +267,4 @@ function copytosega()
 alias sshsega1='sshpass -p Inf!n1tyisenough ssh zoox@sega-local'
 alias uartsega1='sudo picocom -b 115200 /usr/local/dev/sega-main-uart'
 
-
-
+export FZF_DEFAULT_COMMAND='rg --files --hidden'
