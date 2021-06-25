@@ -67,8 +67,8 @@ if $CONFIGURE_ZSH;
   then
     show_banner "INSTALLING ZSH"
     case $MACHINE_TYPE in
-      Linux) sudo apt-get install zsh python-pygments ripgrep;;
-      Mac) brew install zsh python-pygments ripgrep;;
+      Linux) sudo apt-get install zsh python-pygments ripgrep fd;;
+      Mac) brew install zsh python-pygments ripgrep fd;;
       *) echo "Platform unsupported. Please manually install the following and re-run this script: zsh"; exit ;;
     esac
 fi

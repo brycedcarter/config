@@ -32,8 +32,6 @@ LC_ALL="en_US.UTF-8"
 export ZSH=~/.oh-my-zsh
 export ZSH_CUSTOM=~/config/oh-my-zsh/custom
 
-# setup fzf
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 #========================= POWERLEVEL 10K SETTINGS ================================
 #==================================================================================
@@ -188,6 +186,32 @@ ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern cursor)
 # source zshrc sub configs
 source ~/config/source_sub_zsh_configs.sh
 
+
+
+# setup fzf
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# setup fzf settings
+export FZF_DEFAULT_OPTS="
+--layout=reverse
+--info=inline
+--height=30%
+--margin=5%
+--border=rounded
+--multi
+--preview-window=:hidden
+--preview '([[ -f {} ]] && (bat --style=numbers --color=always {} || cat {})) || ([[ -d {} ]] && (tree -C {} | less)) || echo {} 2> /dev/null | head -200'
+--color='hl:148,hl+:154,pointer:032,marker:010,bg+:237,gutter:008'
+--prompt '❯ '
+--pointer '❯ ' 
+--marker '*'
+--bind '?:toggle-preview'
+"
+export FZF_DEFAULT_COMMAND='fd --type f'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND --type d"
+export FZF_COMPLETION_TRIGGER='**'
+
 # general purpose aliases
 # =======================================================================================
 
@@ -267,4 +291,3 @@ function copytosega()
 alias sshsega1='sshpass -p Inf!n1tyisenough ssh zoox@sega-local'
 alias uartsega1='sudo picocom -b 115200 /usr/local/dev/sega-main-uart'
 
-export FZF_DEFAULT_COMMAND='rg --files --hidden'
