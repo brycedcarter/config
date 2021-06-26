@@ -46,7 +46,6 @@ Plugin 'jeetsukumaran/vim-buffergator'
 Plugin 'universal-ctags/ctags'
 Plugin 'majutsushi/tagbar'
 Plugin 'airblade/vim-gitgutter'
-Plugin 'kien/ctrlp.vim'
 Plugin 'voldikss/vim-floaterm'
 Plugin 'junegunn/fzf'
 Plugin 'junegunn/fzf.vim'
@@ -187,6 +186,9 @@ nnoremap <leader>F ?\v
 
 " quick edit
 nnoremap <leader>e :e<Space>
+
+" Fuzzy open shortcut
+nnoremap <C-p> :Files<cr>
 
 nnoremap <tab> :b#<cr>
 " quick cycle through buffers
