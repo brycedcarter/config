@@ -1,10 +1,30 @@
 #!/bin/bash
+# static definitions
+#====================================
+
+LINUX_VIM_PACKAGES=(build-essentials cmake python3-dev python-dev vim universal-ctags fzf)
+MAC_VIM_PACKAGES=(cmake macvim go python fzf "--HEAD universal-ctags/universal-ctags/universal-ctags")
+
+LINUX_ZSH_PACKAGES=(zsh python-pygments ripgrep fd)
+MAC_ZSH_PACKAGES=(zsh pygments ripgrep fd)
+
+OH_MY_ZSH_SETUP_COMMAND='sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"'
+
+FZF_SETUP_COMMAND="/usr/local/opt/fzf/install --key-bindings --completion --no-update-rc"
+
+YCM_COMPILE_COMMAND="git submodule update --init --recursive; python3 install.py --all"
+
+#====================================
+
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 current_time=$(date "+%Y.%m.%d-%H.%M.%S")
+export PATH=$PATH:/usr/local/bin
+ssh-add
 
 # determine some info about the run envrionment and the arguments
 CONFIGURE_VIM=false
 CONFIGURE_ZSH=false
+VERBOSE=false
 FORCE_YCM=false
 
 if [ $# -eq 0 ];
@@ -12,6 +32,7 @@ then
      CONFIGURE_VIM=true
      CONFIGURE_ZSH=true
 fi 
+
 while test $# != 0
 do
     case "$1" in
@@ -20,95 +41,71 @@ do
     -vz|-zv) CONFIGURE_VIM=true 
              CONFIGURE_ZSH=true ;;
     --ycm) FORCE_YCM=true ;;
+    --verbose) VERBOSE=true ;;
     *) echo "Unknown arument: $1";;
     esac
     shift
   done
 
-show_banner()
+# Hide output from commands unless verbose mode is enabled
+exec 3>&1 4>&2 # create new fds for messages and errors
+if ! $VERBOSE; then
+  exec 1>/dev/null 2>&1 # point stdout and stderr to /dev/null
+fi
+
+message()
 {
-  echo -e "\x1b[32m======================= $1 =======================\x1b[0m"
+  echo -e "$1" >&3
 }
 
-echo "Configure VIM: $CONFIGURE_VIM"
-echo "Configure ZSH: $CONFIGURE_ZSH"
+error()
+{
+  echo -e "\x1b[31m$1\x1b[0m" >&4
+  exit 1
+}
 
-unameOut="$(uname -s)"
-case "${unameOut}" in
-    Linux*)     MACHINE_TYPE=Linux;;
-    Darwin*)    MACHINE_TYPE=Mac;;
-    CYGWIN*)    MACHINE_TYPE=Cygwin;;
-    MINGW*)     MACHINE_TYPE=MinGw;;
-    *)          MACHINE_TYPE="UNKNOWN:${unameOut}"
-esac
-echo "Running on: $MACHINE_TYPE"
-# ========================= PERFORM PRE-RUN ACTIONS =========================== 
-# generally usefully stuff
-case $MACHINE_TYPE in
-  Linux) sudo apt-get update; sudo apt-get install wget;;
-  Mac) brew update; brew install wget;;
-  *) echo "Platform unsupported. Please manually install the following and re-run this script: wget"; exit ;;
-esac
+warning()
+{
+  echo -e "\x1b[33m$1\x1b[0m" >&4
+}
 
+status()
+{
+  echo -n -e "$1" >&3
+}
 
-# check that vim is installed
-if $CONFIGURE_VIM;
-then
-    show_banner "INSTALLING VIM"
-    case $MACHINE_TYPE in
-      Linux) sudo apt-get install build-essentials; sudo apt-get install cmake python3-dev python-dev vim universal-ctags fzf;;
-      Mac) brew remove vim; brew install cmake macvim python fzf; brew install --HEAD universal-ctags/universal-ctags/universal-ctags;;
-      *) echo "Platform unsupported. Please manually install the following and re-run this script: compiler toolchain, cmake, python dev symbols, vim, universal ctags"; exit ;;
-    esac
+show_banner()
+{
+  message "\x1b[34m======================= $1 =======================\x1b[0m"
+}
+
+do_thing()
+{
+command="$1"
+description="$2"
+status "$2"
+eval $1
+if [ $? -ne 0 ]; then
+  message ": \x1b[31mFAIL\x1b[0m"
+  error "\nError encountered. Please re-run with --verbose for more details"
+else
+  message ": \x1b[32mOK\x1b[0m"
 fi
+}
 
-# check that zsh is installed
-if $CONFIGURE_ZSH;
-  then
-    show_banner "INSTALLING ZSH"
-    case $MACHINE_TYPE in
-      Linux) sudo apt-get install zsh python-pygments ripgrep fd;;
-      Mac) brew install zsh python-pygments ripgrep fd;;
-      *) echo "Platform unsupported. Please manually install the following and re-run this script: zsh"; exit ;;
-    esac
-fi
 
-# ========================== PERFORM ACTIONS ====================================
-
-if $CONFIGURE_ZSH;
-then
-  if [ ! -d "~/.oh-my-zsh" ]; then
-    show_banner "INSTALLING OH-MY-ZSH"
-    sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
-  fi
-  show_banner "INSTALLING FZF KEY BINDINGS"
-  /usr/local/opt/fzf/install --key-bindings --completion --no-update-rc
-  
-fi
-
-if $CONFIGURE_VIM || $FORCE_YCM;
-then
-    if ! [[ -f ~/.vim/bundle/YouCompleteMe/third_party/ycmd/ycm_core.cpython-39-darwin.so ]] || $FORCE_YCM; then
-    show_banner "INSTALLING YOU-COMPLETE-ME"
-     # compile ycm
-    cd ~/.vim/bundle/YouCompleteMe
-    python3 install.py --all
-    fi
-fi
-
-cd ~
-mkdir -p config-backups
-
-# back up existing config files and replace them with links to the config repo files
-show_banner "BACKING UP MANAGED FILES"
-while read filename;
-do 
-	echo "Backing up and linking $filename"
-  backup_filename="$filename-$current_time"
-	cp -L .$filename config-backups/$backup_filename
-	ln -fs config/$filename ./.$filename
-  ln -fs config-backups/$backup_filename config-backups/$filename-latest
-done < $DIR/managed_files.txt
+install()
+{
+packages=("$@")
+for package_name in "${packages[@]}"
+do
+  case $MACHINE_TYPE in
+    Linux) do_thing "sudo apt-get install $package_name" "Installing $package_name";;
+    Mac) do_thing "brew install $package_name" "Installing $package_name";;
+    *) error "No install method on platform: $MACHINE_TYPE - Please manualy install $package_name";;
+  esac
+done
+}
 
 use_repo()
 {
@@ -126,48 +123,114 @@ use_repo()
   git clone $repo_url $repo_location 
 }
 
+message "Configure VIM: $CONFIGURE_VIM"
+message "Configure ZSH: $CONFIGURE_ZSH"
+message "Verbose Mode: $VERBOSE"
+
+unameOut="$(uname -s)"
+case "${unameOut}" in
+    Linux*)     MACHINE_TYPE=Linux;;
+    Darwin*)    MACHINE_TYPE=Mac;;
+    CYGWIN*)    MACHINE_TYPE=Cygwin;;
+    MINGW*)     MACHINE_TYPE=MinGw;;
+    *)          MACHINE_TYPE="UNKNOWN:${unameOut}"
+esac
+message "Running on: $MACHINE_TYPE"
+
+# ========================= PERFORM PRE-RUN ACTIONS =========================== 
+# generally usefully stuff
+show_banner "Preforming pre-run actions (updating repos and installing wget)"
+case $MACHINE_TYPE in
+  Linux) sudo apt-get update; install wget;;
+  Mac) brew update; install wget;;
+  *) error "Platform unsupported. Please manually install the following and re-run this script: wget"; exit ;;
+esac
+
+
+# make sure that vim is installed
+if $CONFIGURE_VIM;
+then
+    show_banner "INSTALLING VIM PACKAGES"
+    case $MACHINE_TYPE in
+      Linux) install "${LINUX_VIM_PACKAGES[@]}";;
+      Mac) install "${MAC_VIM_PACKAGES[@]}";;
+      *) error "Platform unsupported. Please manually install the following: ${LINUX_VIM_PACKAGES[*]} or ${MAC_VIM_PACKAGES[*]}";;
+    esac
+fi
+
+
+# make sure that zsh is installed
+if $CONFIGURE_ZSH;
+  then
+    show_banner "INSTALLING ZSH PACKAGES"
+    case $MACHINE_TYPE in
+      Linux) install "${LINUX_ZSH_PACKAGES[@]}";;
+      Mac) install "${MAC_ZSH_PACKAGES[@]}";;
+      *) error "Platform unsupported. Please manually install the following: ${LINUX_ZSH_PACKAGES[*]} or ${MAC_ZSH_PACKAGES[*]}";;
+    esac
+fi
+
+# ========================== PERFORM ACTIONS ====================================
+
+# back up existing config files and replace them with links to the config repo files
+show_banner "Backing up and replacing managed config (rc) files"
+do_thing "cd ~; mkdir -p '.config-backups'" "Creating folder for storing backups"
+while read filename;
+do 
+  backup_filename="$filename-$current_time"
+  cd ~
+  if [ -f .$filename ]; then
+    do_thing "cd ~; cp -L .$filename .config-backups/$backup_filename; ln -fs .config-backups/$backup_filename .config-backups/$filename-latest" "Backing up ~/.$filename"
+  fi
+  do_thing  "cd ~; ln -fs config/$filename ./.$filename"  "Linking managed version of ~/.$filename from ~/config"
+done < $DIR/managed_files.txt
 
 if $CONFIGURE_ZSH;
 then
-  show_banner "INSTALLING ZSH SYNTAX HIGHLIGHTING"
-  # install zsh syntax highlighting
-  use_repo https://github.com/zsh-users/zsh-syntax-highlighting.git $DIR/oh-my-zsh/custom/plugins/zsh-syntax-highlighting
-  show_banner "INSTALLING POWERLEVEL10K"
-  use_repo https://github.com/romkatv/powerlevel10k.git $DIR/oh-my-zsh/custom/themes/powerlevel10k
+  show_banner "Setting up zsh stuff"
+  if [ ! -d "$HOME/.oh-my-zsh" ]; then
+    warning "NOTICE: in a moment, the shell will transition to ZSH. When this happens, simply type 'exit' and then press enter"
+    do_thing "$OH_MY_ZSH_SETUP_COMMAND" "Installing oh-my-zsh"
+  fi
+
+  do_thing "$FZF_STEUP_COMMAND" "Adding fzf key bindings"
+ 
+  do_thing "use_repo https://github.com/zsh-users/zsh-syntax-highlighting.git $DIR/oh-my-zsh/custom/plugins/zsh-syntax-highlighting" "Installing zsh syntax highlighting"
+
+  do_thing "use_repo https://github.com/romkatv/powerlevel10k.git $DIR/oh-my-zsh/custom/themes/powerlevel10k" "Installing powerlevel10k"
+  
 fi
+
 
 if $CONFIGURE_VIM;
 then
-  # Install bundle
-  show_banner "INSTALLING VUNDLE"
-  use_repo https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+  show_banner "Setting up vim stuff"
+  do_thing "use_repo https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim" "Installing vundle"
 
-  # install the vim theme
-  show_banner "INSTALLING CUSTOM VIM THEME"
-  if [ ! -d ~/.vim/colors ]
-  then
-    mkdir ~/.vim/colors
-  fi
-  ln -f -s $DIR/vim/colors/brycedcarter.vim ~/.vim/colors/brycedcarter.vim
+  do_thing "mkdir ~/.vim/colors; ln -f -s $DIR/vim/colors/brycedcarter.vim ~/.vim/colors/brycedcarter.vim" "Adding vim color theme"
 
-  vim +'PlugInstall --sync' +qa
+  do_thing "vim +'PluginInstall' +qa" "Installing VIM plugins"
 fi
+
+if $CONFIGURE_VIM || $FORCE_YCM;
+then
+    if ! [[ -f ~/.vim/bundle/YouCompleteMe/third_party/ycmd/ycm_core.cpython-39-darwin.so ]] || $FORCE_YCM; then
+    # compile ycm
+    
+    do_thing "cd ~/.vim/bundle/YouCompleteMe; $YCM_COMPILE_COMMAND" "Compiling YouCompleteMe"
+    fi
+fi
+
 
 if [ $MACHINE_TYPE = "Linux" ]
 then
-  show_banner "INSTALLING OVERPASS NERD FONT"
-  wget https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/Overpass/Mono/Regular/complete/Overpass%20Mono%20Regular%20Nerd%20Font%20Complete%20Mono.otf
-  sudo mv "Overpass Mono Regular Nerd Font Complete Mono.otf" /usr/share/fonts/truetype
-  sudo apt install language-pack-en
+  do_thing "wget https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/Overpass/Mono/Regular/complete/Overpass%20Mono%20Regular%20Nerd%20Font%20Complete%20Mono.otf; sudo mv "Overpass Mono Regular Nerd Font Complete Mono.otf" /usr/share/fonts/truetype; sudo apt install language-pack-en" "Installing overpass nerd font"
 elif [ $MACHINE_TYPE = "Mac" ]
 then
-  show_banner "INSTALLING OVERPASS NERD FONT"
-  brew tap homebrew/cask-fonts
-  brew install --cask font-overpass-nerd-font
+  do_thing "brew tap homebrew/cask-fonts; brew install --cask font-overpass-nerd-font" "Installing overpass nerd font"
 else
-  show_banner "DOWNLOADING OVERPASS NERD FONT"
-  wget https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/Overpass/Mono/Regular/complete/Overpass%20Mono%20Regular%20Nerd%20Font%20Complete%20Mono.otf
-  echo "Please install the font that was just downloaded to your home directory: DejaVu Sans Mono Nerd Font Complete Mono.ttf"
+  do_thing "wget https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/Overpass/Mono/Regular/complete/Overpass%20Mono%20Regular%20Nerd%20Font%20Complete%20Mono.otf" "Downloading overpass nerd font"
+  warning "Please install the font that was just downloaded to your home directory: DejaVu Sans Mono Nerd Font Complete Mono.ttf"
 
 fi
 mkdir ~/config/tmp
