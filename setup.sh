@@ -313,6 +313,7 @@ fi
 ###############################################################################
 
 if $INSTALL_FONTS; then
+  show_banner "Installing fonts"
   if [ $MACHINE_TYPE = "Linux" ]
   then
     do_thing "wget https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/Overpass/Mono/Regular/complete/Overpass%20Mono%20Regular%20Nerd%20Font%20Complete%20Mono.otf; sudo mv "Overpass Mono Regular Nerd Font Complete Mono.otf" /usr/share/fonts/truetype; sudo apt install language-pack-en" "Installing overpass nerd font"
