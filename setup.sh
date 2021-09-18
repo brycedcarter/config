@@ -8,10 +8,10 @@
 ############## CONSTANTS SETUP ################################################
 ###############################################################################
 
-LINUX_ZSH_PACKAGES=(zsh python-pygments ripgrep fd)
+LINUX_ZSH_PACKAGES=(zsh python-pygments ripgrep )
 MAC_ZSH_PACKAGES=(zsh pygments ripgrep fd)
 
-LINUX_VIM_PACKAGES=(build-essentials cmake python3-dev python-dev vim universal-ctags fzf)
+LINUX_VIM_PACKAGES=(build-essential cmake python3-dev python-dev vim universal-ctags golang npm openjdk-11-jdk fzf)
 MAC_VIM_PACKAGES=(cmake macvim go python fzf "--HEAD universal-ctags/universal-ctags/universal-ctags")
 
 LINUX_TOOLS_PACKAGES=(vim picocom git tldr)
@@ -160,7 +160,7 @@ packages=("$@")
 for package_name in "${packages[@]}"
 do
   case $MACHINE_TYPE in
-    Linux) do_thing "sudo apt-get install $package_name" "Installing $package_name";;
+    Linux) do_thing "sudo apt-get install -y $package_name" "Installing $package_name";;
     Mac) do_thing "brew install $package_name" "Installing $package_name";;
     *) error "No install method on platform: $MACHINE_TYPE - Please manualy install $package_name";;
   esac
@@ -258,7 +258,7 @@ then
 
   do_thing "mkdir ~/.vim/colors; ln -f -s $DIR/vim/colors/brycedcarter.vim ~/.vim/colors/brycedcarter.vim" "Adding vim color theme"
 
-  do_thing "vim +'PluginInstall' +qa" "Installing VIM plugins"
+  do_thing "cd ~/config; vim +'source vimrc' +'PluginInstall' +qa" "Installing VIM plugins"
 fi
 
 if $CONFIGURE_VIM || $FORCE_YCM;
@@ -316,7 +316,7 @@ if $INSTALL_FONTS; then
   show_banner "Installing fonts"
   if [ $MACHINE_TYPE = "Linux" ]
   then
-    do_thing "wget https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/Overpass/Mono/Regular/complete/Overpass%20Mono%20Regular%20Nerd%20Font%20Complete%20Mono.otf; sudo mv "Overpass Mono Regular Nerd Font Complete Mono.otf" /usr/share/fonts/truetype; sudo apt install language-pack-en" "Installing overpass nerd font"
+    do_thing "wget https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/Overpass/Mono/Regular/complete/Overpass%20Mono%20Regular%20Nerd%20Font%20Complete%20Mono.otf; sudo mv 'Overpass Mono Regular Nerd Font Complete Mono.otf' /usr/share/fonts/truetype; sudo apt install language-pack-en" "Installing overpass nerd font"
   elif [ $MACHINE_TYPE = "Mac" ]
   then
     do_thing "brew tap homebrew/cask-fonts; brew install --cask font-overpass-nerd-font" "Installing overpass nerd font"
