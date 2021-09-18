@@ -14,8 +14,8 @@ MAC_ZSH_PACKAGES=(zsh pygments ripgrep fd)
 LINUX_VIM_PACKAGES=(build-essential cmake python3-dev python-dev vim universal-ctags golang npm openjdk-11-jdk fzf)
 MAC_VIM_PACKAGES=(cmake macvim go python fzf "--HEAD universal-ctags/universal-ctags/universal-ctags")
 
-LINUX_TOOLS_PACKAGES=(vim picocom git tldr)
-MAC_TOOLS_PACKAGES=(macvim picocom git tldr)
+LINUX_TOOLS_PACKAGES=(vim picocom git tldr tree)
+MAC_TOOLS_PACKAGES=(macvim picocom git tldr tree)
 
 OH_MY_ZSH_SETUP_COMMAND='sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"'
 
