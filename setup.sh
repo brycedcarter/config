@@ -17,7 +17,7 @@ MAC_VIM_PACKAGES=(cmake macvim go python fzf "--HEAD universal-ctags/universal-c
 LINUX_TOOLS_PACKAGES=(vim picocom git tldr tree)
 MAC_TOOLS_PACKAGES=(macvim picocom git tldr tree)
 
-OH_MY_ZSH_SETUP_COMMAND='sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"'
+OH_MY_ZSH_SETUP_COMMAND='sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)" "" --unattended'
 
 FZF_SETUP_COMMAND="/usr/local/opt/fzf/install --key-bindings --completion --no-update-rc"
 
@@ -227,6 +227,7 @@ then
   if [ ! -d "$HOME/.oh-my-zsh" ]; then
     warning "NOTICE: in a moment, the shell will transition to ZSH. When this happens, simply type 'exit' and then press enter"
     do_thing "$OH_MY_ZSH_SETUP_COMMAND" "Installing oh-my-zsh"
+    do_thing "sudo chsh --shell /usr/bin/zsh $USER" "Changing $USER's shell to zsh"
   fi
 
   do_thing "$FZF_STEUP_COMMAND" "Adding fzf key bindings"
@@ -316,7 +317,7 @@ if $INSTALL_FONTS; then
   show_banner "Installing fonts"
   if [ $MACHINE_TYPE = "Linux" ]
   then
-    do_thing "wget https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/Overpass/Mono/Regular/complete/Overpass%20Mono%20Regular%20Nerd%20Font%20Complete.otf; sudo mv 'Overpass Mono Regular Nerd Font Complete.otf' /usr/share/fonts/truetype; sudo apt install language-pack-en" "Installing overpass nerd font"
+    do_thing "wget https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/Overpass/Mono/Regular/complete/Overpass%20Mono%20Regular%20Nerd%20Font%20Complete.otf; sudo mv 'Overpass Mono Regular Nerd Font Complete.otf' /usr/share/fonts/truetype; sudo apt install -y language-pack-en" "Installing overpass nerd font"
   elif [ $MACHINE_TYPE = "Mac" ]
   then
     do_thing "brew tap homebrew/cask-fonts; brew install --cask font-overpass-nerd-font" "Installing overpass nerd font"
