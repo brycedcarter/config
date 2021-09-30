@@ -155,7 +155,8 @@ plugins=(
   ssh-agent
   vundle 
   pip
-  fzf
+  #terminfo
+  #fzf
 )
 
 # User configuration
@@ -211,6 +212,7 @@ export FZF_DEFAULT_COMMAND='fd --type f'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND --type d"
 export FZF_COMPLETION_TRIGGER='**'
+export FZF_BASE="/opt/fzf"
 
 # general purpose aliases
 # =======================================================================================
@@ -291,3 +293,6 @@ function copytosega()
 alias sshsega1='sshpass -p Inf!n1tyisenough ssh zoox@sega-local'
 alias uartsega1='sudo picocom -b 115200 /usr/local/dev/sega-main-uart'
 
+
+source ~/driving/scripts/shell/zooxrc.sh
+export GLOG_alsologtostderr=1

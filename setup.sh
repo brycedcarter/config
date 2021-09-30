@@ -8,10 +8,10 @@
 ############## CONSTANTS SETUP ################################################
 ###############################################################################
 
-LINUX_ZSH_PACKAGES=(zsh python-pygments ripgrep fdclone )
+LINUX_ZSH_PACKAGES=(zsh python-pygments fdclone )
 MAC_ZSH_PACKAGES=(zsh pygments ripgrep fd)
 
-LINUX_VIM_PACKAGES=(build-essential cmake python3-dev python-dev vim universal-ctags golang npm openjdk-11-jdk fzf)
+LINUX_VIM_PACKAGES=(build-essential cmake python3-dev python-dev vim golang openjdk-11-jdk )
 MAC_VIM_PACKAGES=(cmake macvim go python fzf "--HEAD universal-ctags/universal-ctags/universal-ctags")
 
 LINUX_TOOLS_PACKAGES=(vim picocom git tldr tree)
@@ -21,7 +21,7 @@ OH_MY_ZSH_SETUP_COMMAND='sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh
 
 FZF_SETUP_COMMAND="/usr/local/opt/fzf/install --key-bindings --completion --no-update-rc"
 
-YCM_COMPILE_COMMAND="git submodule update --init --recursive; python3 install.py --all"
+YCM_COMPILE_COMMAND="git submodule update --init --recursive; python3.6 install.py --all"
 
 
 ###############################################################################
@@ -227,7 +227,7 @@ then
   if [ ! -d "$HOME/.oh-my-zsh" ]; then
     warning "NOTICE: in a moment, the shell will transition to ZSH. When this happens, simply type 'exit' and then press enter"
     do_thing "$OH_MY_ZSH_SETUP_COMMAND" "Installing oh-my-zsh"
-    do_thing "sudo chsh --shell /usr/bin/zsh $USER" "Changing $USER's shell to zsh"
+    do_thing "sudo chsh --shell /usr/bin/zsh $USER || /opt/pbis/bin/config LoginShellTemplate /bin/zsh" "Changing $USER's shell to zsh"
   fi
 
   do_thing "$FZF_STEUP_COMMAND" "Adding fzf key bindings"
