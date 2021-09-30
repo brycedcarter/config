@@ -8,7 +8,7 @@
 ############## CONSTANTS SETUP ################################################
 ###############################################################################
 
-LINUX_ZSH_PACKAGES=(zsh python-pygments ripgrep fdclone )
+LINUX_ZSH_PACKAGES=(zsh python-pygments ripgrep fd-find)
 MAC_ZSH_PACKAGES=(zsh pygments ripgrep fd)
 
 LINUX_VIM_PACKAGES=(build-essential cmake python3-dev python-dev vim universal-ctags golang npm openjdk-11-jdk fzf)
