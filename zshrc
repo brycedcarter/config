@@ -207,8 +207,8 @@ export FZF_DEFAULT_OPTS="
 --marker '*'
 --bind '?:toggle-preview'
 "
-export FZF_DEFAULT_COMMAND='fd --type f'
-export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_DEFAULT_COMMAND='fd --search-path $HOME --search-path . . '
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND --type f"
 export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND --type d"
 export FZF_COMPLETION_TRIGGER='**'
 
