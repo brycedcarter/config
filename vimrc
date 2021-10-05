@@ -66,8 +66,8 @@ filetype plugin indent on    " required
 set encoding=utf-8
 set number
 set showcmd
-set hlsearch
-set incsearch
+set hlsearch " highlight search results
+set incsearch " show search results while typing
 set backspace=2
 inoremap jk <esc>
 colorscheme brycedcarter
@@ -86,11 +86,16 @@ set smartcase " case insensitive search if search pattern is all lowercase
 set list " show visual whitespace 
 set listchars=tab:>.,trail:.,extends:#,nbsp:.
 
+" disable automatic keybindings for all plugins (except spellunker becuase it 
+" does not support it) 
+let g:gitgutter_map_keys = 0
+let g:NERDCreateDefaultMappings = 0
+
 " spelunker setup
 set nospell
 set spellfile=~/.spellfile.utf-8.add
 let g:spelunker_check_type = 1
-highlight SpelunkerSpellBad cterm=underline ctermfg=247 gui=underline guifg=#9e9e9e
+highlight SpelunkerSpellBad cterm=underline ctermfg=NONE gui=underline guifg=NONE
 highlight SpelunkerComplexOrCompoundWord cterm=underline ctermfg=NONE gui=underline guifg=NONE
 
 " syntastic customization
@@ -124,7 +129,7 @@ endif
 " enable code folding
 set foldmethod=indent
 set foldlevel=99
-nnoremap <leader><space> za
+"  nnoremap <leader><space> za
 let g:SimpylFold_docstring_preview=1
 
 
@@ -149,7 +154,6 @@ nnoremap <C-H> <C-W><C-H>
 
 nnoremap <leader>s :split<cr>
 nnoremap <leader>vs :vsplit<cr>
-
 
 
 " quick file writing
@@ -187,9 +191,6 @@ nnoremap <leader>F ?\v
 " quick edit
 nnoremap <leader>e :e<Space>
 
-" Fuzzy open shortcut
-nnoremap <C-p> :Files<cr>
-
 nnoremap <tab> :b#<cr>
 " quick cycle through buffers
 nnoremap <S-tab> :bn<cr>
@@ -206,6 +207,10 @@ nnoremap <leader>r :%sno/
 nnoremap <leader>t :terminal<cr>
 tnoremap <C-t> exit<cr>
 
+
+" fzf bindings
+nnoremap <leader>H :History<cr>
+nnoremap <leader>C :Color<cr>
 
 " ===================== Auto commands ================
 augroup headers
@@ -236,6 +241,9 @@ if &term =~ '256color'
       " Disable Background Color Erase (BCE) so that color schemes
       "     " work properly when Vim is used inside tmux and GNU screen.
       set t_ut=
+
+" indented list replacement macro
+let @l = ' r€PSÂ§[201~/** r- €kb/* r^\s\*'
 
 
 
