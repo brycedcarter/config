@@ -242,8 +242,17 @@ if &term =~ '256color'
       "     " work properly when Vim is used inside tmux and GNU screen.
       set t_ut=
 
-" indented list replacement macro
-let @l = ' r�PS§[201~/** r- �kb/* r^\s\*'
+" Converts a list that has been copied from OneNote into a valid markdown
+" This is required because anything more than the basic indentation does not 
+" copy to makrdown correctly. 
+" The list indentation is represented with tab indents rather than *s
+function! ListToMarkdown()
+  %sno/\v^\s[-○§] (\S)/* \1/eg
+  %sno/\v^\s\s[-○§] (\S)/** \1/eg
+  %sno/\v^\s\s\s[-○§] (\S)/*** \1/eg
+  %sno/\v^\s\s\s\s[-○§] (\S)/**** \1/eg
+endfunction
+nnoremap <leader>@l :silent call ListToMarkdown()<cr>
 
 
 
