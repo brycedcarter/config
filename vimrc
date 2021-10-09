@@ -29,26 +29,29 @@ filetype off                  " required
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
-Plugin 'VundleVim/Vundle.vim'
-Plugin 'scrooloose/nerdcommenter'
-Plugin 'Valloric/YouCompleteMe'
-Plugin 'editorconfig/editorconfig-vim'
-Plugin 'tmhedberg/SimpylFold'
-Plugin 'vim-scripts/indentpython.vim'
-Plugin 'vim-syntastic/syntastic'
-Plugin 'nvie/vim-flake8'
-Plugin 'preservim/nerdtree'
-Plugin 'Xuyuanp/nerdtree-git-plugin'
-Plugin 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
-Plugin 'mbbill/undotree'
-Plugin 'kamykn/spelunker.vim'
-Plugin 'jeetsukumaran/vim-buffergator'
+Plugin 'VundleVim/Vundle.vim' " Plugin manger
+Plugin 'scrooloose/nerdcommenter' " Quickly add and remove comments 
+Plugin 'Valloric/YouCompleteMe' " Autocompletion
+Plugin 'editorconfig/editorconfig-vim' " Integration with editorconfig files
+Plugin 'tmhedberg/SimpylFold' " Code folding for python
+Plugin 'vim-scripts/indentpython.vim' " better auto indenting for python
+Plugin 'vim-syntastic/syntastic' " Syntax checking 
+Plugin 'nvie/vim-flake8' " syntax checking tool for python
+Plugin 'preservim/nerdtree' " File browsing
+Plugin 'Xuyuanp/nerdtree-git-plugin' " git integration with nerd tree
+Plugin 'mbbill/undotree' " better undo interface
+Plugin 'kamykn/spelunker.vim' " spellcheck and correction suggestions
+Plugin 'jeetsukumaran/vim-buffergator' " buffer listing panel
 Plugin 'universal-ctags/ctags'
-Plugin 'majutsushi/tagbar'
-Plugin 'airblade/vim-gitgutter'
-Plugin 'voldikss/vim-floaterm'
-Plugin 'junegunn/fzf'
+Plugin 'majutsushi/tagbar' " outline sidbar
+Plugin 'airblade/vim-gitgutter' " show git status in gutter
+Plugin 'voldikss/vim-floaterm' " popup terminal
+Plugin 'junegunn/fzf' " fuzyy finding navigation
 Plugin 'junegunn/fzf.vim'
+Plugin 'octol/vim-cpp-enhanced-highlight' " better highlighting for c++
+Plugin 'tpope/vim-obsession' " Intelligent and automatic session management
+Plugin 'vim-airline/vim-airline' " Better status line
+Plugin 'vim-airline/vim-airline-themes' " Color theme support for airline
 call vundle#end()            " required
 filetype plugin indent on    " required
  "to ignore plugin indent changes, instead use:
@@ -72,7 +75,8 @@ set backspace=2
 inoremap jk <esc>
 colorscheme brycedcarter
 syntax enable
-set clipboard=unnamed
+" set clipboard=unnamed
+set clipboard=unnamedplus " allows yank to go dirrectly to the linux system CLIPBOARD (xclip -selection c -o) which is the one that is synced over XQuarts. using unnamed sends yank to the PRIMARY clipboard that is not synced
 let mapleader=" "
 set timeout timeoutlen=1500
 set cursorline
@@ -91,28 +95,57 @@ set listchars=tab:>.,trail:.,extends:#,nbsp:.
 let g:gitgutter_map_keys = 0
 let g:NERDCreateDefaultMappings = 0
 
+" Airline
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:airline#extensions#tabline#enabled = 1
+let g:airline_theme='deus'
+let g:airline_powerline_fonts = 1
+
+" CppEnhancedHighlight
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:cpp_class_scope_highlight=1
+let g:cpp_experimental_simple_template_highlight=1
+let g:cpp_concepts_highlight=1
+
 " spelunker setup
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set nospell
 set spellfile=~/.spellfile.utf-8.add
 let g:spelunker_check_type = 1
 highlight SpelunkerSpellBad cterm=underline ctermfg=NONE gui=underline guifg=NONE
 highlight SpelunkerComplexOrCompoundWord cterm=underline ctermfg=NONE gui=underline guifg=NONE
 
-" syntastic customization
+" Syntastic
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"  Commands:
+"     Errors               pop up location list and display errors
+"     SyntasticToggleMode  toggles between active and passive mode
+"     SyntasticCheck       forces a syntax check in passive mode
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:syntastic_check_on_open=1 " Check for syntax errors on file open.
+let g:syntastic_echo_current_error=1 " Echo errors to the command window.
+let g:syntastic_enable_signs=1 " Mark lines with errors and warnings.
+let g:syntastic_enable_balloons=0 " Do not open error balloons over erroneous lines.
+let g:syntastic_cpp_check_header=1 " YCM will provide context for C++ files.
+let g:syntastic_c_check_header=1 " Same for C files.
 let g:syntastic_python_checkers = ['flake8'] " use flake8 as the python syntax checker
 let g:syntastic_python_flake8_args = '--per-file-ignores="__init__.py:F401"'
 
 " ycm customization
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:ycm_autoclose_preview_window_after_completion=1
+let g:ycm_collect_identifiers_from_tags_files=1
 nnoremap <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
 nnoremap <leader>d  :YcmCompleter GetDoc<CR>
 map <C-n> :NERDTreeToggle<CR>
 
 " buffergator customization
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:buffergator_suppress_keymaps=1
 nnoremap <leader>b :BuffergatorToggle<cr>
 
 " tagbar customization
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:tagbar_autoclose=1
 let g:tagbar_autofocus=1
 let g:tagbar_show_data_type = 1
@@ -186,7 +219,6 @@ nnoremap <silent> <leader><cr> :noh<cr>
 
 " search 
 nnoremap <leader>f /\v
-nnoremap <leader>F ?\v
 
 " quick edit
 nnoremap <leader>e :e<Space>
@@ -207,10 +239,15 @@ nnoremap <leader>r :%sno/
 nnoremap <leader>t :terminal<cr>
 tnoremap <C-t> exit<cr>
 
+" reload vimrc
+nnoremap <F1> :so $MYVIMRC<cr>
 
 " fzf bindings
 nnoremap <leader>H :History<cr>
 nnoremap <leader>C :Color<cr>
+nnoremap <leader>O :Files<cr>
+nnoremap <leader>L :Lines<cr>
+nnoremap <leader>T :Tags<cr>
 
 " ===================== Auto commands ================
 augroup headers
@@ -242,6 +279,7 @@ if &term =~ '256color'
       "     " work properly when Vim is used inside tmux and GNU screen.
       set t_ut=
 
+endif
 " Converts a list that has been copied from OneNote into a valid markdown
 " This is required because anything more than the basic indentation does not 
 " copy to makrdown correctly. 
@@ -254,8 +292,16 @@ function! ListToMarkdown()
 endfunction
 nnoremap <leader>@l :silent call ListToMarkdown()<cr>
 
+" Function to source only if file exists --- from here 
+" https://devel.tech/snippets/n/vIIMz8vZ/load-vim-source-files-only-if-they-exist
+function! SourceIfExists(file)
+  if filereadable(expand(a:file))
+    exe 'source' a:file
+  endif
+endfunction
+
+call SourceIfExists("~/.config-work/vimrc")
 
 
 
-endif
 
