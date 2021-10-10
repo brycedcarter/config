@@ -5,23 +5,12 @@
 "######################################################################################
 
 " BRYCE'S USAGE NOTES
-"
-"
 " <leader> = <space>
-"
-" exit edit mode: jk 
-" toggle comment: <leader>ci
-" toggle folding: <leader><space>
-" get docs for function <leader>d
-" go to definition for function <leader>g
-" add marker: m[a-z0-9]
-" remove all markers from line: m-
-" list markers: m/ 
-" toggle file tree view ctrl+n 
-" just back to previous buffer <tab>
-" open the outliner <leader>o
 
 
+" Plugins 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 set nocompatible              " be iMproved, required
 filetype off                  " required
@@ -54,52 +43,84 @@ Plugin 'vim-airline/vim-airline' " Better status line
 Plugin 'vim-airline/vim-airline-themes' " Color theme support for airline
 call vundle#end()            " required
 filetype plugin indent on    " required
- "to ignore plugin indent changes, instead use:
+"to ignore plugin indent changes, instead use:
 "filetype plugin on
 
     " Brief help    
     " :PluginList          - list configured plugins  
     " :PluginInstall(!)    - install (update) plugins     
     " :PluginSearch(!) foo - search (or refresh cache first) for foo    
-    " " :PluginClean(!)- confirm (or auto-approve) removal of unused pluginsk
+    " :PluginClean(!)- confirm (or auto-approve) removal of unused plugins
     "
- "see :h vundle for more details or wiki for faq
- "put your non-plugin stuff after this line
+"see :h vundle for more details or wiki for faq
+"put your non-plugin stuff after this line
 
-set encoding=utf-8
-set number
-set showcmd
+
+" Basic config settings
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+syntax enable " enable syntax highlighting
+colorscheme brycedcarter " use custom color scheme
+
+set backspace=2 " allow backspace to go over eol, indent, and start of insert
+set clipboard=unnamedplus " allows yank to go dirrectly to the linux system CLIPBOARD (xclip -selection c -o) which is the one that is synced over XQuarts. using unnamed sends yank to the PRIMARY clipboard that is not synced
+set colorcolumn=80 " show the 80th column as a guide
+set cursorline " Highlight the line with the cursor
+set encoding=utf-8 " use utf-8 encoding
+set expandtab                   " Expand tabs into spaces. use CTLR+V->Tab for a real tab
+set foldlevelstart=99 " start with no folding
+set foldmethod=syntax " use syntax elements to define folding boundaries
+set hidden " allow hiding modified buffers without saving
+set history=1000 " remember lots of commands
 set hlsearch " highlight search results
 set incsearch " show search results while typing
-set backspace=2
-inoremap jk <esc>
-colorscheme brycedcarter
-syntax enable
-" set clipboard=unnamed
-set clipboard=unnamedplus " allows yank to go dirrectly to the linux system CLIPBOARD (xclip -selection c -o) which is the one that is synced over XQuarts. using unnamed sends yank to the PRIMARY clipboard that is not synced
-let mapleader=" "
-set timeout timeoutlen=1500
-set cursorline
-set relativenumber
-set laststatus=2
-set history=1000 " remember lots of commands
-set undolevels=1000 " keep lots of undo
-set colorcolumn=80 " show the 80th column as a guide
-set hidden " allow hiding modified buffers without saving
-set smartcase " case insensitive search if search pattern is all lowercase
+set laststatus=2 " always show the status bar for all windows
 set list " show visual whitespace 
-set listchars=tab:>.,trail:.,extends:#,nbsp:.
+set listchars=tab:➤-,trail:·,extends:»,precedes:« " chars to show in place of whitespace
+set lazyredraw                  " Redraw faster.
+set number " show line numbers
+set relativenumber " use relative numbers in line numbering
+set scrolloff=5                 " Keep min of N lines above/below cursor.
+set shiftwidth=2                " Auto-indent 2 spaces each indent level. (used for C style files)
+set showmatch                   " Show matching () {} etc..
+set smarttab                    " Tabs and backspaces at the start of a line indent the line one level.
+set sidescrolloff=10            " Keep min of N columns right/left cursor.
+set smartindent                 " Maintains most indentation and adds extra level when nesting.
+set splitright splitbelow       " Open splits below and to the right.
+set synmaxcol=2000              " Only matches syntax on first N columns of each line.
+set textwidth=80                " Hard wrap at N characters.
+set timeout timeoutlen=1500 " wait 1.5s before canceling a partial command
+set ttyfast                     " Smoother redrawing.
+set undolevels=1000 " keep lots of undo
+set viminfo='100,<500,%,h         " Adjust viminfo contents.
+set virtualedit=block           " Allow the cursor to move to columns without text in block select mode
+set wildignore=*.pyc      " Ignore generated files in the source tree.
+set wildignorecase              " Tab completion is case-insensitive.
+set wildmenu                    " Tab completion navigable menu is enabled.
+set wildmode=list:longest,full  " Tab completion lists matches, then opens wildmenu on next <Tab>.
+set formatoptions=cqronl " custom formatting
 
-" disable automatic keybindings for all plugins (except spellunker becuase it 
-" does not support it) 
-let g:gitgutter_map_keys = 0
-let g:NERDCreateDefaultMappings = 0
+
+" set the leader
+let mapleader=" "
+
+
+" Plugin Config 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" disable automatic keybindings for all plugins (except spellunker because it does not support it) 
+let g:gitgutter_map_keys = 0 " remove git gutter key mappings
+let g:NERDCreateDefaultMappings = 0 "remove nerd tree key mappings
 
 " Airline
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:airline#extensions#tabline#enabled = 1
+set noshowmode  " Don't show current editor mode (insert, visual, replace, etc). that is airline's job now
+let g:airline#extensions#tabline#enabled = 1 " display the enhanced tab bar that shows buffers 
+let g:airline#extensions#tabline#left_alt_sep = '|' " customize tabline visual
+let g:airline#extensions#tabline#left_sep = ' '
 let g:airline_theme='deus'
 let g:airline_powerline_fonts = 1
+let g:airline_extensions = ['tabline'] " opt in to extensions rather than auto enabled
 
 " CppEnhancedHighlight
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -107,20 +128,15 @@ let g:cpp_class_scope_highlight=1
 let g:cpp_experimental_simple_template_highlight=1
 let g:cpp_concepts_highlight=1
 
-" spelunker setup
+" Spelunker setup
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-set nospell
+set nospell " use Spelunker instead of builtin speckcheck
 set spellfile=~/.spellfile.utf-8.add
 let g:spelunker_check_type = 1
 highlight SpelunkerSpellBad cterm=underline ctermfg=NONE gui=underline guifg=NONE
 highlight SpelunkerComplexOrCompoundWord cterm=underline ctermfg=NONE gui=underline guifg=NONE
 
 " Syntastic
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"  Commands:
-"     Errors               pop up location list and display errors
-"     SyntasticToggleMode  toggles between active and passive mode
-"     SyntasticCheck       forces a syntax check in passive mode
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:syntastic_check_on_open=1 " Check for syntax errors on file open.
 let g:syntastic_echo_current_error=1 " Echo errors to the command window.
@@ -130,6 +146,7 @@ let g:syntastic_cpp_check_header=1 " YCM will provide context for C++ files.
 let g:syntastic_c_check_header=1 " Same for C files.
 let g:syntastic_python_checkers = ['flake8'] " use flake8 as the python syntax checker
 let g:syntastic_python_flake8_args = '--per-file-ignores="__init__.py:F401"'
+" ycm is used for C family language checking (controlled by extra_conf files)
 
 " ycm customization
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -137,6 +154,10 @@ let g:ycm_autoclose_preview_window_after_completion=1
 let g:ycm_collect_identifiers_from_tags_files=1
 nnoremap <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
 nnoremap <leader>d  :YcmCompleter GetDoc<CR>
+nnoremap <F5> :YcmForceCompileAndDiagnostics<CR>
+
+
+
 map <C-n> :NERDTreeToggle<CR>
 
 " buffergator customization
@@ -156,15 +177,14 @@ let g:tagbar_sort = 0
 nnoremap <silent> <leader>o :TagbarToggle<cr>
 
 if $VIM_CRONTAB == "true"
-	set backupcopy=yes
+set backupcopy=yes
 endif
 
-" enable code folding
-set foldmethod=indent
-set foldlevel=99
+
 "  nnoremap <leader><space> za
 let g:SimpylFold_docstring_preview=1
 
+inoremap jk <esc>
 
 "ignore files in NERDTree
 let NERDTreeIgnore=['\.pyc$', '\~$']
@@ -218,7 +238,8 @@ inoremap `` ``<esc>i
 nnoremap <silent> <leader><cr> :noh<cr>
 
 " search 
-nnoremap <leader>f /\v
+nnoremap <leader>f /\v\c
+" case insensitive regex search
 
 " quick edit
 nnoremap <leader>e :e<Space>
