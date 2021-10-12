@@ -111,6 +111,7 @@ let mapleader=" "
 " disable automatic keybindings for all plugins (except spellunker because it does not support it) 
 let g:gitgutter_map_keys = 0 " remove git gutter key mappings
 let g:NERDCreateDefaultMappings = 0 "remove nerd tree key mappings
+let g:buffergator_suppress_keymaps=1 " remove buffergator key mappings
 
 " Airline
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -148,49 +149,56 @@ let g:syntastic_python_checkers = ['flake8'] " use flake8 as the python syntax c
 let g:syntastic_python_flake8_args = '--per-file-ignores="__init__.py:F401"'
 " ycm is used for C family language checking (controlled by extra_conf files)
 
-" ycm customization
+" YouCompleteMe ycm
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:ycm_autoclose_preview_window_after_completion=1
 let g:ycm_collect_identifiers_from_tags_files=1
 nnoremap <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
-nnoremap <leader>d  :YcmCompleter GetDoc<CR>
 nnoremap <F5> :YcmForceCompileAndDiagnostics<CR>
 
 
-
-map <C-n> :NERDTreeToggle<CR>
-
-" buffergator customization
+" NERDTree
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:buffergator_suppress_keymaps=1
+" add back default mapping
+map <C-n> :NERDTreeToggle<CR>
+let NERDTreeIgnore=['\.pyc$', '\~$']
+
+" Buffergator 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" add back default mapping
 nnoremap <leader>b :BuffergatorToggle<cr>
 
 " tagbar customization
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:tagbar_autoclose=1
-let g:tagbar_autofocus=1
-let g:tagbar_show_data_type = 1
-let g:tagbar_autoshowtag = 1
-let g:tagbar_autopreview = 0
-let g:no_status_line = 1
-let g:tagbar_sort = 0
+let g:tagbar_autoclose=1 " close the tagbar after jumping to a tag
+let g:tagbar_autofocus=1 " jump to the tag bar when it is opened
+let g:tagbar_show_data_type = 1 " show the tag type to its right
+let g:no_status_line = 1 " don't display the status line
+let g:tagbar_sort = 0 " sort by document order rather than name (outline)
+let g:tagbar_map_close = "<leader>o" " use same mapping to open and close
 nnoremap <silent> <leader>o :TagbarToggle<cr>
 
+" SimpyFold
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:SimpylFold_docstring_preview=1
+
+" UndoTree
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+nnoremap <leader>u :UndotreeToggle<cr>
+
+
+" Workarounds
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 if $VIM_CRONTAB == "true"
 set backupcopy=yes
 endif
 
 
-"  nnoremap <leader><space> za
-let g:SimpylFold_docstring_preview=1
 
 inoremap jk <esc>
 
-"ignore files in NERDTree
-let NERDTreeIgnore=['\.pyc$', '\~$']
 
-" better undo mapping
-nnoremap <leader>u :UndotreeToggle<cr>
 
 " floatterm setup
 nnoremap   <silent>   <F12>   :FloatermToggle<CR>
@@ -276,7 +284,13 @@ augroup headers
   au bufnewfile *.py exe "1," . 7 . "g/Filename:.*/s//Filename: " .expand("%")
   au bufnewfile *.py exe "1," . 7 . "g/Date Created:.*/s//Date Created: " .strftime("%Y-%m-%d")
   au bufnewfile *.py exe "normal! /\\V[Description]\<cr>vf]"
+augroup END
 
+
+" Resize splits on window resize.
+augroup AutoResizeSplits
+   autocmd!
+   autocmd VimResized * exe "normal! \<c-w>="
 augroup END
 
 augroup cleanup

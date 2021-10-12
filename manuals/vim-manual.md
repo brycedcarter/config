@@ -32,6 +32,9 @@ Toggle file browser sidebar                            | **Ctrl+n**
 Toggle outline sidebar                                 | **Space->o**
 Toggle undo history sidebar                            | **Space->u**
 Buffer view sidebar                                    | **Space->b**
+Open buffer in previous window                         | **o**
+Open buffer in new vertical split window               | **s**
+Open buffer in new horizontal split window             | **i**
 
 
 
