@@ -9,16 +9,10 @@
 	email = brycedcarter@gmail.com
 	name = Bryce Carter
 [core]
-	excludesfile = /Users/bryce/.gitignore_global
+	excludesfile = ~/.gitignore_global
 	autocrlf = input
 	fscache = true
 	preloadindex = true
-[difftool "sourcetree"]
-	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-	path = 
-[mergetool "sourcetree"]
-	cmd = /Users/bryce/Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
-	trustExitCode = true
 [commit]
 	template = ~/config/git-commit-template.md
 [diff]
