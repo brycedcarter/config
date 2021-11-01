@@ -139,6 +139,10 @@ highlight SpelunkerComplexOrCompoundWord cterm=underline ctermfg=NONE gui=underl
 
 " Syntastic
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+try
+  let g:flake8_work_file_ignores=join(readfile(expand("~/.config-work/flake8-ignores.txt")))
+catch /.*/
+endtry
 let g:syntastic_check_on_open=1 " Check for syntax errors on file open.
 let g:syntastic_echo_current_error=1 " Echo errors to the command window.
 let g:syntastic_enable_signs=1 " Mark lines with errors and warnings.
@@ -146,7 +150,7 @@ let g:syntastic_enable_balloons=0 " Do not open error balloons over erroneous li
 let g:syntastic_cpp_check_header=1 " YCM will provide context for C++ files.
 let g:syntastic_c_check_header=1 " Same for C files.
 let g:syntastic_python_checkers = ['flake8'] " use flake8 as the python syntax checker
-let g:syntastic_python_flake8_args = '--per-file-ignores="__init__.py:F401"'
+let g:syntastic_python_flake8_args = printf('--per-file-ignores="__init__.py:F401 %s"',g:flake8_work_file_ignores)
 " ycm is used for C family language checking (controlled by extra_conf files)
 
 " YouCompleteMe ycm
@@ -185,6 +189,12 @@ let g:SimpylFold_docstring_preview=1
 " UndoTree
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 nnoremap <leader>u :UndotreeToggle<cr>
+
+
+" UndoTree
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+nnoremap <leader>/ :call nerdcommenter#Comment('n', 'toggle')<CR>
+vnoremap <leader>/ :call nerdcommenter#Comment('x', 'toggle')<CR>
 
 
 " Workarounds
