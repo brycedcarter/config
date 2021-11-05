@@ -186,7 +186,8 @@ ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern cursor)
 # source zshrc sub configs
 source "$HOME/config/source_sub_zsh_configs.sh"
 
-
+# source iterm2 integration
+source ~/.iterm2_shell_integration.zsh
 
 # setup fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
