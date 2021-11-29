@@ -184,9 +184,10 @@ ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern cursor)
 
 
 # source zshrc sub configs
-source ~/config/source_sub_zsh_configs.sh
+source "$HOME/config/source_sub_zsh_configs.sh"
 
-
+# source iterm2 integration
+source ~/.iterm2_shell_integration.zsh
 
 # setup fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
@@ -207,8 +208,8 @@ export FZF_DEFAULT_OPTS="
 --marker '*'
 --bind '?:toggle-preview'
 "
-export FZF_DEFAULT_COMMAND='fd --type f'
-export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_DEFAULT_COMMAND='fd --search-path $HOME --search-path . . '
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND --type f"
 export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND --type d"
 export FZF_COMPLETION_TRIGGER='**'
 
@@ -280,8 +281,8 @@ if [ -f ~/driving/scripts/zooxrc.sh ]; then
 	source ~/driving/scripts/shell/zooxrc.sh
 fi
 
-bindkey '\e[A' history-beginning-search-backward 
-bindkey '\e[B' history-beginning-search-forward
+bindkey '^[[A' history-beginning-search-backward 
+bindkey '^[[B' history-beginning-search-forward
 
 function copytosega()
 {
@@ -293,4 +294,9 @@ function copytosega()
 
 alias sshsega1='sshpass -p Inf!n1tyisenough ssh zoox@sega-local'
 alias uartsega1='sudo picocom -b 115200 /usr/local/dev/sega-main-uart'
+
+# improve speed of auto-completion (recommended form bazel autocomplete)
+zstyle ':completion:*' accept-exact '*(N)'
+zstyle ':completion:*' use-cache on
+zstyle ':completion:*' cache-path ~/.zsh/cache
 

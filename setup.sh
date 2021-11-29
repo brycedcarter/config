@@ -35,6 +35,7 @@ MANAGE_CONFIGS=false
 INSTALL_FONTS=false
 VERBOSE=false
 FORCE_YCM=false
+FORCE=false
 
 if [ $# -eq 0 ];
 then
@@ -58,6 +59,7 @@ show_usage()
   -f: Install fonts
   -ycm: Compile YouCompleteMe
   --verbose: Show verbose output of setup
+  --force: Continue when errors are encountered (this mode is not well tested)
   -h: Show this help
   "
 }
@@ -72,6 +74,7 @@ do
     -f) INSTALL_FONTS=true ;;
     --ycm) FORCE_YCM=true ;;
     --verbose) VERBOSE=true ;;
+    --force) FORCE=true ;;
     -h|--help) show_usage; exit 0;;
     *) echo "Unknown arument: $1";;
     esac
@@ -146,8 +149,13 @@ description="$2"
 status "$2"
 eval $1
 if [ $? -ne 0 ]; then
-  message ": \x1b[31mFAIL\x1b[0m"
-  error "\nError encountered. Please re-run with --verbose for more details"
+  if $FORCE;
+  then
+    message ": \x1b[31mFAILED - BUT CONTINUING DUE TO FOCED MODE,,,\x1b[0m"
+  else
+    message ": \x1b[31mFAIL\x1b[0m"
+    error "\nError encountered. Please re-run with --verbose for more details"
+  fi
 else
   message ": \x1b[32mOK\x1b[0m"
 fi
@@ -235,6 +243,8 @@ then
   do_thing "use_repo https://github.com/zsh-users/zsh-syntax-highlighting.git $DIR/oh-my-zsh/custom/plugins/zsh-syntax-highlighting" "Installing zsh syntax highlighting"
 
   do_thing "use_repo https://github.com/romkatv/powerlevel10k.git $DIR/oh-my-zsh/custom/themes/powerlevel10k" "Installing powerlevel10k"
+
+  do_thing "wget -O ~/.iterm2_shell_integration.zsh https://iterm2.com/shell_integration/zsh" "Installing iterm zsh integration"
   
 fi
 
