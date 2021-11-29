@@ -44,10 +44,10 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 
 
 POWERLEVEL9K_OS_ICON_FOREGROUND=15 # setting backgrounds for all so that they do not cause problems with hyper termal
-POWERLEVEL9K_OS_ICON_BACKGROUND=237
-POWERLEVEL9K_SSH_BACKGROUND=237
-POWERLEVEL9K_PROMPT_CHAR_BACKGROUND=234
-POWERLEVEL9K_STATUS_OK_BACKGROUND=234
+POWERLEVEL9K_OS_ICON_BACKGROUND=8
+POWERLEVEL9K_SSH_BACKGROUND=3
+POWERLEVEL9K_PROMPT_CHAR_BACKGROUND=8
+POWERLEVEL9K_STATUS_OK_BACKGROUND=8
 
 POWERLEVEL9K_ICON_PADDING=moderate
 # The list of segments shown on the left. Fill it with the most important segments.
@@ -146,7 +146,7 @@ plugins=(
   git
   history
   common-aliases
-  osx
+  macos
   wd
   colored-man-pages
   colorize
@@ -266,6 +266,9 @@ alias cat=ccat
 
 # quick acces to searching running processes
 alias pss='ps -ax | grep ' 
+
+# special ssh for when conencting to a trusted system
+alias sssh='ssh -o ForwardX11=yes -o ForwardX11Trusted=yes -o ForwardAgent=yes '
 
 
 # shorthand for finding text in files in current dir
