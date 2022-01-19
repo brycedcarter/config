@@ -17,6 +17,7 @@
 	template = ~/config/git-commit-template.md
 [diff]
 	tool = vimdiff
+  renamelimit = 999999
 [difftool]
 	prompt = false
 [pull]

@@ -1,8 +1,12 @@
 at:~/zoox/driving/scripts/ansible/roles/toad
+bcc:~/Documents/bcc
+b:~/driving/experimental/bryce
 config:~/config
+db:~/driving/bazel-bin
 d:~/driving
 m:/mnt
 p:~/personal
 sega:~/zoox/zhat/hw_tests/sega2
 t:~/zoox/toad
+ycm:~/.vim/bundle/YouCompleteMe/third_party/ycmd
 z:~/zoox

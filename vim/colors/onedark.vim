@@ -106,6 +106,7 @@ let s:yellow = { "gui": "#E5C07b", "cterm": "180", "cterm16": "3" }
 let s:dark_yellow = { "gui": "#D19A66", "cterm": "173", "cterm16": "11" }
 
 let s:blue = { "gui": "#61AFEF", "cterm": "39", "cterm16": "4" } " Alternate cterm: 75
+let s:dark_blue = { "gui": "#00005f", "cterm": "17", "cterm16": "4" }
 
 let s:purple = { "gui": "#C678DD", "cterm": "170", "cterm16": "5" } " Alternate cterm: 176
 
@@ -176,9 +177,9 @@ call s:h("CursorColumn", { "bg": s:cursor_grey }) " the screen column that the c
 call s:h("CursorLine", { "bg": s:cursor_grey }) " the screen line that the cursor is in when 'cursorline' is set
 call s:h("Directory", {}) " directory names (and other special names in listings)
 call s:h("DiffAdd", { "fg": s:green }) " diff mode: Added line
-call s:h("DiffChange", { "fg": s:dark_yellow }) " diff mode: Changed line
+call s:h("DiffChange", { "fg": s:blue }) " diff mode: Changed line
 call s:h("DiffDelete", { "fg": s:red }) " diff mode: Deleted line
-call s:h("DiffText", { "fg": s:blue }) " diff mode: Changed text within a changed line
+call s:h("DiffText", { "bg": s:dark_blue, 'fg': s:blue }) " diff mode: Changed text within a changed line
 call s:h("ErrorMsg", {}) " error messages on the command line
 call s:h("VertSplit", { "fg": s:vertsplit }) " the column separating vertically split windows
 call s:h("Folded", { "fg": s:comment_grey }) " line used for closed folds

@@ -41,6 +41,7 @@ Plugin 'octol/vim-cpp-enhanced-highlight' " better highlighting for c++
 Plugin 'tpope/vim-obsession' " Intelligent and automatic session management
 Plugin 'vim-airline/vim-airline' " Better status line
 Plugin 'vim-airline/vim-airline-themes' " Color theme support for airline
+Plugin 'tpope/vim-fugitive' " Git extension
 call vundle#end()            " required
 filetype plugin indent on    " required
 "to ignore plugin indent changes, instead use:
@@ -99,6 +100,7 @@ set wildignorecase              " Tab completion is case-insensitive.
 set wildmenu                    " Tab completion navigable menu is enabled.
 set wildmode=list:longest,full  " Tab completion lists matches, then opens wildmenu on next <Tab>.
 set formatoptions=cqronl " custom formatting
+set diffopt+=internal,algorithm:patience " enable better 'patience' diff
 
 
 " set the leader
@@ -155,8 +157,12 @@ let g:syntastic_python_flake8_args = printf('--per-file-ignores="__init__.py:F40
 
 " YouCompleteMe ycm
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:ycm_log_level = 'debug'
+let g:ycm_server_log_level = 'debug'
 let g:ycm_autoclose_preview_window_after_completion=1
 let g:ycm_collect_identifiers_from_tags_files=1
+let g:ycm_error_symbol = '>>'
+let g:ycm_warning_symbol = '!'
 nnoremap <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
 nnoremap <F5> :YcmForceCompileAndDiagnostics<CR>
 
@@ -234,8 +240,6 @@ nnoremap <leader>w :w<cr>
 nnoremap <leader>q :q<cr>
 
 
-" add find and replace
-vnoremap <silent> <leader>r :call VisualSelection('replace')<CR>
 
 " paren/wrapping tools
 vnoremap <leader>( <esc>`>a)<esc>`<i(<esc>
@@ -272,7 +276,8 @@ nnoremap <leader>ds i"""<cr><cr>"""<esc>ki
 nnoremap <leader>sd i""""""<esc>hhi
 
 " quick relace
-nnoremap <leader>r :%sno/
+nnoremap <leader>r :%snomagic/
+vnoremap <leader>r :snomagic/
 
 " Quick open terminal
 nnoremap <leader>t :terminal<cr>
