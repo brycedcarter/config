@@ -30,7 +30,6 @@ Plugin 'preservim/nerdtree' " File browsing
 Plugin 'Xuyuanp/nerdtree-git-plugin' " git integration with nerd tree
 Plugin 'mbbill/undotree' " better undo interface
 Plugin 'kamykn/spelunker.vim' " spellcheck and correction suggestions
-Plugin 'jeetsukumaran/vim-buffergator' " buffer listing panel
 Plugin 'universal-ctags/ctags'
 Plugin 'majutsushi/tagbar' " outline sidbar
 Plugin 'airblade/vim-gitgutter' " show git status in gutter
@@ -113,7 +112,6 @@ let mapleader=" "
 " disable automatic keybindings for all plugins (except spellunker because it does not support it) 
 let g:gitgutter_map_keys = 0 " remove git gutter key mappings
 let g:NERDCreateDefaultMappings = 0 "remove nerd tree key mappings
-let g:buffergator_suppress_keymaps=1 " remove buffergator key mappings
 
 " Airline
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -163,7 +161,8 @@ let g:ycm_autoclose_preview_window_after_completion=1
 let g:ycm_collect_identifiers_from_tags_files=1
 let g:ycm_error_symbol = '>>'
 let g:ycm_warning_symbol = '!'
-nnoremap <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
+nnoremap <leader>g  :YcmCompleter GoTo<CR>
+nnoremap <leader>F  :YcmCompleter FixIt<CR>
 nnoremap <F5> :YcmForceCompileAndDiagnostics<CR>
 
 
@@ -173,10 +172,6 @@ nnoremap <F5> :YcmForceCompileAndDiagnostics<CR>
 map <C-n> :NERDTreeToggle<CR>
 let NERDTreeIgnore=['\.pyc$', '\~$']
 
-" Buffergator 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" add back default mapping
-nnoremap <leader>b :BuffergatorToggle<cr>
 
 " tagbar customization
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -210,11 +205,9 @@ if $VIM_CRONTAB == "true"
 set backupcopy=yes
 endif
 
-
+hi debugPC term=reverse ctermbg=52 guibg=DarkRed
 
 inoremap jk <esc>
-
-
 
 " floatterm setup
 nnoremap   <silent>   <F12>   :FloatermToggle<CR>
@@ -292,6 +285,38 @@ nnoremap <leader>C :Color<cr>
 nnoremap <leader>O :Files<cr>
 nnoremap <leader>L :Lines<cr>
 nnoremap <leader>T :Tags<cr>
+nnoremap <leader>b :Buffers<cr>
+nnoremap <leader>R :Rg<cr>
+
+" gdb debuging
+packadd termdebug
+nnoremap <leader>D :Termdebug<cr>
+nnoremap <leader><Right> :Step<cr>
+nnoremap <leader><Down> :Over<cr>
+nnoremap <leader><Up> :Continue<cr>
+" Default mapping is K to evaluate
+
+let g:filePairs = [["cpp", "h"]]
+" for files with logical pairs such as .cpp and .h files, check if the pair
+" exists and if so, open it
+function ToggleIfPair()
+  let l:currentExtension = expand("%:e")
+  for pair in g:filePairs
+    for idx in [0, 1]
+      if pair[idx] == l:currentExtension
+        let l:matchingExtension = pair[(idx + 1)%2]
+        let l:matchingFilename = expand("%:p:r") . "." . l:matchingExtension
+        if filereadable(l:matchingFilename)
+          execute "edit " . l:matchingFilename
+        else
+          echo "Matching file: '" . l:matchingFilename . "' does not exist"
+        endif 
+      endif
+  endfor
+endfor
+endfunction
+
+nnoremap <leader>= :call ToggleIfPair()<cr>
 
 " ===================== Auto commands ================
 augroup headers
@@ -350,8 +375,5 @@ function! SourceIfExists(file)
   endif
 endfunction
 
+
 call SourceIfExists("~/.config-work/vimrc")
-
-
-
-
