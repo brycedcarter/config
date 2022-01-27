@@ -10,4 +10,31 @@ Author: Bryce Carter
 Date Created: 
 """
 
-.
+from pathlib import Path
+import argparse
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.description = __doc__
+
+    # positional argument
+    parser.add_argument("position", help="")
+    # flag argument
+    parser.add_argument("-f", "--flag", action="store_true", help="")
+    # optional input argument
+    parser.add_argument("--input", default="", help="")
+    # optional required input argument
+    parser.add_argument("--input", required=True, help="")
+    # optional input with limited choices
+    parser.add_argument("--choice", choices=[], help="")
+    # optional input with controlled type
+    parser.add_argument("--typed", type=int, help="")
+    # optional input path
+    parser.add_argument("--path", type=Path, help="")
+
+    args = parser.parse_args()
+
+
+if __name__ == "__main__":
+    main()
