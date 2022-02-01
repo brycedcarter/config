@@ -100,6 +100,8 @@ set wildmenu                    " Tab completion navigable menu is enabled.
 set wildmode=list:longest,full  " Tab completion lists matches, then opens wildmenu on next <Tab>.
 set formatoptions=cqronl " custom formatting
 set diffopt+=internal,algorithm:patience " enable better 'patience' diff
+set grepprg=rg\ -n\ --column\ --no-heading  " use rg for grepping
+set grepformat=%f:%l:%c:%m " set grep format to match grep config  
 
 
 " set the leader
@@ -269,8 +271,37 @@ nnoremap <leader>ds i"""<cr><cr>"""<esc>ki
 nnoremap <leader>sd i""""""<esc>hhi
 
 " quick relace
-nnoremap <leader>r :%snomagic/
-vnoremap <leader>r :snomagic/
+nnoremap <leader>r :%snomagic///gc<Left><Left><Left><Left>
+vnoremap <leader>r :snomagic///gc<Left><Left><Left><Left>
+
+" grep based refactor
+command! -nargs=+ Grep silent! :grep  <args> | redraw! | copen
+nnoremap <leader>R viw"ry/<C-r>r<cr>:exe "Grep " . shellescape(fnameescape(getreg("r")))<cr>
+vnoremap <leader>R "ry/<C-r>r<cr>:exe "Grep " . shellescape(fnameescape(getreg("r")))<cr>
+" :exe "Grep " . shellescape(fnameescape(expand("<cword>")))<cr>
+
+" quickfix bindings modified from: https://vonheikemen.github.io/devlog/tools/vim-and-the-quickfix-list/
+function! QuickfixMapping()
+  " Go to the previous location and stay in the quickfix window
+  nnoremap <buffer> K :cprev<CR>zz<C-w>w
+  " Go to the next location and stay in the quickfix window
+  nnoremap <buffer> J :cnext<CR>zz<C-w>w
+  " Make the quickfix list modifiable
+  nnoremap <buffer> <leader>u :set modifiable<CR>
+  " Save the changes in the quickfix window
+  nnoremap <buffer> <leader>w :cgetbuffer<CR>:cclose<CR>:copen<CR>
+  " Begin the search and replace
+  nnoremap <buffer> <leader>r :cdo s/// \| update<C-Left><C-Left><Left><Left><Left>
+  " Begin search and replace with result from previous leader-R in main window
+  nnoremap <buffer> <leader>R :cdo s/<C-R>r// \| update<C-Left><C-Left><Left><Left>
+endfunction
+
+augroup quickfix_group
+    autocmd!
+    autocmd filetype qf call QuickfixMapping()
+augroup END
+nnoremap [q :cprev<CR>
+nnoremap ]q :cnext<CR>
 
 " Quick open terminal
 nnoremap <leader>t :terminal<cr>
@@ -286,7 +317,7 @@ nnoremap <leader>O :Files<cr>
 nnoremap <leader>L :Lines<cr>
 nnoremap <leader>T :Tags<cr>
 nnoremap <leader>b :Buffers<cr>
-nnoremap <leader>R :Rg<cr>
+nnoremap <leader>G :Rg<cr>
 
 " gdb debuging
 packadd termdebug
