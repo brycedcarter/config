@@ -11,7 +11,7 @@
 LINUX_ZSH_PACKAGES=(zsh python-pygments ripgrep fd-find)
 MAC_ZSH_PACKAGES=(zsh pygments ripgrep fd)
 
-LINUX_VIM_PACKAGES=(build-essential cmake python3-dev python-dev vim universal-ctags golang npm openjdk-11-jdk fzf)
+LINUX_VIM_PACKAGES=(build-essential cmake python3-dev python3-venv python-dev vim universal-ctags golang npm openjdk-11-jdk fzf)
 MAC_VIM_PACKAGES=(cmake macvim go python fzf "--HEAD universal-ctags/universal-ctags/universal-ctags")
 
 LINUX_TOOLS_PACKAGES=(vim picocom git tldr tree)

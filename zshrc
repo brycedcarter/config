@@ -42,6 +42,12 @@ unset -m 'POWERLEVEL9K_*|DEFAULT_USER'
 POWERLEVEL9K_MODE=awesome-fontconfig
 ZSH_THEME="powerlevel10k/powerlevel10k"
 
+function prompt_current_project() {
+  if ! [ -z "$PRJACTIVE" ]; then
+    p10k segment -b black -f blue -t "$PRJACTIVE"
+  fi
+ }
+
 
 POWERLEVEL9K_OS_ICON_FOREGROUND=15 # setting backgrounds for all so that they do not cause problems with hyper terminal
 POWERLEVEL9K_OS_ICON_BACKGROUND=237
@@ -58,6 +64,7 @@ POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
   dir                     # current directory
   dir_writable            # current directory writable status 
   vcs                     # git status
+  current_project         # show value of custom PRJACTIVE environment variable 
   # =========================[ Line #2 ]=========================
   newline                 # \n
   prompt_char             # prompt symbol
@@ -196,6 +203,21 @@ function dhcp-stop() {
   sudo /bin/launchctl unload -w /System/Library/LaunchDaemons/bootps.plist
   fi
 }
+
+# For setting some environment variables that can be use as a quick way to set
+# where output data should be sent
+function setprj() {
+  if [ -d "$1" ]; then
+    export PRJACTIVE=$(basename $1) 
+    export PRJPATH=$1 
+  elif ! [ -z "$PRJBASE" ]; then
+    export $(cat "$PRJBASE/ACTIVE" | xargs)
+  else
+    echo "Project base not set"
+  fi
+}
+alias clearprj='export PRJACTIVE=;PRJPATH='
+setprj
 
 # If no ssh key is ready in the agent, load one
 if [ "$(ssh-add -l)" = "The agent has no identities." ]; then

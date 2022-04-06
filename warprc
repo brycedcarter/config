@@ -1,6 +1,7 @@
 at:~/zoox/driving/scripts/ansible/roles/toad
 bcc:~/Documents/bcc
 b:~/driving/experimental/bryce
+ber:~/.cache/bazel/_bazel_bryce/a4b0a616076f0107255a5c8310ba9621/execroot
 config:~/config
 db:~/driving/bazel-bin
 d:~/driving

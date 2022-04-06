@@ -41,6 +41,7 @@ Plugin 'tpope/vim-obsession' " Intelligent and automatic session management
 Plugin 'vim-airline/vim-airline' " Better status line
 Plugin 'vim-airline/vim-airline-themes' " Color theme support for airline
 Plugin 'tpope/vim-fugitive' " Git extension
+Plugin 'psf/black' " Black formatter
 call vundle#end()            " required
 filetype plugin indent on    " required
 "to ignore plugin indent changes, instead use:
@@ -160,9 +161,12 @@ let g:syntastic_python_flake8_args = printf('--per-file-ignores="__init__.py:F40
 let g:ycm_log_level = 'debug'
 let g:ycm_server_log_level = 'debug'
 let g:ycm_autoclose_preview_window_after_completion=1
+let g:ycm_max_num_identifier_candidates = 0
+let g:ycm_min_num_identifier_candidate_chars = 3
 let g:ycm_collect_identifiers_from_tags_files=1
 let g:ycm_error_symbol = '>>'
 let g:ycm_warning_symbol = '!'
+let g:ycm_max_num_candidates = 6
 nnoremap <leader>g  :YcmCompleter GoTo<CR>
 nnoremap <leader>F  :YcmCompleter FixIt<CR>
 nnoremap <F5> :YcmForceCompileAndDiagnostics<CR>
@@ -199,6 +203,11 @@ nnoremap <leader>u :UndotreeToggle<cr>
 nnoremap <leader>/ :call nerdcommenter#Comment('n', 'toggle')<CR>
 vnoremap <leader>/ :call nerdcommenter#Comment('x', 'toggle')<CR>
 
+" Black Formatter
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:black_linelength = 80 
+nnoremap <F4> :Black<CR>
+
 
 " Workarounds
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -234,6 +243,8 @@ nnoremap <leader>w :w<cr>
 " quick quit
 nnoremap <leader>q :q<cr>
 
+" quick toggle line numbers
+nnoremap <leader>n :set relativenumber!<cr>:set number!<cr>
 
 
 " paren/wrapping tools
@@ -261,9 +272,11 @@ nnoremap <leader>f /\v\c
 " quick edit
 nnoremap <leader>e :e<Space>
 
-nnoremap <tab> :b#<cr>
+" quick toggle previous buffer
+nnoremap <leader><tab> :b#<cr>
 " quick cycle through buffers
-nnoremap <S-tab> :bn<cr>
+nnoremap <tab> :bn<cr>
+nnoremap <S-tab> :bp<cr>
 
 " shortcut for adding docstring
 nnoremap <leader>ds i"""<cr><cr>"""<esc>ki
@@ -291,9 +304,9 @@ function! QuickfixMapping()
   " Save the changes in the quickfix window
   nnoremap <buffer> <leader>w :cgetbuffer<CR>:cclose<CR>:copen<CR>
   " Begin the search and replace
-  nnoremap <buffer> <leader>r :cdo s/// \| update<C-Left><C-Left><Left><Left><Left>
+  nnoremap <buffer> <leader>r :cdo s///g \| update<C-Left><C-Left><Left><Left><Left><Left>
   " Begin search and replace with result from previous leader-R in main window
-  nnoremap <buffer> <leader>R :cdo s/<C-R>r// \| update<C-Left><C-Left><Left><Left>
+  nnoremap <buffer> <leader>R :cdo s/<C-R>r//g \| update<C-Left><C-Left><Left><Left><Left>
 endfunction
 
 augroup quickfix_group
@@ -327,7 +340,7 @@ nnoremap <leader><Down> :Over<cr>
 nnoremap <leader><Up> :Continue<cr>
 " Default mapping is K to evaluate
 
-let g:filePairs = [["cpp", "h"]]
+let g:filePairs = [["cpp", "h"], ["cc", "h"], ["c", "h"]]
 " for files with logical pairs such as .cpp and .h files, check if the pair
 " exists and if so, open it
 function ToggleIfPair()
@@ -339,6 +352,7 @@ function ToggleIfPair()
         let l:matchingFilename = expand("%:p:r") . "." . l:matchingExtension
         if filereadable(l:matchingFilename)
           execute "edit " . l:matchingFilename
+          return
         else
           echo "Matching file: '" . l:matchingFilename . "' does not exist"
         endif 
