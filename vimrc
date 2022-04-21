@@ -129,7 +129,7 @@ let g:airline_extensions = ['tabline'] " opt in to extensions rather than auto e
 " CppEnhancedHighlight
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:cpp_class_scope_highlight=1
-let g:cpp_experimental_simple_template_highlight=1
+let g:cpp_experimental_template_highlight=1 " not using g:cpp_experimental_simple_template_highlight because it can be super slow
 let g:cpp_concepts_highlight=1
 
 " Spelunker setup

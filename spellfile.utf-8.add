@@ -88,3 +88,7 @@ hostname
 proto
 symcache
 cyclomatic
+NUMA
+be
+futex
+uchar
