@@ -6,6 +6,16 @@
 
 " BRYCE'S USAGE NOTES
 " <leader> = <space>
+"
+" Leader strategy is as follows:
+"   Actions are grouped together into roughly similar ideas. Each group is
+"   associated with a letter or key. For each group, there is a 'prime' action 
+"   that will be triggered simply with <leader> followed by the group's letter
+"   in lower case. The rest of the group's actions will be accessible using
+"   <leader> followed by the group's letter in UPPER case, followed by another
+"   descriptive letter.
+"   Finally, some groups may contain a subprime action, this will be accecced
+"   with <leader> followed by Ctrl + <groups letter>
 
 
 " Plugins 
@@ -105,9 +115,10 @@ set grepprg=rg\ -n\ --column\ --no-heading  " use rg for grepping
 set grepformat=%f:%l:%c:%m " set grep format to match grep config  
 
 
-" set the leader
-let mapleader=" "
-
+" Native Package Add
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+packadd termdebug
 
 " Plugin Config 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -167,17 +178,12 @@ let g:ycm_collect_identifiers_from_tags_files=1
 let g:ycm_error_symbol = '>>'
 let g:ycm_warning_symbol = '!'
 let g:ycm_max_num_candidates = 6
-nnoremap <leader>g  :YcmCompleter GoTo<CR>
-nnoremap <leader>F  :YcmCompleter FixIt<CR>
-nnoremap <F5> :YcmForceCompileAndDiagnostics<CR>
 
 
 " NERDTree
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " add back default mapping
-map <C-n> :NERDTreeToggle<CR>
 let NERDTreeIgnore=['\.pyc$', '\~$']
-
 
 " tagbar customization
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -187,27 +193,21 @@ let g:tagbar_show_data_type = 1 " show the tag type to its right
 let g:no_status_line = 1 " don't display the status line
 let g:tagbar_sort = 0 " sort by document order rather than name (outline)
 let g:tagbar_map_close = "<leader>o" " use same mapping to open and close
-nnoremap <silent> <leader>o :TagbarToggle<cr>
 
 " SimpyFold
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:SimpylFold_docstring_preview=1
 
-" UndoTree
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-nnoremap <leader>u :UndotreeToggle<cr>
-
-
-" UndoTree
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-nnoremap <leader>/ :call nerdcommenter#Comment('n', 'toggle')<CR>
-vnoremap <leader>/ :call nerdcommenter#Comment('x', 'toggle')<CR>
 
 " Black Formatter
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:black_linelength = 80 
-nnoremap <F4> :Black<CR>
 
+" floatterm setup
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:floaterm_width = 0.9
+let g:floaterm_height = 0.9
+let g:floaterm_autoclose = 2
 
 " Workarounds
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -218,132 +218,25 @@ endif
 
 hi debugPC term=reverse ctermbg=52 guibg=DarkRed
 
-inoremap jk <esc>
+if &term =~ '256color'
+      " COMES FROM" https://superuser.com/questions/457911/in-vim-background-color-changes-on-scrolling/588243
+      " Disable Background Color Erase (BCE) so that color schemes
+      "     " work properly when Vim is used inside tmux and GNU screen.
+      set t_ut=
 
-" floatterm setup
-nnoremap   <silent>   <F12>   :FloatermToggle<CR>
-tnoremap   <silent>   <F12>   <C-\><C-n>:FloatermToggle<CR>
-let g:floaterm_width = 0.9
-let g:floaterm_height = 0.9
-let g:floaterm_autoclose = 2
+endif
 
-" better pane navigation and creation 
-nnoremap <C-J> <C-W><C-J>
-nnoremap <C-K> <C-W><C-K>
-nnoremap <C-L> <C-W><C-L>
-nnoremap <C-H> <C-W><C-H>
-
-nnoremap <leader>s :split<cr>
-nnoremap <leader>vs :vsplit<cr>
-
-
-" quick file writing
-nnoremap <leader>w :w<cr>
-
-" quick quit
-nnoremap <leader>q :q<cr>
-
-" quick toggle line numbers
-nnoremap <leader>n :set relativenumber!<cr>:set number!<cr>
-
-
-" paren/wrapping tools
-vnoremap <leader>( <esc>`>a)<esc>`<i(<esc>
-vnoremap <leader>[ <esc>`>a]<esc>`<i[<esc>
-vnoremap <leader>{ <esc>`>a}<esc>`<i{<esc>
-vnoremap <leader>" <esc>`>a"<esc>`<i"<esc>
-vnoremap <leader>' <esc>`>a'<esc>`<i'<esc>
-vnoremap <leader>` <esc>`>a`<esc>`<i`<esc>
-
-inoremap (( ()<esc>i
-inoremap [[ []<esc>i
-inoremap {{ {}<esc>i
-inoremap "" ""<esc>i
-inoremap '' ''<esc>i
-inoremap `` ``<esc>i
-
-" highligh clear
-nnoremap <silent> <leader><cr> :noh<cr>
-
-" search 
-nnoremap <leader>f /\v\c
-" case insensitive regex search
-
-" quick edit
-nnoremap <leader>e :e<Space>
-
-" quick toggle previous buffer
-nnoremap <leader><tab> :b#<cr>
-" quick cycle through buffers
-nnoremap <tab> :bn<cr>
-nnoremap <S-tab> :bp<cr>
-
-" shortcut for adding docstring
-nnoremap <leader>ds i"""<cr><cr>"""<esc>ki
-" shortcut for adding a short docstring (on one line)
-nnoremap <leader>sd i""""""<esc>hhi
-
-" quick relace
-nnoremap <leader>r :%snomagic///gc<Left><Left><Left><Left>
-vnoremap <leader>r :snomagic///gc<Left><Left><Left><Left>
-
-" grep based refactor
+" Fixing up the grep command so that it can be used by our custom refactor
 command! -nargs=+ Grep silent! :grep  <args> | redraw! | copen
-nnoremap <leader>R viw"ry/<C-r>r<cr>:exe "Grep " . shellescape(fnameescape(getreg("r")))<cr>
-vnoremap <leader>R "ry/<C-r>r<cr>:exe "Grep " . shellescape(fnameescape(getreg("r")))<cr>
-" :exe "Grep " . shellescape(fnameescape(expand("<cword>")))<cr>
 
-" quickfix bindings modified from: https://vonheikemen.github.io/devlog/tools/vim-and-the-quickfix-list/
-function! QuickfixMapping()
-  " Go to the previous location and stay in the quickfix window
-  nnoremap <buffer> K :cprev<CR>zz<C-w>w
-  " Go to the next location and stay in the quickfix window
-  nnoremap <buffer> J :cnext<CR>zz<C-w>w
-  " Make the quickfix list modifiable
-  nnoremap <buffer> <leader>u :set modifiable<CR>
-  " Save the changes in the quickfix window
-  nnoremap <buffer> <leader>w :cgetbuffer<CR>:cclose<CR>:copen<CR>
-  " Begin the search and replace
-  nnoremap <buffer> <leader>r :cdo s///g \| update<C-Left><C-Left><Left><Left><Left><Left>
-  " Begin search and replace with result from previous leader-R in main window
-  nnoremap <buffer> <leader>R :cdo s/<C-R>r//g \| update<C-Left><C-Left><Left><Left><Left>
-endfunction
+" Custom functions and routines
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-augroup quickfix_group
-    autocmd!
-    autocmd filetype qf call QuickfixMapping()
-augroup END
-nnoremap [q :cprev<CR>
-nnoremap ]q :cnext<CR>
-
-" Quick open terminal
-nnoremap <leader>t :terminal<cr>
-tnoremap <C-t> exit<cr>
-
-" reload vimrc
-nnoremap <F1> :so $MYVIMRC<cr>
-
-" fzf bindings
-nnoremap <leader>H :History<cr>
-nnoremap <leader>C :Color<cr>
-nnoremap <leader>O :Files<cr>
-nnoremap <leader>L :Lines<cr>
-nnoremap <leader>T :Tags<cr>
-nnoremap <leader>b :Buffers<cr>
-nnoremap <leader>G :Rg<cr>
-
-" gdb debuging
-packadd termdebug
-nnoremap <leader>D :Termdebug<cr>
-nnoremap <leader><Right> :Step<cr>
-nnoremap <leader><Down> :Over<cr>
-nnoremap <leader><Up> :Continue<cr>
-" Default mapping is K to evaluate
-
-let g:filePairs = [["cpp", "h"], ["cc", "h"], ["c", "h"]]
-" for files with logical pairs such as .cpp and .h files, check if the pair
+" For files with logical pairs such as .cpp and .h files, check if the pair
 " exists and if so, open it
 function ToggleIfPair()
+  let l:filePairs = [["cpp", "h"], ["cc", "h"], ["c", "h"]]
   let l:currentExtension = expand("%:e")
   for pair in g:filePairs
     for idx in [0, 1]
@@ -361,45 +254,6 @@ function ToggleIfPair()
 endfor
 endfunction
 
-nnoremap <leader>= :call ToggleIfPair()<cr>
-
-" ===================== Auto commands ================
-augroup headers
-  au BufNewFile *.py so ~/config/headers/python.txt
-  au bufnewfile *.py exe "1," . 7 . "g/Filename:.*/s//Filename: " .expand("%")
-  au bufnewfile *.py exe "1," . 7 . "g/Date Created:.*/s//Date Created: " .strftime("%Y-%m-%d")
-  au bufnewfile *.py exe "normal! /\\V[Description]\<cr>vf]"
-augroup END
-
-
-" Resize splits on window resize.
-augroup AutoResizeSplits
-   autocmd!
-   autocmd VimResized * exe "normal! \<c-w>="
-augroup END
-
-augroup cleanup
-  " when saving
-  " remember current cursor location
-  au BufWritePre,FileWritePre * exe "normal mq"
-  " trim bad whitespace
-  au BufWritePre,FileWritePre *.py silent! exe "%s/\\v(\\S|^)\\zs\\s+\\ze$//g"
-  " trim trailing newlines
-  au BufWritePre,FileWritePre *.py silent! exe "%s/\\v\\n*%$//g"
-  " return to cursor position
-  au BufWritePre,FileWritePre * silent! exe "normal `q"
-  au BufWritePre,FileWritePre * silent! exe ":delmarks q"
-augroup END
-
-
-
-if &term =~ '256color'
-      " COMES FROM" https://superuser.com/questions/457911/in-vim-background-color-changes-on-scrolling/588243
-      " Disable Background Color Erase (BCE) so that color schemes
-      "     " work properly when Vim is used inside tmux and GNU screen.
-      set t_ut=
-
-endif
 " Converts a list that has been copied from OneNote into a valid markdown
 " This is required because anything more than the basic indentation does not 
 " copy to makrdown correctly. 
@@ -420,5 +274,208 @@ function! SourceIfExists(file)
   endif
 endfunction
 
+" quickfix bindings modified from: https://vonheikemen.github.io/devlog/tools/vim-and-the-quickfix-list/
+function! QuickfixMapping()
+  " Go to the previous location and stay in the quickfix window
+  nnoremap <buffer> K :cprev<CR>zz<C-w>w
+  " Go to the next location and stay in the quickfix window
+  nnoremap <buffer> J :cnext<CR>zz<C-w>w
+  " Make the quickfix list modifiable
+  nnoremap <buffer> <leader>u :set modifiable<CR>
+  " Save the changes in the quickfix window
+  nnoremap <buffer> <leader>w :cgetbuffer<CR>:cclose<CR>:copen<CR>
+  " Begin the search and replace
+  nnoremap <buffer> <leader>r :cdo s///g \| update<C-Left><C-Left><Left><Left><Left><Left>
+  " Begin search and replace with result from previous leader-R in main window
+  nnoremap <buffer> <leader>R :cdo s/<C-R>r//g \| update<C-Left><C-Left><Left><Left><Left>
+endfunction
 
+" Auto Commands
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Populate a header for python files
+augroup headers
+  au BufNewFile *.py so ~/config/headers/python.txt
+  au bufnewfile *.py exe "1," . 7 . "g/Filename:.*/s//Filename: " .expand("%")
+  au bufnewfile *.py exe "1," . 7 . "g/Date Created:.*/s//Date Created: " .strftime("%Y-%m-%d")
+  au bufnewfile *.py exe "normal! /\\V[Description]\<cr>vf]"
+augroup END
+
+
+" Resize splits on window resize.
+augroup AutoResizeSplits
+   autocmd!
+   autocmd VimResized * exe "normal! \<c-w>="
+augroup END
+
+" install special bindings for the quickfix window
+augroup quickfix_group
+    autocmd!
+    autocmd filetype qf call QuickfixMapping()
+augroup END
+
+" Command Mappings
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" General
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
+
+" easier exit from insert mode
+inoremap jk <esc>
+
+" Auto closing of closures
+inoremap (( ()<esc>i
+inoremap [[ []<esc>i
+inoremap {{ {}<esc>i
+inoremap "" ""<esc>i
+inoremap '' ''<esc>i
+inoremap `` ``<esc>i
+
+" highlight clear
+nnoremap <silent> <leader><cr> :noh<cr>
+
+" movement for use in quickfix mode
+nnoremap [q :cprev<CR>
+nnoremap ]q :cnext<CR>
+
+" Ctrl
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
+
+" better pane navigation and creation 
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
+
+" NERDTree directory browser
+nnoremap <C-n> :NERDTreeToggle<CR>
+
+" F-Key mapping
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
+
+" Reload vimrc
+nnoremap <F1> :so $MYVIMRC<cr>
+
+" Back formatter
+nnoremap <F4> :Black<CR>
+
+" YouCompleteMe
+nnoremap <F5> :YcmForceCompileAndDiagnostics<CR>
+
+" floatterm keys
+nnoremap   <silent>   <F12>   :FloatermToggle<CR>
+tnoremap   <silent>   <F12>   <C-\><C-n>:FloatermToggle<CR>
+
+" LEADER raw
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
+
+" set the leader
+let mapleader=" "
+
+" Comment toggling
+nnoremap <leader>/ :call nerdcommenter#Comment('n', 'toggle')<CR>
+vnoremap <leader>/ :call nerdcommenter#Comment('x', 'toggle')<CR>
+
+" paren/wrapping tools
+vnoremap <leader>( <esc>`>a)<esc>`<i(<esc>
+vnoremap <leader>[ <esc>`>a]<esc>`<i[<esc>
+vnoremap <leader>{ <esc>`>a}<esc>`<i{<esc>
+vnoremap <leader>" <esc>`>a"<esc>`<i"<esc>
+vnoremap <leader>' <esc>`>a'<esc>`<i'<esc>
+vnoremap <leader>` <esc>`>a`<esc>`<i`<esc>
+
+" quick toggle previous buffer
+nnoremap <leader><tab> :b#<cr>
+" quick cycle through buffers
+nnoremap <tab> :bn<cr>
+nnoremap <S-tab> :bp<cr>
+
+" Swapping between pairs of logically connected files
+nnoremap <leader>= :call ToggleIfPair()<cr>
+
+" LEADER groups
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
+" See leader strategy above
+
+" --- U --- Undo
+"  prime = pending
+"  subprime = UNDEFINED
+
+" --- D --- Debug/Diagnose
+"  prime = UNDEFINED
+"  subprime = Start gdb terminal debugger
+"  D->b = insert breakpoint at current line
+"  D->c = clear breakpoint at current line
+nnoremap <leader><C-D> :Termdebug<cr>
+nnoremap <leader>Db :Break<cr>
+nnoremap <leader>Dc :Clear<cr>
+
+" --- F --- Find
+"  prime = start case insensitive regex find 
+"  F->l = use fzf to find lines in open buffers
+"  F->g = use fzf to perform a ripgrep recursive search of files
+nnoremap <leader>f /\v\c
+nnoremap <leader>Fl :Lines<cr>
+nnoremap <leader>Fg :Rg<cr>
+
+" --- G --- Git
+"  prime = Open fugitive
+nnoremap <leader>g  :Git<CR>
+
+" --- J --- Jump
+"  prime = Open buffer jump dialog
+"  subprime = Jump to definition/declaration using YCM
+nnoremap <leader>j :Buffers<cr>
+nnoremap <leader><C-J> :YcmCompleter GoTo<CR>
+
+" --- L --- Load
+"  prime = use fzf to look for files to load
+nnoremap <leader>l :Files<cr>
+
+" --- Q --- Quit
+"  prime = quit
+"  subprime = force quit
+nnoremap <leader>q :q<cr>
+nnoremap <leader><C-Q> :q!<cr>
+
+" --- R --- Replace/Repair/Refactor
+"  prime = start find and replace
+"  subprime = start find and rjplace
+"  R->f = perform YCM fixit operation
+"  R->g =  perform grep based refactor
+nnoremap <leader>r viw"ry<cr>:%snomagic/<c-r>r//gc<Left><Left><Left>a<bs>
+vnoremap <leader>r "ry<cr>:%snomagic/<c-r>r//gc<Left><Left><Left>a<bs>
+nnoremap <leader>Rf  :YcmCompleter FixIt<CR>
+nnoremap <leader>Rg viw"ry/<C-r>r<cr>:exe "Grep " . shellescape(fnameescape(getreg("r")))<cr>
+vnoremap <leader>Rg "ry/<C-r>r<cr>:exe "Grep " . shellescape(fnameescape(getreg("r")))<cr>
+
+" --- S --- Split
+"  prime = split vertically
+"  subprime = split horizontally
+nnoremap <leader>s :vsplit<cr>
+nnoremap <leader><C-S> :split<cr>
+
+" --- O --- Outline/Overview
+"  prime = open outline
+nnoremap <silent> <leader>o :TagbarToggle<cr>
+
+" --- U --- Undo
+"  prime = open undo tree
+nnoremap <leader>u :UndotreeToggle<cr>
+
+" --- V --- Visualize (Display related actions)
+"  prime = UNDEFINED
+"  subprime = UNDEFINED
+"  V->n = toggle line numbers display
+"  V->c = use fzf to search for a color profile to load
+nnoremap <leader>Vn :set relativenumber!<cr>:set number!<cr>
+nnoremap <leader>vc :Color<cr>
+
+" --- W --- Write
+"  prime = write current buffer
+nnoremap <leader>w :w<cr>
+
+" load a work specific vimrc if applicable
 call SourceIfExists("~/.config-work/vimrc")
