@@ -422,7 +422,11 @@ nnoremap <leader>Fg :Rg<cr>
 
 " --- G --- Git
 "  prime = Open fugitive
+"  G->p = initiate a git push
+"  G->b = initiate a git blame
 nnoremap <leader>g  :Git<CR>
+nnoremap <leader>Gp  :G push<CR>
+nnoremap <leader>Gb  :G blame<CR>
 
 " --- J --- Jump
 "  prime = Open buffer jump dialog
