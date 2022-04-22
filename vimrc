@@ -238,7 +238,7 @@ command! -nargs=+ Grep silent! :grep  <args> | redraw! | copen
 function ToggleIfPair()
   let l:filePairs = [["cpp", "h"], ["cc", "h"], ["c", "h"]]
   let l:currentExtension = expand("%:e")
-  for pair in g:filePairs
+  for pair in l:filePairs
     for idx in [0, 1]
       if pair[idx] == l:currentExtension
         let l:matchingExtension = pair[(idx + 1)%2]
