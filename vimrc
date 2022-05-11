@@ -51,7 +51,9 @@ Plugin 'tpope/vim-obsession' " Intelligent and automatic session management
 Plugin 'vim-airline/vim-airline' " Better status line
 Plugin 'vim-airline/vim-airline-themes' " Color theme support for airline
 Plugin 'tpope/vim-fugitive' " Git extension
-Plugin 'psf/black' " Black formatter
+Plugin 'psf/black' " Black formatter for python
+Plugin 'rhysd/vim-clang-format' " clang-format formatter for C style 
+Plugin 'stsewd/fzf-checkout.vim' " fzf git actions
 call vundle#end()            " required
 filetype plugin indent on    " required
 "to ignore plugin indent changes, instead use:
@@ -71,7 +73,7 @@ filetype plugin indent on    " required
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 syntax enable " enable syntax highlighting
-colorscheme brycedcarter " use custom color scheme
+colorscheme brycedcarter-light " use custom color scheme
 
 set backspace=2 " allow backspace to go over eol, indent, and start of insert
 set clipboard=unnamedplus " allows yank to go dirrectly to the linux system CLIPBOARD (xclip -selection c -o) which is the one that is synced over XQuarts. using unnamed sends yank to the PRIMARY clipboard that is not synced
@@ -203,6 +205,10 @@ let g:SimpylFold_docstring_preview=1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:black_linelength = 80 
 
+" calng-format Formatter
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:clang_format#command = 'clang-format-3.6'
+
 " floatterm setup
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:floaterm_width = 0.9
@@ -234,24 +240,25 @@ command! -nargs=+ Grep silent! :grep  <args> | redraw! | copen
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " For files with logical pairs such as .cpp and .h files, check if the pair
-" exists and if so, open it
+" exists and if so, open/show it
 function ToggleIfPair()
-  let l:filePairs = [["cpp", "h"], ["cc", "h"], ["c", "h"]]
-  let l:currentExtension = expand("%:e")
-  for pair in l:filePairs
+  " This list is ordered... the first entry for which there is a matching pair
+  " will be the one that is opened
+  let file_pairs = [["cpp", "h"], ["cc", "h"], ["c", "h"]]
+  let current_extension = expand("%:e")
+  for pair in file_pairs
     for idx in [0, 1]
-      if pair[idx] == l:currentExtension
-        let l:matchingExtension = pair[(idx + 1)%2]
-        let l:matchingFilename = expand("%:p:r") . "." . l:matchingExtension
-        if filereadable(l:matchingFilename)
-          execute "edit " . l:matchingFilename
+      if pair[idx] == current_extension
+        let matching_extension = pair[(idx + 1)%2]
+        let matching_filename = expand("%:p:r") . "." . matching_extension
+        if filereadable(matching_filename)
+          execute "edit " . matching_filename
           return
-        else
-          echo "Matching file: '" . l:matchingFilename . "' does not exist"
         endif 
       endif
+    endfor
   endfor
-endfor
+  echo "No paired file found :-("
 endfunction
 
 " Converts a list that has been copied from OneNote into a valid markdown
@@ -288,6 +295,19 @@ function! QuickfixMapping()
   nnoremap <buffer> <leader>r :cdo s///g \| update<C-Left><C-Left><Left><Left><Left><Left>
   " Begin search and replace with result from previous leader-R in main window
   nnoremap <buffer> <leader>R :cdo s/<C-R>r//g \| update<C-Left><C-Left><Left><Left><Left>
+endfunction
+
+" A wrapper function that selects the correct auto-formatter based on the
+" current file type
+function! FormatBuffer()
+  let l:currentExtension = expand("%:e")
+  if &filetype ==# 'c' || &filetype ==# 'cpp' 
+    execute 'ClangFormat'
+  elseif &filetype ==# 'python' 
+    execute 'Black'
+  else 
+    echo "No formatter for filetype: " . &filetype
+  endif
 endfunction
 
 " Auto Commands
@@ -359,7 +379,7 @@ nnoremap <C-n> :NERDTreeToggle<CR>
 nnoremap <F1> :so $MYVIMRC<cr>
 
 " Back formatter
-nnoremap <F4> :Black<CR>
+nnoremap <F4> :call FormatBuffer()<CR>
 
 " YouCompleteMe
 nnoremap <F5> :YcmForceCompileAndDiagnostics<CR>
@@ -399,18 +419,23 @@ nnoremap <leader>= :call ToggleIfPair()<cr>
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
 " See leader strategy above
 
-" --- U --- Undo
-"  prime = pending
-"  subprime = UNDEFINED
-
 " --- D --- Debug/Diagnose
 "  prime = UNDEFINED
 "  subprime = Start gdb terminal debugger
 "  D->b = insert breakpoint at current line
 "  D->c = clear breakpoint at current line
+"  D->h = show highlighting info at the current location
+"       FROM: https://stackoverflow.com/questions/29029050/vim-highlighting-is-there-a-way-to-find-out-what-is-applied-at-a-particular-po
+"  D->p = start profiling of all functions. NOTE: need to exit vim before
+"  results will be written to /tmp/vim.profile
 nnoremap <leader><C-D> :Termdebug<cr>
 nnoremap <leader>Db :Break<cr>
 nnoremap <leader>Dc :Clear<cr>
+nnoremap <silent> <leader>Dh :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name")
+    \ . '> trans<' . synIDattr(synID(line("."),col("."),0),"name")
+    \ . "> lo<" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name")
+    \ . ">"<CR>
+nnoremap <leader>Dp :profile start /tmp/vim.profile<cr>:profile file *<cr>:profile func *<cr>
 
 " --- F --- Find
 "  prime = start case insensitive regex find 
@@ -424,9 +449,13 @@ nnoremap <leader>Fg :Rg<cr>
 "  prime = Open fugitive
 "  G->p = initiate a git push
 "  G->b = initiate a git blame
+"  G->c = initiate a checkout for branches
+"  G->t = initiate a checkout for tags
 nnoremap <leader>g  :Git<CR>
 nnoremap <leader>Gp  :G push<CR>
 nnoremap <leader>Gb  :G blame<CR>
+nnoremap <leader>Gc  :GBranches checkout<CR>
+nnoremap <leader>Gt  :GTags checkout<CR>
 
 " --- J --- Jump
 "  prime = Open buffer jump dialog
@@ -441,16 +470,19 @@ nnoremap <leader>l :Files<cr>
 " --- Q --- Quit
 "  prime = quit
 "  subprime = force quit
+"  Q->b = drop the current buffer
 nnoremap <leader>q :q<cr>
 nnoremap <leader><C-Q> :q!<cr>
+nnoremap <leader>Qb :bd<cr>
 
 " --- R --- Replace/Repair/Refactor
 "  prime = start find and replace
+"  prime-visual = start find and replace bounded by visual selection
 "  subprime = start find and rjplace
 "  R->f = perform YCM fixit operation
 "  R->g =  perform grep based refactor
 nnoremap <leader>r viw"ry<cr>:%snomagic/<c-r>r//gc<Left><Left><Left>a<bs>
-vnoremap <leader>r "ry<cr>:%snomagic/<c-r>r//gc<Left><Left><Left>a<bs>
+vnoremap <leader>r :snomagic///gc<Left><Left><Left><Left>
 nnoremap <leader>Rf  :YcmCompleter FixIt<CR>
 nnoremap <leader>Rg viw"ry/<C-r>r<cr>:exe "Grep " . shellescape(fnameescape(getreg("r")))<cr>
 vnoremap <leader>Rg "ry/<C-r>r<cr>:exe "Grep " . shellescape(fnameescape(getreg("r")))<cr>
@@ -475,7 +507,7 @@ nnoremap <leader>u :UndotreeToggle<cr>
 "  V->n = toggle line numbers display
 "  V->c = use fzf to search for a color profile to load
 nnoremap <leader>Vn :set relativenumber!<cr>:set number!<cr>
-nnoremap <leader>vc :Color<cr>
+nnoremap <leader>Vc :Color<cr>
 
 " --- W --- Write
 "  prime = write current buffer
