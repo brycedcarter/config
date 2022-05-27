@@ -92,3 +92,5 @@ NUMA
 be
 futex
 uchar
+stdout
+glog
