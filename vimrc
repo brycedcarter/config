@@ -34,7 +34,7 @@ Plugin 'Valloric/YouCompleteMe' " Autocompletion
 Plugin 'editorconfig/editorconfig-vim' " Integration with editorconfig files
 Plugin 'tmhedberg/SimpylFold' " Code folding for python
 Plugin 'vim-scripts/indentpython.vim' " better auto indenting for python
-Plugin 'vim-syntastic/syntastic' " Syntax checking 
+"Plugin 'vim-syntastic/syntastic' " Syntax checking 
 Plugin 'nvie/vim-flake8' " syntax checking tool for python
 Plugin 'preservim/nerdtree' " File browsing
 Plugin 'Xuyuanp/nerdtree-git-plugin' " git integration with nerd tree
@@ -76,7 +76,7 @@ syntax enable " enable syntax highlighting
 colorscheme brycedcarter-light " use custom color scheme
 
 set backspace=2 " allow backspace to go over eol, indent, and start of insert
-set clipboard=unnamedplus " allows yank to go dirrectly to the linux system CLIPBOARD (xclip -selection c -o) which is the one that is synced over XQuarts. using unnamed sends yank to the PRIMARY clipboard that is not synced
+set clipboard=unnamedplus " allows yank to go directly to the linux system CLIPBOARD (xclip -selection c -o) which is the one that is synced over XQuarts. using unnamed sends yank to the PRIMARY clipboard that is not synced
 set colorcolumn=80 " show the 80th column as a guide
 set cursorline " Highlight the line with the cursor
 set encoding=utf-8 " use utf-8 encoding
@@ -235,6 +235,8 @@ endif
 " Fixing up the grep command so that it can be used by our custom refactor
 command! -nargs=+ Grep silent! :grep  <args> | redraw! | copen
 
+set eventignore-=Syntax
+
 " Custom functions and routines
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -265,7 +267,7 @@ endfunction
 " This is required because anything more than the basic indentation does not 
 " copy to makrdown correctly. 
 " The list indentation is represented with tab indents rather than *s
-function! ListToMarkdown()
+function ListToMarkdown()
   %sno/\v^\s[-○§] (\S)/* \1/eg
   %sno/\v^\s\s[-○§] (\S)/** \1/eg
   %sno/\v^\s\s\s[-○§] (\S)/*** \1/eg
@@ -282,7 +284,7 @@ function! SourceIfExists(file)
 endfunction
 
 " quickfix bindings modified from: https://vonheikemen.github.io/devlog/tools/vim-and-the-quickfix-list/
-function! QuickfixMapping()
+function QuickfixMapping()
   " Go to the previous location and stay in the quickfix window
   nnoremap <buffer> K :cprev<CR>zz<C-w>w
   " Go to the next location and stay in the quickfix window
@@ -299,7 +301,7 @@ endfunction
 
 " A wrapper function that selects the correct auto-formatter based on the
 " current file type
-function! FormatBuffer()
+function FormatBuffer()
   let l:currentExtension = expand("%:e")
   if &filetype ==# 'c' || &filetype ==# 'cpp' 
     execute 'ClangFormat'
@@ -308,6 +310,21 @@ function! FormatBuffer()
   else 
     echo "No formatter for filetype: " . &filetype
   endif
+endfunction
+
+" Helper to fill the arglist with all files in the current directory of a
+" certain type. The main reason for this function is to prevent opening a buffer
+" call *.xx when there are no files with the extension of xx in the current
+" directory
+function ExpandFilePatterns(patterns)
+  " first we clear out any existing entries in the arglist
+  silent! argdel *
+  for pattern in a:patterns
+    " expand the pattern here
+    silent! execute 'argadd ' . pattern
+    " don't expand here, so we can remove *.xx if it was not expanded before
+    silent! execute 'argdel \' . pattern 
+  endfor
 endfunction
 
 " Auto Commands
@@ -465,15 +482,29 @@ nnoremap <leader><C-J> :YcmCompleter GoTo<CR>
 
 " --- L --- Load
 "  prime = use fzf to look for files to load
+"  L->h = load all headers in the current directory
+"  L->p = load all .py in the current directory
+"  L->c = load all .c/.cc/.cpp/.h/.hpp files in the current directory
 nnoremap <leader>l :Files<cr>
+" using "next" on joined list rather than argdo because argdo disables syntax
+" autocmd for Syntax when it si running
+nnoremap <leader>Lh :call ExpandFilePatterns(['*.h'])<cr>:silent exe 'next ' . join(argv(), ' ' )<cr>
+nnoremap <leader>Lp :call ExpandFilePatterns(['*.py'])<cr>:silent exe 'next ' . join(argv(), ' ' )<cr>
+nnoremap <leader>Lc :call ExpandFilePatterns(['*.c', '*.cc', '*.cpp', '*.h', '*.hpp'])<cr>:silent exe 'next ' . join(argv(), ' ' )<cr>
+
+" --- O --- Outline/Overview
+"  prime = open outline
+nnoremap <silent> <leader>o :TagbarToggle<cr>
 
 " --- Q --- Quit
 "  prime = quit
 "  subprime = force quit
 "  Q->b = drop the current buffer
+"  G->a = drop all buffers
 nnoremap <leader>q :q<cr>
 nnoremap <leader><C-Q> :q!<cr>
 nnoremap <leader>Qb :bd<cr>
+nnoremap <leader>Qa :silent bufdo bd<cr>
 
 " --- R --- Replace/Repair/Refactor
 "  prime = start find and replace
@@ -490,12 +521,10 @@ vnoremap <leader>Rg "ry/<C-r>r<cr>:exe "Grep " . shellescape(fnameescape(getreg(
 " --- S --- Split
 "  prime = split vertically
 "  subprime = split horizontally
+"  S->s = swap the current split with the one to its right
 nnoremap <leader>s :vsplit<cr>
 nnoremap <leader><C-S> :split<cr>
-
-" --- O --- Outline/Overview
-"  prime = open outline
-nnoremap <silent> <leader>o :TagbarToggle<cr>
+nnoremap <leader>Ss <C-W><C-X><cr>
 
 " --- U --- Undo
 "  prime = open undo tree
