@@ -267,7 +267,7 @@ then
   show_banner "Setting up vim stuff"
   do_thing "use_repo https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim" "Installing vundle"
 
-  do_thing "mkdir ~/.vim/colors; ln -f -s $DIR/vim/colors/brycedcarter.vim ~/.vim/colors/brycedcarter.vim" "Adding vim color theme"
+  do_thing "mkdir ~/.vim/colors; ln -f -s $DIR/vim/colors/brycedcarter-light.vim ~/.vim/colors/brycedcarter-light.vim;  ln -f -s $DIR/vim/colors/brycedcarter-dark.vim ~/.vim/colors/brycedcarter-dark.vim" "Adding vim color themes"
 
   do_thing "cd ~/config; vim +'source vimrc' +'PluginInstall' +qa" "Installing VIM plugins"
 fi

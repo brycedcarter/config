@@ -1,10 +1,8 @@
 " Vim Color File
-" Name:       brycedcarter.vim
-" Maintainer: https://github.com/joshdick/brycedcarter.vim/
+" Name:       brycedcarter-lightk.vim
 " License:    The MIT License (MIT)
-" Based On:   https://github.com/MaxSt/FlatColor/
+" Based On: https://github.com/joshdick/brycedcarter.vim/
 
-" A companion [vim-airline](https://github.com/bling/vim-airline) theme is available at: https://github.com/joshdick/airline-brycedcarter.vim
 
 " +-----------------+
 " | Color Reference |
@@ -54,7 +52,7 @@ endif
 
 set t_Co=256
 
-let g:colors_name="brycedcarter"
+let g:colors_name="brycedcarter-light"
 
 " Set to "256" for 256-color terminals, or
 " set to "16" to use your terminal emulator's native colors
