@@ -146,7 +146,7 @@ ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern cursor)
 source "$HOME/config/source_sub_zsh_configs.sh"
 
 # source iterm2 integration
-if [[ $TERM_PROGRAM == "iTerm.app" ]]; then
+if [[ $CUSTOM_SSH_ENV_TERM == "iTerm.app" ]]; then
   source ~/.iterm2_shell_integration.zsh
 fi
 
