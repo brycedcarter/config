@@ -27,6 +27,9 @@ show_usage()
   A helper script for creating or connecting to tmux sessions either locally 
   or remotely
 
+  NOTE: if you are having issues with ssh-agent forwarding to the remote host, 
+  follow this guide: https://blog.testdouble.com/posts/2016-11-18-reconciling-tmux-and-ssh-agent-forwarding/
+
   [options]
     -n|--name NAME: Provide the name of the session that should be created or c
              onnected to. If not provided, will default to 'dev'
