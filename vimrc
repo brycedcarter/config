@@ -352,6 +352,12 @@ augroup quickfix_group
     autocmd filetype qf call QuickfixMapping()
 augroup END
 
+" Refresh teh xserver connection so that clipboard work in tmux
+augroup xserver_referesh
+  autocmd!
+  autocmd FocusGained * xrestore
+augroup END
+
 " Command Mappings
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""

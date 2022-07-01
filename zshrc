@@ -244,3 +244,20 @@ bindkey -M main '^[OA' history-beginning-search-backward
 bindkey -M main '^[OB' history-beginning-search-forward
 
 bindkey -M viins 'jk' vi-cmd-mode
+
+# workaround for getting stateful environment variables back into zshs that live
+# inside temux sessions:
+# From here: https://www.babushk.in/posts/renew-environment-tmux.html
+if [ -n "$TMUX" ]; then
+function refresh {
+  export $(tmux show-environment | grep "^SSH_AUTH_SOCK")
+  export $(tmux show-environment | grep "^DISPLAY")
+  }
+else
+  function refresh { }
+fi
+
+function preexec {
+  refresh
+}
+

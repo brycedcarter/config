@@ -94,3 +94,8 @@ futex
 uchar
 stdout
 glog
+ftrace
+gflag
+gflags
+backends
+backend
