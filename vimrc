@@ -54,6 +54,7 @@ Plugin 'tpope/vim-fugitive' " Git extension
 Plugin 'psf/black' " Black formatter for python
 Plugin 'rhysd/vim-clang-format' " clang-format formatter for C style 
 Plugin 'stsewd/fzf-checkout.vim' " fzf git actions
+Plugin 'kkoomen/vim-doge' " documentation generator
 call vundle#end()            " required
 filetype plugin indent on    " required
 "to ignore plugin indent changes, instead use:
@@ -516,10 +517,12 @@ nnoremap <leader>Qa :silent bufdo bd<cr>
 "  prime = start find and replace
 "  prime-visual = start find and replace bounded by visual selection
 "  subprime = start find and rjplace
+"  R->d = perform DoGe document generation
 "  R->f = perform YCM fixit operation
 "  R->g =  perform grep based refactor
 nnoremap <leader>r viw"ry<cr>:%snomagic/<c-r>r//gc<Left><Left><Left>a<bs>
 vnoremap <leader>r :snomagic///gc<Left><Left><Left><Left>
+nnoremap <leader>Rd  :DogeGenerate 1<CR>
 nnoremap <leader>Rf  :YcmCompleter FixIt<CR>
 nnoremap <leader>Rg viw"ry/<C-r>r<cr>:exe "Grep " . shellescape(fnameescape(getreg("r")))<cr>
 vnoremap <leader>Rg "ry/<C-r>r<cr>:exe "Grep " . shellescape(fnameescape(getreg("r")))<cr>

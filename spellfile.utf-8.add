@@ -100,3 +100,12 @@ gflags
 backends
 backend
 tmux
+procfs
+userspace
+passthrough
+ksyms
+addr
+syms
+unuseful
+sysv
+vsyscall
