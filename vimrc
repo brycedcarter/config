@@ -14,9 +14,14 @@
 "   in lower case. The rest of the group's actions will be accessible using
 "   <leader> followed by the group's letter in UPPER case, followed by another
 "   descriptive letter.
-"   Finally, some groups may contain a subprime action, this will be accecced
+"   Finally, some groups may contain a subprime action, this will be accessed
 "   with <leader> followed by Ctrl + <groups letter>
 
+if has('nvim')
+  let g:nvim = 1
+else 
+  let g:nvim = 0
+endif
 
 " Plugins 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -30,20 +35,16 @@ set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 Plugin 'VundleVim/Vundle.vim' " Plugin manger
 Plugin 'scrooloose/nerdcommenter' " Quickly add and remove comments 
-Plugin 'Valloric/YouCompleteMe' " Autocompletion
 Plugin 'editorconfig/editorconfig-vim' " Integration with editorconfig files
-Plugin 'tmhedberg/SimpylFold' " Code folding for python
+Plugin 'tmhedberg/SimpylFold' " Code folding forL python
 Plugin 'vim-scripts/indentpython.vim' " better auto indenting for python
-"Plugin 'vim-syntastic/syntastic' " Syntax checking 
-Plugin 'nvie/vim-flake8' " syntax checking tool for python
 Plugin 'preservim/nerdtree' " File browsing
 Plugin 'Xuyuanp/nerdtree-git-plugin' " git integration with nerd tree
 Plugin 'mbbill/undotree' " better undo interface
 Plugin 'kamykn/spelunker.vim' " spellcheck and correction suggestions
-Plugin 'universal-ctags/ctags'
-Plugin 'majutsushi/tagbar' " outline sidbar
+"Plugin 'universal-ctags/ctags'
+Plugin 'majutsushi/tagbar' " outline sidebar
 Plugin 'airblade/vim-gitgutter' " show git status in gutter
-Plugin 'voldikss/vim-floaterm' " popup terminal
 Plugin 'junegunn/fzf' " fuzyy finding navigation
 Plugin 'junegunn/fzf.vim'
 Plugin 'octol/vim-cpp-enhanced-highlight' " better highlighting for c++
@@ -55,6 +56,26 @@ Plugin 'psf/black' " Black formatter for python
 Plugin 'rhysd/vim-clang-format' " clang-format formatter for C style 
 Plugin 'stsewd/fzf-checkout.vim' " fzf git actions
 Plugin 'kkoomen/vim-doge' " documentation generator
+Plugin('chrisbra/Colorizer') " highlight color codes
+
+if nvim " neovim only plugins
+  Plugin 'neovim/nvim-lspconfig' " language server protocol client std configs
+  Plugin 'p00f/clangd_extensions.nvim'
+  Plugin 'hrsh7th/nvim-cmp' " autocompletion for use with nvim lsp
+  " Completion sources for nvim-cmp
+  Plugin('hrsh7th/cmp-nvim-lsp')
+  Plugin('hrsh7th/cmp-buffer')
+  Plugin('hrsh7th/cmp-path')
+  Plugin('hrsh7th/cmp-cmdline')
+  " snippet tool used by nvim-cmp
+  Plugin('saadparwaiz1/cmp_luasnip')
+  Plugin('L3MON4D3/LuaSnip')
+  
+
+  Plugin('onsails/lspkind.nvim') " LSP completion icons
+else
+  Plugin 'lifepillar/vim-mucomplete' " sets up completion sources (native)
+endif
 call vundle#end()            " required
 filetype plugin indent on    " required
 "to ignore plugin indent changes, instead use:
@@ -73,8 +94,19 @@ filetype plugin indent on    " required
 " Basic config settings
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set runtimepath+=~/config/vim/
+
 syntax enable " enable syntax highlighting
-colorscheme brycedcarter-light " use custom color scheme
+set termguicolors " use specific hex colors
+
+let g:tmp_dir = "~/config/.tmp/"
+let s:current_scheme_file = g:tmp_dir . "vim_current_scheme"
+if filereadable(expand(s:current_scheme_file))
+  execute "colorscheme " . readfile(expand(s:current_scheme_file))[0]
+  call mkdir(expand(g:tmp_dir), "p")
+else
+  colorscheme brycedcarter-cool-dark " use custom color scheme
+endif
 
 set backspace=2 " allow backspace to go over eol, indent, and start of insert
 set clipboard=unnamedplus " allows yank to go directly to the linux system CLIPBOARD (xclip -selection c -o) which is the one that is synced over XQuarts. using unnamed sends yank to the PRIMARY clipboard that is not synced
@@ -154,33 +186,18 @@ let g:spelunker_check_type = 1
 highlight SpelunkerSpellBad cterm=underline ctermfg=NONE gui=underline guifg=NONE
 highlight SpelunkerComplexOrCompoundWord cterm=underline ctermfg=NONE gui=underline guifg=NONE
 
-" Syntastic
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-try
-  let g:flake8_work_file_ignores=join(readfile(expand("~/.config-work/flake8-ignores.txt")))
-catch /.*/
-endtry
-let g:syntastic_check_on_open=1 " Check for syntax errors on file open.
-let g:syntastic_echo_current_error=1 " Echo errors to the command window.
-let g:syntastic_enable_signs=1 " Mark lines with errors and warnings.
-let g:syntastic_enable_balloons=0 " Do not open error balloons over erroneous lines.
-let g:syntastic_cpp_check_header=1 " YCM will provide context for C++ files.
-let g:syntastic_c_check_header=1 " Same for C files.
-let g:syntastic_python_checkers = ['flake8'] " use flake8 as the python syntax checker
-let g:syntastic_python_flake8_args = printf('--per-file-ignores="__init__.py:F401 %s"',g:flake8_work_file_ignores)
-" ycm is used for C family language checking (controlled by extra_conf files)
 
-" YouCompleteMe ycm
+
+" General completion
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:ycm_log_level = 'debug'
-let g:ycm_server_log_level = 'debug'
-let g:ycm_autoclose_preview_window_after_completion=1
-let g:ycm_max_num_identifier_candidates = 0
-let g:ycm_min_num_identifier_candidate_chars = 3
-let g:ycm_collect_identifiers_from_tags_files=1
-let g:ycm_error_symbol = '>>'
-let g:ycm_warning_symbol = '!'
-let g:ycm_max_num_candidates = 6
+set completeopt=menu,menuone,noselect
+
+if !nvim
+  " MUcomplete basic completion
+  """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+  let g:mucomplete#enable_auto_at_startup = 1
+  let g:mucomplete#chains = {'default' : ['path', 'keyn', 'omni']}
+endif
 
 
 " NERDTree
@@ -194,7 +211,7 @@ let g:tagbar_autoclose=1 " close the tagbar after jumping to a tag
 let g:tagbar_autofocus=1 " jump to the tag bar when it is opened
 let g:tagbar_show_data_type = 1 " show the tag type to its right
 let g:no_status_line = 1 " don't display the status line
-let g:tagbar_sort = 0 " sort by document order rather than name (outline)
+let g:tagbar_sort = 0 " sort by docu:ment order rather than name (outline)
 let g:tagbar_map_close = "<leader>o" " use same mapping to open and close
 
 " SimpyFold
@@ -285,7 +302,7 @@ function! SourceIfExists(file)
 endfunction
 
 " quickfix bindings modified from: https://vonheikemen.github.io/devlog/tools/vim-and-the-quickfix-list/
-function QuickfixMapping()
+function! QuickfixMapping()
   " Go to the previous location and stay in the quickfix window
   nnoremap <buffer> K :cprev<CR>zz<C-w>w
   " Go to the next location and stay in the quickfix window
@@ -302,9 +319,9 @@ endfunction
 
 " A wrapper function that selects the correct auto-formatter based on the
 " current file type
-function FormatBuffer()
+function! FormatBuffer()
   let l:currentExtension = expand("%:e")
-  if &filetype ==# 'c' || &filetype ==# 'cpp' 
+  if &filetype ==# 'c' || &filetype ==# 'cpp' || &filetype ==# 'proto'
     execute 'ClangFormat'
   elseif &filetype ==# 'python' 
     execute 'Black'
@@ -317,7 +334,7 @@ endfunction
 " certain type. The main reason for this function is to prevent opening a buffer
 " call *.xx when there are no files with the extension of xx in the current
 " directory
-function ExpandFilePatterns(patterns)
+function! ExpandFilePatterns(patterns)
   " first we clear out any existing entries in the arglist
   silent! argdel *
   for pattern in a:patterns
@@ -327,6 +344,22 @@ function ExpandFilePatterns(patterns)
     silent! execute 'argdel \' . pattern 
   endfor
 endfunction
+
+" This is a wrapper around a lua call. It will first check that it is being run
+" in Nvim, and then proceed to make the lua call provided by "lua_call"
+function! LuaCall(lua_call) 
+  if g:nvim
+      silent execute "lua " .. a:lua_call
+  else
+    echohl WarningMsg | echo "This key mapping is only valid in nvim" | echohl None
+  endif
+endfunction
+
+" Display syntax group 
+function! SynGroup()
+    let l:s = synID(line('.'), col('.'), 1)
+    echo synIDattr(l:s, 'name') . ' -> ' . synIDattr(synIDtrans(l:s), 'name')
+endfun
 
 " Auto Commands
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -356,7 +389,15 @@ augroup END
 " Refresh teh xserver connection so that clipboard work in tmux
 augroup xserver_referesh
   autocmd!
-  autocmd FocusGained * xrestore
+  " taking out for now becuase of delay
+  "autocmd FocusGained * xrestore
+augroup END
+
+" Record the current color scheme so that it can be loaded on the next open
+augroup remember_colorscheme
+  autocmd!
+  call system('touch ' . s:current_scheme_file)
+  autocmd ColorScheme * call writefile([ g:colors_name,], expand(s:current_scheme_file))
 augroup END
 
 " Command Mappings
@@ -437,10 +478,10 @@ nnoremap <tab> :bn<cr>
 nnoremap <S-tab> :bp<cr>
 
 " Swapping between pairs of logically connected files
-nnoremap <leader>= :call ToggleIfPair()<cr>
+nnoremap <silent> <leader>= :call ToggleIfPair()<cr>
 
 " LEADER groups
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""
 " See leader strategy above
 
 " --- D --- Debug/Diagnose
@@ -450,24 +491,30 @@ nnoremap <leader>= :call ToggleIfPair()<cr>
 "  D->c = clear breakpoint at current line
 "  D->h = show highlighting info at the current location
 "       FROM: https://stackoverflow.com/questions/29029050/vim-highlighting-is-there-a-way-to-find-out-what-is-applied-at-a-particular-po
-"  D->p = start profiling of all functions. NOTE: need to exit vim before
+"  D->H = show detailed highlighting ifromation in a new window
+"  D->n = Jump to the next diagnostic
+"  D->N = Jump to the previous diagnostic
+"  D->p = Jump to the previous
+"  D->m = start profiling of all functions. NOTE: need to exit vim before
 "  results will be written to /tmp/vim.profile
 nnoremap <leader><C-D> :Termdebug<cr>
 nnoremap <leader>Db :Break<cr>
 nnoremap <leader>Dc :Clear<cr>
-nnoremap <silent> <leader>Dh :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name")
-    \ . '> trans<' . synIDattr(synID(line("."),col("."),0),"name")
-    \ . "> lo<" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name")
-    \ . ">"<CR>
-nnoremap <leader>Dp :profile start /tmp/vim.profile<cr>:profile file *<cr>:profile func *<cr>
+nnoremap <silent> <leader>Dh :call SynGroup()<cr>
+nnoremap <silent> <leader>DH :so $VIMRUNTIME/syntax/hitest.vim<cr>
+nnoremap <silent> <leader>Dn :call LuaCall("vim.diagn
+nnoremap <silent> <leader>DN :call LuaCall("vim.diagnostic.goto_prev()")<CR>
+nnoremap <leader>Dm :profile start /tmp/vim.profile<cr>:profile file *<cr>:profile func *<cr>
 
 " --- F --- Find
 "  prime = start case insensitive regex find 
 "  F->l = use fzf to find lines in open buffers
 "  F->g = use fzf to perform a ripgrep recursive search of files
+"  F->r = find references using language server
 nnoremap <leader>f /\v\c
 nnoremap <leader>Fl :Lines<cr>
 nnoremap <leader>Fg :Rg<cr>
+nnoremap <leader>Fr :call LuaCall("TryLsp('references')")<cr>
 
 " --- G --- Git
 "  prime = Open fugitive
@@ -475,17 +522,29 @@ nnoremap <leader>Fg :Rg<cr>
 "  G->b = initiate a git blame
 "  G->c = initiate a checkout for branches
 "  G->t = initiate a checkout for tags
+"  G->n = next git hunk
+"  G->N = previous git hunk
 nnoremap <leader>g  :Git<CR>
 nnoremap <leader>Gp  :G push<CR>
 nnoremap <leader>Gb  :G blame<CR>
 nnoremap <leader>Gc  :GBranches checkout<CR>
 nnoremap <leader>Gt  :GTags checkout<CR>
+nnoremap <leader>Gn  :GitGutterNextHunk<CR>
+nnoremap <leader>GN  :GitGutterPrevHunk<CR>
+
+" --- H --- Help
+"  prime = LSP hover help
+"  H->l = get info about current LSP state
+nnoremap <leader>h  :call LuaCall("TryLsp('hover')")<CR>
+nnoremap <leader>Hl  :LspInfo<CR>
 
 " --- J --- Jump
 "  prime = Open buffer jump dialog
-"  subprime = Jump to definition/declaration using YCM
+"  subprime = Jump to definition using the language server
+"  J->d = Jump to declaration using the language server
 nnoremap <leader>j :Buffers<cr>
-nnoremap <leader><C-J> :YcmCompleter GoTo<CR>
+nnoremap <silent> <leader><C-J> :call LuaCall("TryLsp('declaration')")<CR>
+nnoremap <silent> <leader>Jd :call LuaCall("TryLsp('definition')")<CR>
 
 " --- L --- Load
 "  prime = use fzf to look for files to load
@@ -501,7 +560,9 @@ nnoremap <leader>Lc :call ExpandFilePatterns(['*.c', '*.cc', '*.cpp', '*.h', '*.
 
 " --- O --- Outline/Overview
 "  prime = open outline
+"  subprime = open the folder that contains the current document
 nnoremap <silent> <leader>o :TagbarToggle<cr>
+nnoremap <silent> <leader><C-O> :Explore<cr>
 
 " --- Q --- Quit
 "  prime = quit
@@ -516,16 +577,17 @@ nnoremap <leader>Qa :silent bufdo bd<cr>
 " --- R --- Replace/Repair/Refactor
 "  prime = start find and replace
 "  prime-visual = start find and replace bounded by visual selection
-"  subprime = start find and rjplace
 "  R->d = perform DoGe document generation
 "  R->f = perform YCM fixit operation
 "  R->g =  perform grep based refactor
+"  R->s = perfom a sort on the selected lines
 nnoremap <leader>r viw"ry<cr>:%snomagic/<c-r>r//gc<Left><Left><Left>a<bs>
 vnoremap <leader>r :snomagic///gc<Left><Left><Left><Left>
 nnoremap <leader>Rd  :DogeGenerate 1<CR>
 nnoremap <leader>Rf  :YcmCompleter FixIt<CR>
 nnoremap <leader>Rg viw"ry/<C-r>r<cr>:exe "Grep " . shellescape(fnameescape(getreg("r")))<cr>
 vnoremap <leader>Rg "ry/<C-r>r<cr>:exe "Grep " . shellescape(fnameescape(getreg("r")))<cr>
+vnoremap <leader>Rs  :sort<CR>
 
 " --- S --- Split
 "  prime = split vertically
@@ -544,8 +606,10 @@ nnoremap <leader>u :UndotreeToggle<cr>
 "  subprime = UNDEFINED
 "  V->n = toggle line numbers display
 "  V->c = use fzf to search for a color profile to load
+"  V->h = Toggle highlighing of color codes
 nnoremap <leader>Vn :set relativenumber!<cr>:set number!<cr>
-nnoremap <leader>Vc :Color<cr>
+nnoremap <leader>Vc :Colors<cr>
+nnoremap <leader>Vh :ColorToggle<cr>
 
 " --- W --- Write
 "  prime = write current buffer
@@ -553,3 +617,7 @@ nnoremap <leader>w :w<cr>
 
 " load a work specific vimrc if applicable
 call SourceIfExists("~/.config-work/vimrc")
+" run lua init script if we are running neovim
+if nvim
+  source ~/config/vim/nvim/lua/init.lua
+endif
