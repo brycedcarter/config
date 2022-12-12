@@ -23,6 +23,11 @@ require'lspconfig'.sumneko_lua.setup{on_attach = on_attach, capabilities=capabil
 
 -- General nvim settings
 
+
+-- Status line setup
+require('lualine').setup()
+require("bufferline").setup{}
+
 -- max popup height
 vim.o.pumheight = 10;
 

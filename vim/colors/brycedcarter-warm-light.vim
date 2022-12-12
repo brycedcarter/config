@@ -4,15 +4,11 @@
 " +----------------+
 " | Initialization |
 " +----------------+
-   runtime colors/colorlib/palette.vim
 if !exists('*GetPalette')
-  echo "loading"
    runtime colors/colorlib/palette.vim
 endif
 
-   runtime colors/colorlib/highlighting.vim
 if !exists('*HighlightBasic')
-  echo "loading"
    runtime colors/colorlib/highlighting.vim
 endif
 

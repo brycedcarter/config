@@ -8,8 +8,9 @@
 " <leader> = <space>
 "
 " Leader strategy is as follows:
-"   Actions are grouped together into roughly similar ideas. Each group is
-"   associated with a letter or key. For each group, there is a 'prime' action 
+"   Actions are grouped together into roughly similar ideas ((D)ebug, (J)ump, 
+"   (L)oad, etc...). Each group is associated with a letter or key. 
+"   For each group, there is a 'prime' action 
 "   that will be triggered simply with <leader> followed by the group's letter
 "   in lower case. The rest of the group's actions will be accessible using
 "   <leader> followed by the group's letter in UPPER case, followed by another
@@ -36,21 +37,18 @@ call vundle#begin()
 Plugin 'VundleVim/Vundle.vim' " Plugin manger
 Plugin 'scrooloose/nerdcommenter' " Quickly add and remove comments 
 Plugin 'editorconfig/editorconfig-vim' " Integration with editorconfig files
-Plugin 'tmhedberg/SimpylFold' " Code folding forL python
+Plugin 'tmhedberg/SimpylFold' " Code folding for python
 Plugin 'vim-scripts/indentpython.vim' " better auto indenting for python
 Plugin 'preservim/nerdtree' " File browsing
 Plugin 'Xuyuanp/nerdtree-git-plugin' " git integration with nerd tree
 Plugin 'mbbill/undotree' " better undo interface
-Plugin 'kamykn/spelunker.vim' " spellcheck and correction suggestions
-"Plugin 'universal-ctags/ctags'
+Plugin 'universal-ctags/ctags' " ctags implementation required by tagbar
 Plugin 'majutsushi/tagbar' " outline sidebar
 Plugin 'airblade/vim-gitgutter' " show git status in gutter
 Plugin 'junegunn/fzf' " fuzyy finding navigation
 Plugin 'junegunn/fzf.vim'
 Plugin 'octol/vim-cpp-enhanced-highlight' " better highlighting for c++
 Plugin 'tpope/vim-obsession' " Intelligent and automatic session management
-Plugin 'vim-airline/vim-airline' " Better status line
-Plugin 'vim-airline/vim-airline-themes' " Color theme support for airline
 Plugin 'tpope/vim-fugitive' " Git extension
 Plugin 'psf/black' " Black formatter for python
 Plugin 'rhysd/vim-clang-format' " clang-format formatter for C style 
@@ -73,6 +71,9 @@ if nvim " neovim only plugins
   
 
   Plugin('onsails/lspkind.nvim') " LSP completion icons
+
+  Plugin 'nvim-lualine/lualine.nvim'
+  Plugin 'akinsho/bufferline.nvim'
 else
   Plugin 'lifepillar/vim-mucomplete' " sets up completion sources (native)
 endif
@@ -148,7 +149,9 @@ set formatoptions=cqronl " custom formatting
 set diffopt+=internal,algorithm:patience " enable better 'patience' diff
 set grepprg=rg\ -n\ --column\ --no-heading  " use rg for grepping
 set grepformat=%f:%l:%c:%m " set grep format to match grep config  
-
+set spell " enable spellcheck
+set spellfile=~/.spellfile.utf-8.add " personal spelling dictionary
+set spellsuggest=10 " limit the number of spelling suggestions
 
 " Native Package Add
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -162,31 +165,12 @@ packadd termdebug
 let g:gitgutter_map_keys = 0 " remove git gutter key mappings
 let g:NERDCreateDefaultMappings = 0 "remove nerd tree key mappings
 
-" Airline
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-set noshowmode  " Don't show current editor mode (insert, visual, replace, etc). that is airline's job now
-let g:airline#extensions#tabline#enabled = 1 " display the enhanced tab bar that shows buffers 
-let g:airline#extensions#tabline#left_alt_sep = '|' " customize tabline visual
-let g:airline#extensions#tabline#left_sep = ' '
-let g:airline_theme='deus'
-let g:airline_powerline_fonts = 1
-let g:airline_extensions = ['tabline'] " opt in to extensions rather than auto enabled
 
 " CppEnhancedHighlight
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:cpp_class_scope_highlight=1
 let g:cpp_experimental_template_highlight=1 " not using g:cpp_experimental_simple_template_highlight because it can be super slow
 let g:cpp_concepts_highlight=1
-
-" Spelunker setup
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-set nospell " use Spelunker instead of builtin speckcheck
-set spellfile=~/.spellfile.utf-8.add
-let g:spelunker_check_type = 1
-highlight SpelunkerSpellBad cterm=underline ctermfg=NONE gui=underline guifg=NONE
-highlight SpelunkerComplexOrCompoundWord cterm=underline ctermfg=NONE gui=underline guifg=NONE
-
-
 
 " General completion
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -247,7 +231,6 @@ if &term =~ '256color'
       " Disable Background Color Erase (BCE) so that color schemes
       "     " work properly when Vim is used inside tmux and GNU screen.
       set t_ut=
-
 endif
 
 " Fixing up the grep command so that it can be used by our custom refactor
@@ -425,6 +408,9 @@ nnoremap <silent> <leader><cr> :noh<cr>
 nnoremap [q :cprev<CR>
 nnoremap ]q :cnext<CR>
 
+" improved spellcheck correction options view
+nnoremap z= i<C-X>s
+
 " Ctrl
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
 
@@ -524,6 +510,9 @@ nnoremap <leader>Fr :call LuaCall("TryLsp('references')")<cr>
 "  G->t = initiate a checkout for tags
 "  G->n = next git hunk
 "  G->N = previous git hunk
+"  G->v = view preview of hunk under the cursor
+"  G->r = restore (discard) the changes in the hunk under the cursor
+"  G->a = stage the changes in the hunk under the cursor
 nnoremap <leader>g  :Git<CR>
 nnoremap <leader>Gp  :G push<CR>
 nnoremap <leader>Gb  :G blame<CR>
@@ -531,6 +520,9 @@ nnoremap <leader>Gc  :GBranches checkout<CR>
 nnoremap <leader>Gt  :GTags checkout<CR>
 nnoremap <leader>Gn  :GitGutterNextHunk<CR>
 nnoremap <leader>GN  :GitGutterPrevHunk<CR>
+nnoremap <leader>Gv  :GitGutterPreviewHunk<CR>
+nnoremap <leader>Gr  :GitGutterUndoHunk<CR>
+nnoremap <leader>Ga  :GitGutterStageHunk<CR>
 
 " --- H --- Help
 "  prime = LSP hover help
@@ -606,10 +598,12 @@ nnoremap <leader>u :UndotreeToggle<cr>
 "  subprime = UNDEFINED
 "  V->n = toggle line numbers display
 "  V->c = use fzf to search for a color profile to load
-"  V->h = Toggle highlighing of color codes
+"  V->h = Toggle highlighting of color codes
+"  V->g = Toggle git gutter display
 nnoremap <leader>Vn :set relativenumber!<cr>:set number!<cr>
 nnoremap <leader>Vc :Colors<cr>
 nnoremap <leader>Vh :ColorToggle<cr>
+nnoremap <leader>Vg :GitGutterToggle<cr>
 
 " --- W --- Write
 "  prime = write current buffer
