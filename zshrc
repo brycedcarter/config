@@ -17,7 +17,7 @@
 #
 # # Use hyper.is or iTerm2 as terminal emulators
 
-export TERM="xterm-256color"
+! [[ "$TERM" =~ ^.*256color.*$ ]] && echo "WARNING: \$TERM is does not seem to support 256 colors. Maybe you need to configure your terminal emulator to set \$TERM correctly"
 
 LANG="en_US.UTF-8"
 LC_COLLATE="en_US.UTF-8"
@@ -82,7 +82,7 @@ POWERLEVEL9K_FOLDER_ICON="" # better than the defualt folder icon because it 
 POWERLEVEL9K_DIR_WRITABLE_FORBIDDEN_FOREGROUND="015" # make the lock a nice white instead of an ugly gold
 
 
-POWERLEVEL9K_MULTILINE_FIRST_PROMPT_GAP_CHAR='·'  # set up the fillter between right and left prompts
+POWERLEVEL9K_MULTILINE_FIRST_PROMPT_GAP_CHAR='·'  # set up the filler between right and left prompts
 POWERLEVEL9K_MULTILINE_FIRST_PROMPT_GAP_FOREGROUND=238
 
 
@@ -113,7 +113,6 @@ COMPLETION_WAITING_DOTS="true"
 # plugins to load
 plugins=(
   git
-  history
   common-aliases
   macos
   wd
@@ -122,22 +121,20 @@ plugins=(
   zsh-syntax-highlighting
   command-not-found
   ssh-agent
-  vundle 
   pip
-  fzf
   vi-mode
 )
 
 # User configuration
 
-export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/mysql/bin/"
+export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/mysql/bin/:$HOME/.local/bin/"
 export EDITOR=vim  
 
 zstyle :omz:plugins:ssh-agent agent-forwarding on
 source $ZSH/oh-my-zsh.sh
 
 # setting environment variables to be sent to ssh hosts
-# NDTE: for these env vars to be sent to the host, the client config needs this
+# NOTE: for these env vars to be sent to the host, the client config needs this
 # line:
 # SendEnv CUSTOM_SSH_ENV_*
 # And the host config needs this line:
@@ -271,4 +268,3 @@ fi
 function preexec {
   refresh
 }
-
