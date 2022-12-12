@@ -2,3 +2,5 @@ Session.vim
 tags
 .gdb_history
 bryce-data
+.clangd
+.tmp

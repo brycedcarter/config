@@ -1,9 +1,6 @@
 #!/bin/bash
 # static definitions
 
-
-
-
 ###############################################################################
 ############## CONSTANTS SETUP ################################################
 ###############################################################################
@@ -266,8 +263,6 @@ then
 
   show_banner "Setting up vim stuff"
   do_thing "use_repo https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim" "Installing vundle"
-
-  do_thing "mkdir ~/.vim/colors; ln -f -s $DIR/vim/colors/brycedcarter-light.vim ~/.vim/colors/brycedcarter-light.vim;  ln -f -s $DIR/vim/colors/brycedcarter-dark.vim ~/.vim/colors/brycedcarter-dark.vim" "Adding vim color themes"
 
   do_thing "cd ~/config; vim +'source vimrc' +'PluginInstall' +qa" "Installing VIM plugins"
   do_thing "cd ~/config; vim +'source vimrc' +'call doge#install()' +qa" "Installing Doge (document generation)"
