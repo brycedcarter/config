@@ -23,10 +23,24 @@ require'lspconfig'.sumneko_lua.setup{on_attach = on_attach, capabilities=capabil
 
 -- General nvim settings
 
+require("nvim-tree").setup()
+
 
 -- Status line setup
 require('lualine').setup()
-require("bufferline").setup{}
+require("bufferline").setup{
+  options = {
+    diagnostics = "nvim_lsp",
+    show_buffer_icons = true,
+    color_icons = true,
+    show_buffer_default_icon = true ,
+    separator_style = "thick", 
+    show_buffer_close_icons = false,
+    diagnostics_indicator = function(count, level)
+        local icon = level:match("error") and " " or ""
+        return " " .. icon .. count
+    end
+}}
 
 -- max popup height
 vim.o.pumheight = 10;

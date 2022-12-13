@@ -39,8 +39,6 @@ Plugin 'scrooloose/nerdcommenter' " Quickly add and remove comments
 Plugin 'editorconfig/editorconfig-vim' " Integration with editorconfig files
 Plugin 'tmhedberg/SimpylFold' " Code folding for python
 Plugin 'vim-scripts/indentpython.vim' " better auto indenting for python
-Plugin 'preservim/nerdtree' " File browsing
-Plugin 'Xuyuanp/nerdtree-git-plugin' " git integration with nerd tree
 Plugin 'mbbill/undotree' " better undo interface
 Plugin 'universal-ctags/ctags' " ctags implementation required by tagbar
 Plugin 'majutsushi/tagbar' " outline sidebar
@@ -68,12 +66,13 @@ if nvim " neovim only plugins
   " snippet tool used by nvim-cmp
   Plugin('saadparwaiz1/cmp_luasnip')
   Plugin('L3MON4D3/LuaSnip')
-  
 
   Plugin('onsails/lspkind.nvim') " LSP completion icons
 
   Plugin 'nvim-lualine/lualine.nvim'
   Plugin 'akinsho/bufferline.nvim'
+  Plugin 'nvim-tree/nvim-web-devicons' " icons for bufferline
+  Plugin 'nvim-tree/nvim-tree.lua'
 else
   Plugin 'lifepillar/vim-mucomplete' " sets up completion sources (native)
 endif
@@ -126,7 +125,6 @@ set list " show visual whitespace
 set listchars=tab:➤-,trail:·,extends:»,precedes:« " chars to show in place of whitespace
 set lazyredraw                  " Redraw faster.
 set number " show line numbers
-set relativenumber " use relative numbers in line numbering
 set scrolloff=5                 " Keep min of N lines above/below cursor.
 set shiftwidth=2                " Auto-indent 2 spaces each indent level. (used for C style files)
 set showmatch                   " Show matching () {} etc..
@@ -163,7 +161,6 @@ packadd termdebug
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " disable automatic keybindings for all plugins (except spellunker because it does not support it) 
 let g:gitgutter_map_keys = 0 " remove git gutter key mappings
-let g:NERDCreateDefaultMappings = 0 "remove nerd tree key mappings
 
 
 " CppEnhancedHighlight
@@ -183,11 +180,6 @@ if !nvim
   let g:mucomplete#chains = {'default' : ['path', 'keyn', 'omni']}
 endif
 
-
-" NERDTree
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" add back default mapping
-let NERDTreeIgnore=['\.pyc$', '\~$']
 
 " tagbar customization
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -420,9 +412,6 @@ nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 
-" NERDTree directory browser
-nnoremap <C-n> :NERDTreeToggle<CR>
-
 " F-Key mapping
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
 
@@ -488,7 +477,7 @@ nnoremap <leader>Db :Break<cr>
 nnoremap <leader>Dc :Clear<cr>
 nnoremap <silent> <leader>Dh :call SynGroup()<cr>
 nnoremap <silent> <leader>DH :so $VIMRUNTIME/syntax/hitest.vim<cr>
-nnoremap <silent> <leader>Dn :call LuaCall("vim.diagn
+nnoremap <silent> <leader>Dn :call LuaCall("vim.diagnostic.goto_next()")<CR>
 nnoremap <silent> <leader>DN :call LuaCall("vim.diagnostic.goto_prev()")<CR>
 nnoremap <leader>Dm :profile start /tmp/vim.profile<cr>:profile file *<cr>:profile func *<cr>
 
@@ -497,10 +486,12 @@ nnoremap <leader>Dm :profile start /tmp/vim.profile<cr>:profile file *<cr>:profi
 "  F->l = use fzf to find lines in open buffers
 "  F->g = use fzf to perform a ripgrep recursive search of files
 "  F->r = find references using language server
+"  F->t = open the tree sidebar
 nnoremap <leader>f /\v\c
 nnoremap <leader>Fl :Lines<cr>
 nnoremap <leader>Fg :Rg<cr>
 nnoremap <leader>Fr :call LuaCall("TryLsp('references')")<cr>
+nnoremap <leader>Ft :call LuaCall('require("nvim-tree.api").tree.toggle()')<cr>
 
 " --- G --- Git
 "  prime = Open fugitive
@@ -570,13 +561,13 @@ nnoremap <leader>Qa :silent bufdo bd<cr>
 "  prime = start find and replace
 "  prime-visual = start find and replace bounded by visual selection
 "  R->d = perform DoGe document generation
-"  R->f = perform YCM fixit operation
+"  R->f = perform LSP fixit operation
 "  R->g =  perform grep based refactor
 "  R->s = perfom a sort on the selected lines
 nnoremap <leader>r viw"ry<cr>:%snomagic/<c-r>r//gc<Left><Left><Left>a<bs>
 vnoremap <leader>r :snomagic///gc<Left><Left><Left><Left>
 nnoremap <leader>Rd  :DogeGenerate 1<CR>
-nnoremap <leader>Rf  :YcmCompleter FixIt<CR>
+nnoremap <leader>Rf  :call LuaCall("TryLsp('code_action')")<CR>
 nnoremap <leader>Rg viw"ry/<C-r>r<cr>:exe "Grep " . shellescape(fnameescape(getreg("r")))<cr>
 vnoremap <leader>Rg "ry/<C-r>r<cr>:exe "Grep " . shellescape(fnameescape(getreg("r")))<cr>
 vnoremap <leader>Rs  :sort<CR>
@@ -600,7 +591,7 @@ nnoremap <leader>u :UndotreeToggle<cr>
 "  V->c = use fzf to search for a color profile to load
 "  V->h = Toggle highlighting of color codes
 "  V->g = Toggle git gutter display
-nnoremap <leader>Vn :set relativenumber!<cr>:set number!<cr>
+nnoremap <leader>Vn :set number!<cr>
 nnoremap <leader>Vc :Colors<cr>
 nnoremap <leader>Vh :ColorToggle<cr>
 nnoremap <leader>Vg :GitGutterToggle<cr>
