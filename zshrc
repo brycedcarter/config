@@ -268,3 +268,22 @@ fi
 function preexec {
   refresh
 }
+
+function mksublib {
+  mkdir $1
+  sed "s/{NAME}/$1/g" ~/config/templates/BUILD_LIB > "$1/BUILD"
+  touch "$1/$1.h"
+  touch "$1/$1.cpp"
+  touch "$1/${1}_test.h"
+  touch "$1/${1}_test.cpp"
+  touch "$1/README.md"
+}
+
+function mksubbin {
+  mkdir $1
+  sed "s/{NAME}/$1/g" ~/config/templates/BUILD_BIN > "$1/BUILD"
+  touch "$1/$1.h"
+  touch "$1/$1.cpp"
+  touch "$1/${1}_test.cpp"
+  touch "$1/README.md"
+}

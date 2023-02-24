@@ -340,9 +340,9 @@ endfun
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" Populate a header for python files
-augroup headers
-  au BufNewFile *.py so ~/config/headers/python.txt
+" Populate a template for python files
+augroup templates
+  au BufNewFile *.py so ~/config/templates/python.txt
   au bufnewfile *.py exe "1," . 7 . "g/Filename:.*/s//Filename: " .expand("%")
   au bufnewfile *.py exe "1," . 7 . "g/Date Created:.*/s//Date Created: " .strftime("%Y-%m-%d")
   au bufnewfile *.py exe "normal! /\\V[Description]\<cr>vf]"

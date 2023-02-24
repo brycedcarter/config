@@ -1,0 +1,22 @@
+cc_binary(
+    name = "{NAME}",
+    srcs = [
+        "{NAME}.cpp",
+    ],
+    hdrs = ["{NAME}.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+    ],
+)
+
+cc_test(
+    name = "{NAME}_test",
+    srcs = [
+        "{NAME}_test.cpp",
+    ],
+    testonly = True,
+    deps = [
+        ":{NAME}",
+        "//base/test/gtest:gtest_main",
+    ],
+)
