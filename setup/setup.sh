@@ -8,8 +8,8 @@
 LINUX_ZSH_PACKAGES=(zsh python-pygments ripgrep fd-find)
 MAC_ZSH_PACKAGES=(zsh pygments ripgrep fd)
 
-LINUX_VIM_PACKAGES=(build-essential cmake python3-dev python3-venv python-dev vim universal-ctags golang npm openjdk-11-jdk fzf)
-MAC_VIM_PACKAGES=(cmake macvim go python fzf "--HEAD universal-ctags/universal-ctags/universal-ctags")
+LINUX_VIM_PACKAGES=(build-essential cmake python3-dev python3-venv python-dev vim nvim universal-ctags golang npm openjdk-11-jdk fzf)
+MAC_VIM_PACKAGES=(cmake nvim go python fzf "--HEAD universal-ctags/universal-ctags/universal-ctags")
 
 LINUX_TOOLS_PACKAGES=(vim picocom git tldr tree)
 MAC_TOOLS_PACKAGES=(macvim picocom git tldr tree)
@@ -19,6 +19,15 @@ OH_MY_ZSH_SETUP_COMMAND='sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh
 FZF_SETUP_COMMAND="/usr/local/opt/fzf/install --key-bindings --completion --no-update-rc"
 
 YCM_COMPILE_COMMAND="git submodule update --init --recursive; python3 install.py --all"
+
+
+# XDG EXPLICIT SETUP
+export XDG_DATA_HOME=$HOME/.local/share
+export XDG_DATA_DIRS=/usr/local/share/:/usr/share/
+export XDG_CONFIG_HOME=$HOME/.config
+export XDG_CONFIG_DIRS=$HOME/config:/etc/xdg
+export XDG_STATE_HOME=$HOME/.local/state
+export XDG_CACHE_HOME=$HOME/.cache
 
 
 ###############################################################################
@@ -60,6 +69,8 @@ show_usage()
   -h: Show this help
   "
 }
+
+
 
 while test $# != 0
 do
@@ -301,14 +312,14 @@ fi
 if $MANAGE_CONFIGS; then
   show_banner "Backing up and replacing managed config (rc) files"
   do_thing "cd ~; mkdir -p '.config-backups'" "Creating folder for storing backups"
-  while read filename;
+  while read -r filepath dotfile;
   do 
-    backup_filename="$filename-$current_time"
+	  backup_filename="${dotfile#?}-$current_time"
     cd ~
-    if [ -f .$filename ]; then
-      do_thing "cd ~; cp -L .$filename .config-backups/$backup_filename; ln -fs .config-backups/$backup_filename .config-backups/$filename-latest" "Backing up ~/.$filename"
+    if [ -f $dotfile ]; then
+      do_thing "cd ~; cp -L $dotfile .config-backups/$backup_filename; ln -fs .config-backups/$backup_filename .config-backups/${dotfile#?}-latest" "Backing up ~/$dotfile"
     fi
-    do_thing  "cd ~; ln -fs config/$filename ./.$filename"  "Linking managed version of ~/.$filename from ~/config"
+    do_thing  "cd ~; ln -fs $HOME/config/$filepath ./$dotfile"  "Linking managed version of ~/$dotfile from ~/config/$filepath"
   done < $DIR/managed_files.txt
 fi
 

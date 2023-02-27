@@ -534,12 +534,14 @@ nnoremap <silent> <leader>Jd :call LuaCall("TryLsp('definition')")<CR>
 "  L->h = load all headers in the current directory
 "  L->p = load all .py in the current directory
 "  L->c = load all .c/.cc/.cpp/.h/.hpp files in the current directory
+"  L->n = load a new empty buffer
 nnoremap <leader>l :Files<cr>
 " using "next" on joined list rather than argdo because argdo disables syntax
 " autocmd for Syntax when it si running
 nnoremap <leader>Lh :call ExpandFilePatterns(['*.h'])<cr>:silent exe 'next ' . join(argv(), ' ' )<cr>
 nnoremap <leader>Lp :call ExpandFilePatterns(['*.py'])<cr>:silent exe 'next ' . join(argv(), ' ' )<cr>
 nnoremap <leader>Lc :call ExpandFilePatterns(['*.c', '*.cc', '*.cpp', '*.h', '*.hpp'])<cr>:silent exe 'next ' . join(argv(), ' ' )<cr>
+nnoremap <leader>Ln :enew<cr>
 
 " --- O --- Outline/Overview
 "  prime = open outline
