@@ -11,8 +11,8 @@ MAC_ZSH_PACKAGES=(zsh pygments ripgrep fd)
 LINUX_VIM_PACKAGES=(build-essential cmake python3-dev python3-venv python-dev vim neovim universal-ctags golang openjdk-11-jdk fzf)
 MAC_VIM_PACKAGES=(cmake nvim go python fzf "--HEAD universal-ctags/universal-ctags/universal-ctags")
 
-LINUX_TOOLS_PACKAGES=(vim picocom git tldr tree)
-MAC_TOOLS_PACKAGES=(macvim picocom git tldr tree)
+LINUX_TOOLS_PACKAGES=(vim picocom git tldr tree tmux)
+MAC_TOOLS_PACKAGES=(macvim picocom git tldr tree tmux)
 
 OH_MY_ZSH_SETUP_COMMAND='sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)" "" --unattended'
 
