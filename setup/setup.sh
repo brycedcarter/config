@@ -8,7 +8,7 @@
 LINUX_ZSH_PACKAGES=(zsh python-pygments ripgrep fd-find)
 MAC_ZSH_PACKAGES=(zsh pygments ripgrep fd)
 
-LINUX_VIM_PACKAGES=(build-essential cmake python3-dev python3-venv python-dev vim nvim universal-ctags golang npm openjdk-11-jdk fzf)
+LINUX_VIM_PACKAGES=(build-essential cmake python3-dev python3-venv python-dev vim neovim universal-ctags golang openjdk-11-jdk fzf)
 MAC_VIM_PACKAGES=(cmake nvim go python fzf "--HEAD universal-ctags/universal-ctags/universal-ctags")
 
 LINUX_TOOLS_PACKAGES=(vim picocom git tldr tree)
@@ -63,7 +63,6 @@ show_usage()
   -t: setup miscellaneous tools 
   -c: Manage configuration files (rc files mainly)
   -f: Install fonts
-  -ycm: Compile YouCompleteMe
   --verbose: Show verbose output of setup
   --force: Continue when errors are encountered (this mode is not well tested)
   -h: Show this help
@@ -80,7 +79,6 @@ do
     -t) INSTALL_TOOLS=true ;;
     -c) MANAGE_CONFIGS=true ;;
     -f) INSTALL_FONTS=true ;;
-    --ycm) FORCE_YCM=true ;;
     --verbose) VERBOSE=true ;;
     --force) FORCE=true ;;
     -h|--help) show_usage; exit 0;;
@@ -96,7 +94,8 @@ do
 ############## PREPARE THE ENVIRONMENT ########################################
 ###############################################################################
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+SETUP_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+CONFIG_DIR=$(dirname $SETUP_DIR)
 current_time=$(date "+%Y.%m.%d-%H.%M.%S")
 export PATH=$PATH:/usr/local/bin
 ssh-add
@@ -248,9 +247,9 @@ then
 
   do_thing "$FZF_STEUP_COMMAND" "Adding fzf key bindings"
  
-  do_thing "use_repo https://github.com/zsh-users/zsh-syntax-highlighting.git $DIR/oh-my-zsh/custom/plugins/zsh-syntax-highlighting" "Installing zsh syntax highlighting"
+  do_thing "use_repo https://github.com/zsh-users/zsh-syntax-highlighting.git $CONFIG_DIR/zsh/oh-my-zsh/custom/plugins/zsh-syntax-highlighting" "Installing zsh syntax highlighting"
 
-  do_thing "use_repo https://github.com/romkatv/powerlevel10k.git $DIR/oh-my-zsh/custom/themes/powerlevel10k" "Installing powerlevel10k"
+  do_thing "use_repo https://github.com/romkatv/powerlevel10k.git $CONFIG_DIR/zsh/oh-my-zsh/custom/themes/powerlevel10k" "Installing powerlevel10k"
 
   do_thing "wget -O ~/.iterm2_shell_integration.zsh https://iterm2.com/shell_integration/zsh" "Installing iterm zsh integration"
   
@@ -273,19 +272,9 @@ then
     esac
 
   show_banner "Setting up vim stuff"
-  do_thing "use_repo https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim" "Installing vundle"
 
-  do_thing "cd ~/config; vim +'source vimrc' +'PluginInstall' +qa" "Installing VIM plugins"
+  do_thing "cd ~/config; vim +'source vimrc' +'PlugInstall' +qa" "Installing VIM plugins"
   do_thing "cd ~/config; vim +'source vimrc' +'call doge#install()' +qa" "Installing Doge (document generation)"
-fi
-
-if $CONFIGURE_VIM || $FORCE_YCM;
-then
-    if ! [[ -f ~/.vim/bundle/YouCompleteMe/third_party/ycmd/ycm_core.cpython-39-darwin.so ]] || $FORCE_YCM; then
-    # compile ycm
-    
-    do_thing "cd ~/.vim/bundle/YouCompleteMe; $YCM_COMPILE_COMMAND" "Compiling YouCompleteMe"
-    fi
 fi
 
 
@@ -320,7 +309,7 @@ if $MANAGE_CONFIGS; then
       do_thing "cd ~; cp -L $dotfile .config-backups/$backup_filename; ln -fs .config-backups/$backup_filename .config-backups/${dotfile#?}-latest" "Backing up ~/$dotfile"
     fi
     do_thing  "cd ~; ln -fs $HOME/config/$filepath ./$dotfile"  "Linking managed version of ~/$dotfile from ~/config/$filepath"
-  done < $DIR/managed_files.txt
+  done < $SETUP_DIR/managed_files.txt
 fi
 
 
