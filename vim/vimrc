@@ -39,7 +39,6 @@ if empty(glob(data_dir . '/autoload/plug.vim'))
 endif
 
 call plug#begin()
-Plug 'VundleVim/Vundle.vim' " Plugin manger
 Plug 'scrooloose/nerdcommenter' " Quickly add and remove comments 
 Plug 'editorconfig/editorconfig-vim' " Integration with editorconfig files
 Plug 'tmhedberg/SimpylFold' " Code folding for python
@@ -608,5 +607,7 @@ nnoremap <leader>w :w<cr>
 call SourceIfExists("~/.config-work/vimrc")
 " run lua init script if we are running neovim
 if nvim
+  set runtimepath^=~/.vim runtimepath+=~/.vim/after
+  let &packpath=&runtimepath
   source ~/config/vim/nvim/lua/init.lua
 endif

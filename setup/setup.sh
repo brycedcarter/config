@@ -5,20 +5,21 @@
 ############## CONSTANTS SETUP ################################################
 ###############################################################################
 
-LINUX_ZSH_PACKAGES=(zsh python-pygments ripgrep fd-find)
-MAC_ZSH_PACKAGES=(zsh pygments ripgrep fd)
+LINUX_ZSH_PACKAGES=(zsh python-pygments)
+MAC_ZSH_PACKAGES=(zsh pygments)
 
-LINUX_VIM_PACKAGES=(build-essential cmake python3-dev python3-venv python-dev vim neovim universal-ctags golang openjdk-11-jdk fzf)
-MAC_VIM_PACKAGES=(cmake nvim go python fzf "--HEAD universal-ctags/universal-ctags/universal-ctags")
+LINUX_VIM_PACKAGES=(build-essential cmake python4-dev python3-venv python-dev vim neovim universal-ctags golang openjdk-11-jdk)
+MAC_VIM_PACKAGES=(cmake nvim go python "--HEAD universal-ctags/universal-ctags/universal-ctags")
+
+LINUX_FZF_PACKAGES=(ripgrep fd-find)
+MAC_FZF_PACKAGES=(ripgrep fd)
 
 LINUX_TOOLS_PACKAGES=(vim picocom git tldr tree tmux)
 MAC_TOOLS_PACKAGES=(macvim picocom git tldr tree tmux)
 
 OH_MY_ZSH_SETUP_COMMAND='sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)" "" --unattended'
 
-FZF_SETUP_COMMAND="/usr/local/opt/fzf/install --key-bindings --completion --no-update-rc"
-
-YCM_COMPILE_COMMAND="git submodule update --init --recursive; python3 install.py --all"
+FZF_SETUP_COMMAND="$HOME/.fzf/install --key-bindings --completion --no-update-rc"
 
 
 # XDG EXPLICIT SETUP
@@ -259,26 +260,27 @@ fi
 
 
 ###############################################################################
-############## SETUP VIM ######################################################
+############## SETUP FZF AND FD ###############################################
 ###############################################################################
 
-if $CONFIGURE_VIM;
+if $CONFIGURE_VIM || $CONFIGURE_ZSH;
 then
-    show_banner "Installing vim packages"
+  show_banner "Setting up fzf"
     case $MACHINE_TYPE in
-      Linux) install "${LINUX_VIM_PACKAGES[@]}";;
-      Mac) install "${MAC_VIM_PACKAGES[@]}";;
-      *) error "Platform unsupported. Please manually install the following: ${LINUX_VIM_PACKAGES[*]} or ${MAC_VIM_PACKAGES[*]}";;
+      Linux) install "${LINUX_FZF_PACKAGES[@]}"
+        # fd name is used by some other package, so the fd we want gets
+        # installed as fd-find... make a link
+        mkdir -p $HOME/.local/bin
+        ln -s $(which fdfind) ~/.local/bin/fd
+        ;;
+      Mac) install "${MAC_FZF_PACKAGES[@]}";;
+      *) error "Platform unsupported. Please manually install the following: ${LINUX_ZSH_PACKAGES[*]} or ${MAC_ZSH_PACKAGES[*]}";;
     esac
 
-  show_banner "Setting up vim stuff"
+  do_thing "use_repo https://github.com/junegunn/fzf.git $HOME/.fzf" "Cloning fzf"
+  do_thing "$FZF_SETUP_COMMAND" "Installing fzf"
 
-  do_thing "cd ~/config; vim +'source vimrc' +'PlugInstall' +qa" "Installing VIM plugins"
-  do_thing "cd ~/config; vim +'source vimrc' +'call doge#install()' +qa" "Installing Doge (document generation)"
 fi
-
-
-
 
 ###############################################################################
 ############## INSTALL TOOLS ##################################################

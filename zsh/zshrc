@@ -261,6 +261,9 @@ bindkey -M main '^[OB' history-beginning-search-forward
 
 bindkey -M viins 'jk' vi-cmd-mode
 
+# remove alias that was added by oh-my-zsh common shortcuts
+unalias fd
+
 # workaround for getting stateful environment variables back into zshs that live
 # inside temux sessions:
 # From here: https://www.babushk.in/posts/renew-environment-tmux.html
