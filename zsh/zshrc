@@ -128,7 +128,7 @@ plugins=(
   colorize
   zsh-syntax-highlighting
   command-not-found
-  ssh-agent
+  #ssh-agent
   pip
   vi-mode
 )
@@ -232,11 +232,6 @@ function setprj() {
 alias clearprj='export PRJACTIVE=;PRJPATH='
 setprj
 
-# If no ssh key is ready in the agent, load one
-if [ "$(ssh-add -l)" = "The agent has no identities." ]; then
-  ssh-add
-fi
-
 # Faster access to native shell on windows
 alias cmd=/mnt/c/Windows/System32/cmd.exe
 
@@ -262,7 +257,9 @@ bindkey -M main '^[OB' history-beginning-search-forward
 bindkey -M viins 'jk' vi-cmd-mode
 
 # remove alias that was added by oh-my-zsh common shortcuts
-unalias fd
+if alias fd >/dev/null 2>&1; then 
+  unalias fd
+fi
 
 # workaround for getting stateful environment variables back into zshs that live
 # inside temux sessions:
