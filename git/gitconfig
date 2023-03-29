@@ -15,7 +15,7 @@
 	preloadindex = true
 	editor = nvim
 [commit]
-	template = ~/config/git-commit-template.md
+	template = ~/config/git/git-commit-template.md
 [diff]
 	tool = vimdiff
   renamelimit = 999999

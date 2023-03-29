@@ -31,63 +31,64 @@ endif
 set nocompatible              " be iMproved, required
 filetype off                  " required
 
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-Plugin 'VundleVim/Vundle.vim' " Plugin manger
-Plugin 'scrooloose/nerdcommenter' " Quickly add and remove comments 
-Plugin 'editorconfig/editorconfig-vim' " Integration with editorconfig files
-Plugin 'tmhedberg/SimpylFold' " Code folding for python
-Plugin 'vim-scripts/indentpython.vim' " better auto indenting for python
-Plugin 'mbbill/undotree' " better undo interface
-Plugin 'universal-ctags/ctags' " ctags implementation required by tagbar
-Plugin 'majutsushi/tagbar' " outline sidebar
-Plugin 'airblade/vim-gitgutter' " show git status in gutter
-Plugin 'junegunn/fzf' " fuzyy finding navigation
-Plugin 'junegunn/fzf.vim'
-Plugin 'octol/vim-cpp-enhanced-highlight' " better highlighting for c++
-Plugin 'tpope/vim-obsession' " Intelligent and automatic session management
-Plugin 'tpope/vim-fugitive' " Git extension
-Plugin 'psf/black' " Black formatter for python
-Plugin 'rhysd/vim-clang-format' " clang-format formatter for C style 
-Plugin 'stsewd/fzf-checkout.vim' " fzf git actions
-Plugin 'kkoomen/vim-doge' " documentation generator
-Plugin('chrisbra/Colorizer') " highlight color codes
+" Auto install vim-plug plugin manager
+let data_dir = g:nvim ? stdpath('data') . '/site' : '~/.vim'
+if empty(glob(data_dir . '/autoload/plug.vim'))
+  silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+call plug#begin()
+Plug 'scrooloose/nerdcommenter' " Quickly add and remove comments 
+Plug 'editorconfig/editorconfig-vim' " Integration with editorconfig files
+Plug 'tmhedberg/SimpylFold' " Code folding for python
+Plug 'vim-scripts/indentpython.vim' " better auto indenting for python
+Plug 'mbbill/undotree' " better undo interface
+Plug 'universal-ctags/ctags' " ctags implementation required by tagbar
+Plug 'majutsushi/tagbar' " outline sidebar
+Plug 'airblade/vim-gitgutter' " show git status in gutter
+Plug 'junegunn/fzf' " fuzyy finding navigation
+Plug 'junegunn/fzf.vim'
+Plug 'octol/vim-cpp-enhanced-highlight' " better highlighting for c++
+Plug 'tpope/vim-obsession' " Intelligent and automatic session management
+Plug 'tpope/vim-fugitive' " Git extension
+Plug 'psf/black' " Black formatter for python
+Plug 'rhysd/vim-clang-format' " clang-format formatter for C style 
+Plug 'stsewd/fzf-checkout.vim' " fzf git actions
+Plug 'kkoomen/vim-doge' " documentation generator
+Plug('chrisbra/Colorizer') " highlight color codes
 
 if nvim " neovim only plugins
-  Plugin 'neovim/nvim-lspconfig' " language server protocol client std configs
-  Plugin 'p00f/clangd_extensions.nvim'
-  Plugin 'hrsh7th/nvim-cmp' " autocompletion for use with nvim lsp
+  Plug 'neovim/nvim-lspconfig' " language server protocol client std configs
+  Plug 'p00f/clangd_extensions.nvim'
+  Plug 'hrsh7th/nvim-cmp' " autocompletion for use with nvim lsp
   " Completion sources for nvim-cmp
-  Plugin('hrsh7th/cmp-nvim-lsp')
-  Plugin('hrsh7th/cmp-buffer')
-  Plugin('hrsh7th/cmp-path')
-  Plugin('hrsh7th/cmp-cmdline')
+  Plug('hrsh7th/cmp-nvim-lsp')
+  Plug('hrsh7th/cmp-buffer')
+  Plug('hrsh7th/cmp-path')
+  Plug('hrsh7th/cmp-cmdline')
   " snippet tool used by nvim-cmp
-  Plugin('saadparwaiz1/cmp_luasnip')
-  Plugin('L3MON4D3/LuaSnip')
+  Plug('saadparwaiz1/cmp_luasnip')
+  Plug('L3MON4D3/LuaSnip')
 
-  Plugin('onsails/lspkind.nvim') " LSP completion icons
+  Plug('onsails/lspkind.nvim') " LSP completion icons
 
-  Plugin 'nvim-lualine/lualine.nvim'
-  Plugin 'akinsho/bufferline.nvim'
-  Plugin 'nvim-tree/nvim-web-devicons' " icons for bufferline
-  Plugin 'nvim-tree/nvim-tree.lua'
+  Plug 'nvim-lualine/lualine.nvim'
+  Plug 'akinsho/bufferline.nvim'
+  Plug 'nvim-tree/nvim-web-devicons' " icons for bufferline
+  Plug 'nvim-tree/nvim-tree.lua'
 else
-  Plugin 'lifepillar/vim-mucomplete' " sets up completion sources (native)
+  Plug 'lifepillar/vim-mucomplete' " sets up completion sources (native)
 endif
-call vundle#end()            " required
-filetype plugin indent on    " required
+call plug#end()            " required
 "to ignore plugin indent changes, instead use:
 "filetype plugin on
 
     " Brief help    
-    " :PluginList          - list configured plugins  
-    " :PluginInstall(!)    - install (update) plugins     
-    " :PluginSearch(!) foo - search (or refresh cache first) for foo    
-    " :PluginClean(!)- confirm (or auto-approve) removal of unused plugins
+    " :PlugStatus          - list configured plugins  
+    " :PlugInstall    - install plugins     
+    " :PlugClean(!)- confirm (or auto-approve) removal of unused plugins
     "
-"see :h vundle for more details or wiki for faq
 "put your non-plugin stuff after this line
 
 
@@ -534,12 +535,14 @@ nnoremap <silent> <leader>Jd :call LuaCall("TryLsp('definition')")<CR>
 "  L->h = load all headers in the current directory
 "  L->p = load all .py in the current directory
 "  L->c = load all .c/.cc/.cpp/.h/.hpp files in the current directory
+"  L->n = load a new empty buffer
 nnoremap <leader>l :Files<cr>
 " using "next" on joined list rather than argdo because argdo disables syntax
 " autocmd for Syntax when it si running
 nnoremap <leader>Lh :call ExpandFilePatterns(['*.h'])<cr>:silent exe 'next ' . join(argv(), ' ' )<cr>
 nnoremap <leader>Lp :call ExpandFilePatterns(['*.py'])<cr>:silent exe 'next ' . join(argv(), ' ' )<cr>
 nnoremap <leader>Lc :call ExpandFilePatterns(['*.c', '*.cc', '*.cpp', '*.h', '*.hpp'])<cr>:silent exe 'next ' . join(argv(), ' ' )<cr>
+nnoremap <leader>Ln :enew<cr>
 
 " --- O --- Outline/Overview
 "  prime = open outline
@@ -604,5 +607,7 @@ nnoremap <leader>w :w<cr>
 call SourceIfExists("~/.config-work/vimrc")
 " run lua init script if we are running neovim
 if nvim
+  set runtimepath^=~/.vim runtimepath+=~/.vim/after
+  let &packpath=&runtimepath
   source ~/config/vim/nvim/lua/init.lua
 endif

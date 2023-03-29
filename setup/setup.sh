@@ -5,20 +5,30 @@
 ############## CONSTANTS SETUP ################################################
 ###############################################################################
 
-LINUX_ZSH_PACKAGES=(zsh python-pygments ripgrep fd-find)
-MAC_ZSH_PACKAGES=(zsh pygments ripgrep fd)
+LINUX_ZSH_PACKAGES=(zsh python-pygments)
+MAC_ZSH_PACKAGES=(zsh pygments)
 
-LINUX_VIM_PACKAGES=(build-essential cmake python3-dev python3-venv python-dev vim universal-ctags golang npm openjdk-11-jdk fzf)
-MAC_VIM_PACKAGES=(cmake macvim go python fzf "--HEAD universal-ctags/universal-ctags/universal-ctags")
+LINUX_VIM_PACKAGES=(build-essential cmake python4-dev python3-venv python-dev vim neovim universal-ctags golang openjdk-11-jdk)
+MAC_VIM_PACKAGES=(cmake nvim go python "--HEAD universal-ctags/universal-ctags/universal-ctags")
 
-LINUX_TOOLS_PACKAGES=(vim picocom git tldr tree)
-MAC_TOOLS_PACKAGES=(macvim picocom git tldr tree)
+LINUX_FZF_PACKAGES=(ripgrep fd-find)
+MAC_FZF_PACKAGES=(ripgrep fd)
+
+LINUX_TOOLS_PACKAGES=(vim picocom git tldr tree tmux)
+MAC_TOOLS_PACKAGES=(macvim picocom git tldr tree tmux)
 
 OH_MY_ZSH_SETUP_COMMAND='sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)" "" --unattended'
 
-FZF_SETUP_COMMAND="/usr/local/opt/fzf/install --key-bindings --completion --no-update-rc"
+FZF_SETUP_COMMAND="$HOME/.fzf/install --key-bindings --completion --no-update-rc"
 
-YCM_COMPILE_COMMAND="git submodule update --init --recursive; python3 install.py --all"
+
+# XDG EXPLICIT SETUP
+export XDG_DATA_HOME=$HOME/.local/share
+export XDG_DATA_DIRS=/usr/local/share/:/usr/share/
+export XDG_CONFIG_HOME=$HOME/.config
+export XDG_CONFIG_DIRS=$HOME/config:/etc/xdg
+export XDG_STATE_HOME=$HOME/.local/state
+export XDG_CACHE_HOME=$HOME/.cache
 
 
 ###############################################################################
@@ -54,12 +64,13 @@ show_usage()
   -t: setup miscellaneous tools 
   -c: Manage configuration files (rc files mainly)
   -f: Install fonts
-  -ycm: Compile YouCompleteMe
   --verbose: Show verbose output of setup
   --force: Continue when errors are encountered (this mode is not well tested)
   -h: Show this help
   "
 }
+
+
 
 while test $# != 0
 do
@@ -69,7 +80,6 @@ do
     -t) INSTALL_TOOLS=true ;;
     -c) MANAGE_CONFIGS=true ;;
     -f) INSTALL_FONTS=true ;;
-    --ycm) FORCE_YCM=true ;;
     --verbose) VERBOSE=true ;;
     --force) FORCE=true ;;
     -h|--help) show_usage; exit 0;;
@@ -85,7 +95,8 @@ do
 ############## PREPARE THE ENVIRONMENT ########################################
 ###############################################################################
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+SETUP_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+CONFIG_DIR=$(dirname $SETUP_DIR)
 current_time=$(date "+%Y.%m.%d-%H.%M.%S")
 export PATH=$PATH:/usr/local/bin
 ssh-add
@@ -237,9 +248,9 @@ then
 
   do_thing "$FZF_STEUP_COMMAND" "Adding fzf key bindings"
  
-  do_thing "use_repo https://github.com/zsh-users/zsh-syntax-highlighting.git $DIR/oh-my-zsh/custom/plugins/zsh-syntax-highlighting" "Installing zsh syntax highlighting"
+  do_thing "use_repo https://github.com/zsh-users/zsh-syntax-highlighting.git $CONFIG_DIR/zsh/oh-my-zsh/custom/plugins/zsh-syntax-highlighting" "Installing zsh syntax highlighting"
 
-  do_thing "use_repo https://github.com/romkatv/powerlevel10k.git $DIR/oh-my-zsh/custom/themes/powerlevel10k" "Installing powerlevel10k"
+  do_thing "use_repo https://github.com/romkatv/powerlevel10k.git $CONFIG_DIR/zsh/oh-my-zsh/custom/themes/powerlevel10k" "Installing powerlevel10k"
 
   do_thing "wget -O ~/.iterm2_shell_integration.zsh https://iterm2.com/shell_integration/zsh" "Installing iterm zsh integration"
   
@@ -249,36 +260,27 @@ fi
 
 
 ###############################################################################
-############## SETUP VIM ######################################################
+############## SETUP FZF AND FD ###############################################
 ###############################################################################
 
-if $CONFIGURE_VIM;
+if $CONFIGURE_VIM || $CONFIGURE_ZSH;
 then
-    show_banner "Installing vim packages"
+  show_banner "Setting up fzf"
     case $MACHINE_TYPE in
-      Linux) install "${LINUX_VIM_PACKAGES[@]}";;
-      Mac) install "${MAC_VIM_PACKAGES[@]}";;
-      *) error "Platform unsupported. Please manually install the following: ${LINUX_VIM_PACKAGES[*]} or ${MAC_VIM_PACKAGES[*]}";;
+      Linux) install "${LINUX_FZF_PACKAGES[@]}"
+        # fd name is used by some other package, so the fd we want gets
+        # installed as fd-find... make a link
+        mkdir -p $HOME/.local/bin
+        ln -s $(which fdfind) ~/.local/bin/fd
+        ;;
+      Mac) install "${MAC_FZF_PACKAGES[@]}";;
+      *) error "Platform unsupported. Please manually install the following: ${LINUX_ZSH_PACKAGES[*]} or ${MAC_ZSH_PACKAGES[*]}";;
     esac
 
-  show_banner "Setting up vim stuff"
-  do_thing "use_repo https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim" "Installing vundle"
+  do_thing "use_repo https://github.com/junegunn/fzf.git $HOME/.fzf" "Cloning fzf"
+  do_thing "$FZF_SETUP_COMMAND" "Installing fzf"
 
-  do_thing "cd ~/config; vim +'source vimrc' +'PluginInstall' +qa" "Installing VIM plugins"
-  do_thing "cd ~/config; vim +'source vimrc' +'call doge#install()' +qa" "Installing Doge (document generation)"
 fi
-
-if $CONFIGURE_VIM || $FORCE_YCM;
-then
-    if ! [[ -f ~/.vim/bundle/YouCompleteMe/third_party/ycmd/ycm_core.cpython-39-darwin.so ]] || $FORCE_YCM; then
-    # compile ycm
-    
-    do_thing "cd ~/.vim/bundle/YouCompleteMe; $YCM_COMPILE_COMMAND" "Compiling YouCompleteMe"
-    fi
-fi
-
-
-
 
 ###############################################################################
 ############## INSTALL TOOLS ##################################################
@@ -301,15 +303,15 @@ fi
 if $MANAGE_CONFIGS; then
   show_banner "Backing up and replacing managed config (rc) files"
   do_thing "cd ~; mkdir -p '.config-backups'" "Creating folder for storing backups"
-  while read filename;
+  while read -r filepath dotfile;
   do 
-    backup_filename="$filename-$current_time"
+	  backup_filename="${dotfile#?}-$current_time"
     cd ~
-    if [ -f .$filename ]; then
-      do_thing "cd ~; cp -L .$filename .config-backups/$backup_filename; ln -fs .config-backups/$backup_filename .config-backups/$filename-latest" "Backing up ~/.$filename"
+    if [ -f $dotfile ]; then
+      do_thing "cd ~; cp -L $dotfile .config-backups/$backup_filename; ln -fs .config-backups/$backup_filename .config-backups/${dotfile#?}-latest" "Backing up ~/$dotfile"
     fi
-    do_thing  "cd ~; ln -fs config/$filename ./.$filename"  "Linking managed version of ~/.$filename from ~/config"
-  done < $DIR/managed_files.txt
+    do_thing  "cd ~; ln -fs $HOME/config/$filepath ./$dotfile"  "Linking managed version of ~/$dotfile from ~/config/$filepath"
+  done < $SETUP_DIR/managed_files.txt
 fi
 
 
