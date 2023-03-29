@@ -145,7 +145,7 @@ set wildmenu                    " Tab completion navigable menu is enabled.
 set wildmode=list:longest,full  " Tab completion lists matches, then opens wildmenu on next <Tab>.
 set formatoptions=cqronl " custom formatting
 set diffopt+=internal,algorithm:patience " enable better 'patience' diff
-set grepprg=rg\ -n\ --column\ --no-heading  " use rg for grepping
+set grepprg=rg\ --vimgrep\ --no-messages  " use rg for grepping
 set grepformat=%f:%l:%c:%m " set grep format to match grep config  
 set spell " enable spellcheck
 set spellfile=~/.spellfile.utf-8.add " personal spelling dictionary

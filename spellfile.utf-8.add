@@ -153,3 +153,6 @@ dom
 NaNs
 DataFrame
 cdf
+matplotlib
+ParallelRenderer
+str
