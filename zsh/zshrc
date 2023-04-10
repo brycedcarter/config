@@ -164,7 +164,7 @@ if [[ $CUSTOM_SSH_ENV_TERM == "iTerm.app" ]]; then
 fi
 
 # setup fzf
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+[ -f "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh ] && source "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh
 
 # setup fzf settings
 export FZF_DEFAULT_OPTS="
@@ -235,7 +235,7 @@ setprj
 # Faster access to native shell on windows
 alias cmd=/mnt/c/Windows/System32/cmd.exe
 
-# quick acces to searching running processes
+# quick access to searching running processes
 alias pss='ps -ax | grep ' 
 
 # special ssh for when connecting to a trusted system
@@ -295,3 +295,6 @@ function mksubbin {
   touch "$1/${1}_test.cpp"
   touch "$1/README.md"
 }
+
+
+

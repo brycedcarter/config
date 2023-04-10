@@ -156,3 +156,5 @@ cdf
 matplotlib
 ParallelRenderer
 str
+nanoppbs
+SymbolCacheSnapshot

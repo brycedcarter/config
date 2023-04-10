@@ -19,7 +19,7 @@ MAC_TOOLS_PACKAGES=(macvim picocom git tldr tree tmux)
 
 OH_MY_ZSH_SETUP_COMMAND='sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)" "" --unattended'
 
-FZF_SETUP_COMMAND="$HOME/.fzf/install --key-bindings --completion --no-update-rc"
+FZF_SETUP_COMMAND="$HOME/.fzf/install --key-bindings --completion --no-update-rc --xdg"
 
 
 # XDG EXPLICIT SETUP
@@ -99,7 +99,10 @@ SETUP_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 CONFIG_DIR=$(dirname $SETUP_DIR)
 current_time=$(date "+%Y.%m.%d-%H.%M.%S")
 export PATH=$PATH:/usr/local/bin
-ssh-add
+# If no ssh key is ready in the agent, load one
+if [ "$(ssh-add -l)" = "The agent has no identities." ]; then
+  ssh-add
+fi
 
 # Hide output from commands unless verbose mode is enabled
 exec 3>&1 4>&2 # create new fds for messages and errors
@@ -245,8 +248,6 @@ then
     do_thing "$OH_MY_ZSH_SETUP_COMMAND" "Installing oh-my-zsh"
     do_thing "sudo chsh --shell /usr/bin/zsh $USER" "Changing $USER's shell to zsh"
   fi
-
-  do_thing "$FZF_STEUP_COMMAND" "Adding fzf key bindings"
  
   do_thing "use_repo https://github.com/zsh-users/zsh-syntax-highlighting.git $CONFIG_DIR/zsh/oh-my-zsh/custom/plugins/zsh-syntax-highlighting" "Installing zsh syntax highlighting"
 
@@ -271,13 +272,15 @@ then
         # fd name is used by some other package, so the fd we want gets
         # installed as fd-find... make a link
         mkdir -p $HOME/.local/bin
-        ln -s $(which fdfind) ~/.local/bin/fd
+        ln -s $(which fdfind) $HOME/.local/bin/fd
         ;;
       Mac) install "${MAC_FZF_PACKAGES[@]}";;
       *) error "Platform unsupported. Please manually install the following: ${LINUX_ZSH_PACKAGES[*]} or ${MAC_ZSH_PACKAGES[*]}";;
     esac
 
   do_thing "use_repo https://github.com/junegunn/fzf.git $HOME/.fzf" "Cloning fzf"
+  mkdir -p $HOME/.local/bin
+  ln -s $HOME/.fzf/bin/fzf $HOME/.local/bin/fzf
   do_thing "$FZF_SETUP_COMMAND" "Installing fzf"
 
 fi

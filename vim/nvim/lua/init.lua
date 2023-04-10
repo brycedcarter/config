@@ -18,7 +18,6 @@ end
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 require'lspconfig'.clangd.setup{on_attach = on_attach, capabilities=capabilities}
 require'lspconfig'.pyright.setup{on_attach = on_attach, capabilities=capabilities} --  install via pip install pyright
-require'lspconfig'.sumneko_lua.setup{on_attach = on_attach, capabilities=capabilities} -- Insall from: https://github.com/sumneko/lua-language-server/wiki/Getting-Started
 --require'clangd_extensions'.setup()
 
 -- General nvim settings
