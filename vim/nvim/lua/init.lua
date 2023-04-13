@@ -22,7 +22,39 @@ require'lspconfig'.pyright.setup{on_attach = on_attach, capabilities=capabilitie
 
 -- General nvim settings
 
-require("nvim-tree").setup()
+-- nvim-tree vinegar style setup
+require("nvim-tree").setup{
+  hijack_netrw = true,
+  hijack_unnamed_buffer_when_opening = true,
+view = {
+    mappings = {
+      list = {
+        { key = "<CR>", action = "edit_in_place" }
+      }
+    }
+  },
+        renderer = {
+        highlight_opened_files = "all"
+      },
+        hijack_directories = {
+        enable = true,
+      },
+actions = {
+change_dir = {
+-- NOTE: netrw-style, do not change the cwd when navigating
+enable = false,
+},
+},
+}
+-- NOTE: disable fixed nvim-tree width and height
+-- to allow creating splits naturally
+local winopts = require("nvim-tree.view").View.winopts
+winopts.winfixwidth = false
+winopts.winfixheight = false
+
+function ExploreCurrentFileDir()
+  require("nvim-tree").open_replacing_current_buffer()
+end
 
 
 -- Status line setup

@@ -548,7 +548,7 @@ nnoremap <leader>Ln :enew<cr>
 "  prime = open outline
 "  subprime = open the folder that contains the current document
 nnoremap <silent> <leader>o :TagbarToggle<cr>
-nnoremap <silent> <leader><C-O> :Explore<cr>
+nnoremap <silent> <leader><C-O> :call LuaCall("ExploreCurrentFileDir()")<cr>
 
 " --- Q --- Quit
 "  prime = quit
@@ -598,7 +598,7 @@ nnoremap <leader>Vn :set number!<cr>
 nnoremap <leader>Vc :Colors<cr>
 nnoremap <leader>Vh :ColorToggle<cr>
 nnoremap <leader>Vg :GitGutterToggle<cr>
-
+:
 " --- W --- Write
 "  prime = write current buffer
 nnoremap <leader>w :w<cr>
