@@ -93,7 +93,7 @@ function! g:HighlightBasic(palette)
   call s:h("DiffAdd", { "fg": a:palette.green }) " diff mode: Added line
   call s:h("DiffChange", { "fg": a:palette.blue }) " diff mode: Changed line
   call s:h("DiffDelete", { "fg": a:palette.red }) " diff mode: Deleted line
-  call s:h("DiffText", { "bg": a:palette.blue, 'fg': a:palette.blueprime }) " diff mode: Changed text within a changed line
+  call s:h("DiffText", { "bg": a:palette.blue, 'fg': a:palette.aft }) " diff mode: Changed text within a changed line
   call s:h("ErrorMsg", {}) " error messages on the command line
   call s:h("VertSplit", { "fg": a:palette.foreweak }) " the column separating vertically split windows
   call s:h("Folded", { "fg": a:palette.fore }) " line used for closed folds
