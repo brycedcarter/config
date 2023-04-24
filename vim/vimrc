@@ -493,11 +493,13 @@ nnoremap <leader>Dm :profile start /tmp/vim.profile<cr>:profile file *<cr>:profi
 "  prime = start case insensitive regex find 
 "  F->l = use fzf to find lines in open buffers
 "  F->g = use fzf to perform a ripgrep recursive search of files
+"  F->o = use fzf to find tags in the current file (outline search)
 "  F->r = find references using language server
 "  F->t = open the tree sidebar
 nnoremap <leader>f /\v\c
 nnoremap <leader>Fl :Lines<cr>
 nnoremap <leader>Fg :Rg<cr>
+nnoremap <leader>Fo :BTags<cr>
 nnoremap <leader>Fr :call LuaCall("TryLsp('references')")<cr>
 nnoremap <leader>Ft :call LuaCall('require("nvim-tree.api").tree.toggle()')<cr>
 
