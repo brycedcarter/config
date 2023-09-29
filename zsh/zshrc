@@ -289,7 +289,7 @@ function preexec {
 
 function mksublib {
   mkdir $1
-  sed "s/{NAME}/$1/g" ~/config/templates/BUILD_LIB > "$1/BUILD"
+  sed "s/{NAME}/$1/g" ~/config/vim/templates/BUILD_LIB > "$1/BUILD"
   touch "$1/$1.h"
   touch "$1/$1.cpp"
   touch "$1/${1}_test.h"
@@ -299,7 +299,7 @@ function mksublib {
 
 function mksubbin {
   mkdir $1
-  sed "s/{NAME}/$1/g" ~/config/templates/BUILD_BIN > "$1/BUILD"
+  sed "s/{NAME}/$1/g" ~/config/vim/templates/BUILD_BIN > "$1/BUILD"
   touch "$1/$1.h"
   touch "$1/$1.cpp"
   touch "$1/${1}_test.cpp"

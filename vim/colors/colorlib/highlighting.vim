@@ -102,7 +102,7 @@ function! g:HighlightBasic(palette)
   call s:h("IncSearch", { "fg": a:palette.alpha, "bg": a:palette.aft }) " 'incsearch' highlighting; also used for the text replaced with ":s///c"
   call s:h("LineNr", { "fg": a:palette.aftweak }) " Line number for ":number" and ":#" commands, and when 'number' or 'relativenumber' option is set.
   call s:h("CursorLineNr", {"fg": a:palette.delta}) " Like LineNr when 'cursorline' or 'relativenumber' is set for the cursor line.
-  call s:h("MatchParen", { "fg": a:palette.flare, "gui": "underline" }) " The character under the cursor or just before it, if it is a paired bracket, and its match.
+  call s:h("MatchParen", { "bg": a:palette.gamma, "fg": a:palette.aft, "gui": "underline" }) " The character under the cursor or just before it, if it is a paired bracket, and its match.
   call s:h("ModeMsg", {}) " 'showmode' message (e.g., "-- INSERT --")
   call s:h("MoreMsg", {}) " more-prompt
   call s:h("NonText", { "fg": a:palette.foreweak }) " '~' and '@' at the end of the window, characters from 'showbreak' and other characters that do not really exist in the text (e.g., ">" displayed when a double-wide character doesn't fit at the end of the line).

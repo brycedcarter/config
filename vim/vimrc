@@ -164,7 +164,6 @@ packadd termdebug
 " disable automatic keybindings for all plugins (except spellunker because it does not support it) 
 let g:gitgutter_map_keys = 0 " remove git gutter key mappings
 
-
 " CppEnhancedHighlight
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:cpp_class_scope_highlight=1
@@ -377,6 +376,13 @@ augroup remember_colorscheme
   autocmd ColorScheme * call writefile([ g:colors_name,], expand(s:current_scheme_file))
 augroup END
 
+" Markdown can use trailing whitespace to present things like new lines in lists
+augroup disable_whitespace_removal_for_markdown
+  autocmd!
+  autocmd FileType markdown let g:EditorConfig_disable_rules = ['trim_trailing_whitespace']
+augroup END
+
+
 " Command Mappings
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -487,11 +493,13 @@ nnoremap <leader>Dm :profile start /tmp/vim.profile<cr>:profile file *<cr>:profi
 "  prime = start case insensitive regex find 
 "  F->l = use fzf to find lines in open buffers
 "  F->g = use fzf to perform a ripgrep recursive search of files
+"  F->o = use fzf to find tags in the current file (outline search)
 "  F->r = find references using language server
 "  F->t = open the tree sidebar
 nnoremap <leader>f /\v\c
 nnoremap <leader>Fl :Lines<cr>
 nnoremap <leader>Fg :Rg<cr>
+nnoremap <leader>Fo :BTags<cr>
 nnoremap <leader>Fr :call LuaCall("TryLsp('references')")<cr>
 nnoremap <leader>Ft :call LuaCall('require("nvim-tree.api").tree.toggle()')<cr>
 
