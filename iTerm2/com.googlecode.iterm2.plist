@@ -1211,11 +1211,11 @@
 			<key>Name</key>
 			<string>brycedcarter</string>
 			<key>Non Ascii Font</key>
-			<string>Monaco 14</string>
+			<string>Monaco 17</string>
 			<key>Non-ASCII Anti Aliased</key>
 			<false/>
 			<key>Normal Font</key>
-			<string>OverpassMonoNerdFontComplete-Regular 17</string>
+			<string>OverpassMonoNerdFontComplete-Regular 20</string>
 			<key>Only The Default BG Color Uses Transparency</key>
 			<true/>
 			<key>Open Password Manager Automatically</key>
@@ -2890,11 +2890,11 @@
 			<key>Name</key>
 			<string>tmux</string>
 			<key>Non Ascii Font</key>
-			<string>Monaco 17</string>
+			<string>Monaco 18</string>
 			<key>Non-ASCII Anti Aliased</key>
 			<false/>
 			<key>Normal Font</key>
-			<string>OverpassMonoNerdFontComplete-Regular 17</string>
+			<string>OverpassMonoNerdFontComplete-Regular 18</string>
 			<key>Only The Default BG Color Uses Transparency</key>
 			<true/>
 			<key>Open Toolbelt</key>

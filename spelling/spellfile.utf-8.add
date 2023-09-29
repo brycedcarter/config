@@ -158,3 +158,6 @@ ParallelRenderer
 str
 nanoppbs
 SymbolCacheSnapshot
+ethernet
+ip
+ipheartbeat
