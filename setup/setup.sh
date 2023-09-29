@@ -8,7 +8,7 @@
 LINUX_ZSH_PACKAGES=(zsh python-pygments)
 MAC_ZSH_PACKAGES=(zsh pygments)
 
-LINUX_VIM_PACKAGES=(build-essential cmake python4-dev python3-venv python-dev vim neovim universal-ctags golang openjdk-11-jdk)
+LINUX_VIM_PACKAGES=(build-essential cmake python3-dev python3-venv python-dev vim neovim universal-ctags golang openjdk-11-jdk)
 MAC_VIM_PACKAGES=(cmake nvim go python "--HEAD universal-ctags/universal-ctags/universal-ctags")
 
 LINUX_FZF_PACKAGES=(ripgrep fd-find)
@@ -257,6 +257,19 @@ then
   
 fi
 
+###############################################################################
+############## SETUP VIM ######################################################
+###############################################################################
+if $CONFIGURE_VIM;
+then
+  show_banner "Setting up vim"
+    warning "NOTICE: It we are going to install NVIM for you, but depending on your OS version, you may want to replace it with one that you build from source becuase our setup needs a pretty modern version of nvim"
+    case $MACHINE_TYPE in
+      Linux) install "${LINUX_VIM_PACKAGES[@]}" ;;
+      Mac) install "${MAC_VIM_PACKAGES[@]}";;
+      *) error "Platform unsupported. Please manually install the following: ${LINUX_ZSH_PACKAGES[*]} or ${MAC_ZSH_PACKAGES[*]}";;
+    esac
+fi
 
 
 
@@ -328,13 +341,13 @@ if $INSTALL_FONTS; then
   show_banner "Installing fonts"
   if [ $MACHINE_TYPE = "Linux" ]
   then
-    do_thing "wget https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/Overpass/Mono/Regular/complete/Overpass%20Mono%20Regular%20Nerd%20Font%20Complete.otf; sudo mv 'Overpass Mono Regular Nerd Font Complete.otf' /usr/share/fonts/truetype; sudo apt install -y language-pack-en" "Installing overpass nerd font"
+    do_thing "wget https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/Overpass/Mono/Regular/OverpassMNerdFontMono-Regular.otf && sudo mv 'OverpassMNerdFontMono-Regular.otf' /usr/share/fonts/opentype && sudo apt install -y language-pack-en" "Installing overpass nerd font"
   elif [ $MACHINE_TYPE = "Mac" ]
   then
     do_thing "brew tap homebrew/cask-fonts; brew install --cask font-overpass-nerd-font" "Installing overpass nerd font"
   else
-    do_thing "wget https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/Overpass/Mono/Regular/complete/Overpass%20Mono%20Regular%20Nerd%20Font%20Complete%20Mono.otf" "Downloading overpass nerd font"
-    warning "Please install the font that was just downloaded to your home directory: DejaVu Sans Mono Nerd Font Complete Mono.ttf"
+    do_thing "wget https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/Overpass/Mono/Regular/OverpassMNerdFontMono-Regular.otf" "Downloading overpass nerd font"
+    warning "Please install the font that was just downloaded to your home directory: OverpassMNerdFontMono-Regular.otf"
 
   fi
   mkdir ~/config/tmp

@@ -120,6 +120,5 @@ if ! shopt -oq posix; then
 fi
 
 source ~/driving/scripts/shell/zooxrc.sh
-alias git='~/config/custom_git.sh'
 
 [ -f "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.bash ] && source "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.bash

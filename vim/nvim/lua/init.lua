@@ -26,13 +26,14 @@ require'lspconfig'.pyright.setup{on_attach = on_attach, capabilities=capabilitie
 require("nvim-tree").setup{
   hijack_netrw = true,
   hijack_unnamed_buffer_when_opening = true,
-view = {
-    mappings = {
-      list = {
-        { key = "<CR>", action = "edit_in_place" }
-      }
-    }
-  },
+--view = {   # Seems to be deprecated by pluging... need to figure out how the
+--new system works
+    --mappings = {
+      --list = {
+        --{ key = "<CR>", action = "edit_in_place" }
+      --}
+    --}
+  --},
         renderer = {
         highlight_opened_files = "all"
       },
@@ -64,7 +65,6 @@ require("bufferline").setup{
     diagnostics = "nvim_lsp",
     show_buffer_icons = true,
     color_icons = true,
-    show_buffer_default_icon = true ,
     separator_style = "thick", 
     show_buffer_close_icons = false,
     diagnostics_indicator = function(count, level)
