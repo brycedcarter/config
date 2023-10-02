@@ -94,9 +94,11 @@ do
 ###############################################################################
 ############## PREPARE THE ENVIRONMENT ########################################
 ###############################################################################
+#
 
 SETUP_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 CONFIG_DIR=$(dirname $SETUP_DIR)
+mkdir -p "$CONFIG_DIR/.tmp" 
 current_time=$(date "+%Y.%m.%d-%H.%M.%S")
 export PATH=$PATH:/usr/local/bin
 # If no ssh key is ready in the agent, load one
