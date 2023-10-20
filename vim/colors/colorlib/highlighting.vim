@@ -112,7 +112,7 @@ function! g:HighlightBasic(palette)
   call s:h("PmenuSbar", { "bg": a:palette.foreweak }) " Popup menu: scrollbar.
   call s:h("PmenuThumb", { "bg": a:palette.forestrong }) " Popup menu: Thumb of the scrollbar.
   call s:h("Question", { "fg": a:palette.contrast }) " hit-enter prompt and yes/no questions
-  call s:h("Search", { "fg": a:palette.aft, "bg": a:palette.alpha }) " Last search pattern highlighting (see 'hlsearch'). Also used for highlighting the current line in the quickfix window and similar items that need to stand out.
+  call s:h("Search", { "fg": a:palette.flarefill, "bg": a:palette.accentprime }) " Last search pattern highlighting (see 'hlsearch'). Also used for highlighting the current line in the quickfix window and similar items that need to stand out.
   call s:h("SpecialKey", { "fg": a:palette.alphaprime }) " Meta and special keys listed with ":map", also for text used to show unprintable characters in the text, 'listchars'. Generally: text that is displayed differently from what it really is.
   call s:h("SpellBad", { "fg": a:palette.flare, "gui": "underline"}) " Word that is not recognized by the spellchecker. This will be combined with the highlighting used otherwise.
   "call s:h("SpellCap", { "fg": a:palette.contrastprime }) " Word that should start with a capital. This will be combined with the highlighting used otherwise.
@@ -122,7 +122,7 @@ function! g:HighlightBasic(palette)
   call s:h("StatusLineNC", { "fg": a:palette.foreweak }) " status lines of not-current windows Note: if this is equal to "StatusLine" Vim will use "^^^" in the status line of the current window.
   "call s:h("TabLine", { "fg": a:palette.fore }) " tab pages line, not active tab page label
   "call s:h("TabLineFill", {}) " tab pages line, where there are no labels
-  "call s:h("TabLineSel", { "fg": s:white }) " tab pages line, active tab page label
+  "call s:h("TabLineSel", { "fg": a:palette.red }) " tab pages line, active tab page label
   call s:h("Title", { "fg": a:palette.gamma }) " titles for output from ":set all", ":autocmd" etc.
   call s:h("Visual", {"bg": a:palette.aftweak }) " Visual mode selection
   "call s:h("VisualNOS", { "bg": s:visual_grey }) " Visual mode selection when vim is "Not Owning the Selection". Only X11 Gui's gui-x11 and xterm-clipboard supports this.
@@ -193,6 +193,10 @@ function! g:HighlightBasic(palette)
   " tpope/vim-fugitive
   call s:h("diffAdded", { "fg": a:palette.green })
   call s:h("diffRemoved", { "fg": a:palette.red })
+
+  " simrat39/symbols-outline.nvim
+  call s:h("FocusedSymbol", { "bg": a:palette.flarefill })
+
 
   "" +------------------+
   "" | Git Highlighting |

@@ -57,6 +57,42 @@ function ExploreCurrentFileDir()
   require("nvim-tree").open_replacing_current_buffer()
 end
 
+-- Outline viewer setup
+require("symbols-outline").setup{
+  relative_width = false,
+  width = 80,
+  auto_close = true,
+  symbols = {
+    File = { icon = "", hl = "@text.uri" },
+    Module = { icon = "", hl = "@namespace" },
+    Namespace = { icon = "", hl = "@namespace" },
+    Package = { icon = "", hl = "@namespace" },
+    Class = { icon = "𝓒", hl = "@type" },
+    Method = { icon = "ƒ", hl = "Function" },
+    Property = { icon = "", hl = "@method" },
+    Field = { icon = "", hl = "@field" },
+    Constructor = { icon = "", hl = "@constructor" },
+    Enum = { icon = "ℰ", hl = "@type" },
+    Interface = { icon = "ﰮ", hl = "@type" },
+    Function = { icon = "", hl = "Function" },
+    Variable = { icon = "", hl = "@constant" },
+    Constant = { icon = "", hl = "@constant" },
+    String = { icon = "𝓐", hl = "@string" },
+    Number = { icon = "#", hl = "@number" },
+    Boolean = { icon = "⊨", hl = "@boolean" },
+    Array = { icon = "", hl = "@constant" },
+    Object = { icon = "⦿", hl = "@type" },
+    Key = { icon = "🔐", hl = "@type" },
+    Null = { icon = "NULL", hl = "@type" },
+    EnumMember = { icon = "", hl = "@field" },
+    Struct = { icon = "𝓢", hl = "@type" },
+    Event = { icon = "🗲", hl = "@type" },
+    Operator = { icon = "+", hl = "@operator" },
+    TypeParameter = { icon = "𝙏", hl = "@parameter" },
+    Component = { icon = "", hl = "@function" },
+    Fragment = { icon = "", hl = "@constant" },
+  },
+}
 
 -- Status line setup
 require('lualine').setup()
@@ -163,3 +199,89 @@ cmp.setup.cmdline(':', {
   })
 })
 
+
+-- Syntax parser
+require'nvim-treesitter.configs'.setup {
+  -- A list of parser names, or "all" (the five listed parsers should always be installed)
+  ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "cpp", "python", "markdown" },
+
+  -- Install parsers synchronously (only applied to `ensure_installed`)
+  sync_install = false,
+
+  -- Automatically install missing parsers when entering buffer
+  -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
+  auto_install = true,
+
+  -- List of parsers to ignore installing (or "all")
+  ignore_install = { "javascript" },
+
+  highlight = {
+    enable = true,
+    disable = {},
+    -- Don't highlight for huge files
+    disable = function(lang, buf)
+        local max_filesize = 100 * 1024 -- 100 KB
+        local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
+        if ok and stats and stats.size > max_filesize then
+            return true
+        end
+    end,
+
+    -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
+    -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
+    -- Using this option may slow down your editor, and you may see some duplicate highlights.
+    -- Instead of true it can also be a list of languages
+    additional_vim_regex_highlighting = false,
+  },
+}
+
+require'nvim-treesitter.configs'.setup {
+  incremental_selection = {
+    enable = true,
+    keymaps = {
+            init_selection = '<C-Up>',
+            scope_incremental = '<C-Right>',
+            node_incremental = '<C-Up>',
+            node_decremental = '<C-Down>',
+    },
+  },
+}
+
+require('telescope').setup{
+    defaults = {
+      sorting_strategy = "ascending",
+      layout_strategy = 'vertical',
+      layout_config = { 
+        anchor = 'top',
+        height = 0.8,
+        width = 0.8,
+        mirror = false,
+        prompt_position = 'top',
+
+    },
+    },
+  }
+
+require("smartcolumn").setup()
+require"gitlinker".setup({
+  callbacks = {
+        ["github.com"] = require"gitlinker.hosts".get_github_type_url,
+        ["git.zooxlabs.com"] = require"gitlinker.hosts".get_github_type_url,
+  },
+  mappings = "<leader>Gl",
+}
+)
+
+require("scrollbar").setup({
+      handlers = {
+        cursor = true,
+        diagnostic = true,
+        gitsigns = true, -- Requires gitsigns
+        handle = true,
+        search = false, -- Requires hlslens
+        ale = false, -- Requires ALE
+    },
+})
+require('gitsigns').setup()
+
+require("luasnip.loaders.from_vscode").lazy_load()
