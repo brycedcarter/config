@@ -41,16 +41,12 @@ endif
 call plug#begin()
 Plug 'scrooloose/nerdcommenter' " Quickly add and remove comments 
 Plug 'editorconfig/editorconfig-vim' " Integration with editorconfig files
-Plug 'tmhedberg/SimpylFold' " Code folding for python
 Plug 'vim-scripts/indentpython.vim' " better auto indenting for python
 Plug 'mbbill/undotree' " better undo interface
-Plug 'junegunn/fzf' " fuzyy finding navigation
-Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-obsession' " Intelligent and automatic session management
 Plug 'tpope/vim-fugitive' " Git extension
 Plug 'psf/black' " Black formatter for python
 Plug 'rhysd/vim-clang-format' " clang-format formatter for C style 
-Plug 'stsewd/fzf-checkout.vim' " fzf git actions
 Plug 'kkoomen/vim-doge' " documentation generator
 Plug('chrisbra/Colorizer') " highlight color codes
 Plug('rickhowe/diffchar.vim') " improved diffing that allows showing multiple diffs on the same line
@@ -74,8 +70,8 @@ if nvim " neovim only plugins
   Plug 'nvim-lualine/lualine.nvim'
   Plug 'akinsho/bufferline.nvim'
   Plug 'nvim-tree/nvim-web-devicons' " icons for bufferline
-  Plug 'nvim-tree/nvim-tree.lua'
   Plug 'simrat39/symbols-outline.nvim' " Outline viewer
+  Plug 'stevearc/aerial.nvim' " Outline viewer
   
   Plug 'kevinhwang91/nvim-bqf' " Better quick fix window
   Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'} " syntax tree gen. Needs the update to keep the update the parsers
@@ -86,6 +82,8 @@ if nvim " neovim only plugins
   Plug 'ruifm/gitlinker.nvim' " Github link gen
   Plug 'petertriho/nvim-scrollbar' " Scrollbar 
   Plug 'lewis6991/gitsigns.nvim' " show git status in gutter
+  Plug 'echasnovski/mini.files', { 'branch': 'stable' } " File browser
+  Plug 'nvim-telescope/telescope-file-browser.nvim' " File browser
 else
   Plug 'lifepillar/vim-mucomplete' " sets up completion sources (native)
 endif
@@ -501,8 +499,6 @@ nnoremap <leader>Fo :Telescope treesitter<cr>
 "  prime = Open fugitive
 "  G->p = initiate a git push
 "  G->b = initiate a git blame
-"  G->c = initiate a checkout for branches
-"  G->t = initiate a checkout for tags
 "  G->n = next git hunk
 "  G->N = previous git hunk
 "  G->v = view preview of hunk under the cursor
@@ -513,8 +509,6 @@ nnoremap <leader>Fo :Telescope treesitter<cr>
 nnoremap <leader>g  :Git<CR>
 nnoremap <leader>Gp  :G push<CR>
 nnoremap <leader>Gb  :G blame<CR>
-nnoremap <leader>Gc  :GBranches checkout<CR>
-nnoremap <leader>Gt  :GTags checkout<CR>
 nnoremap <leader>Gn  :Gitsigns next_hunk<CR>
 nnoremap <leader>GN  :Gitsigns prev_hunk<CR>
 nnoremap <leader>Gv  :Gitsigns preview_hunk<CR>
@@ -543,13 +537,14 @@ nnoremap <leader>Jr :Telescope lsp_references<cr>
 nnoremap <leader>Jm :Telescope marks<cr>
 
 " --- L --- Load
-"  prime = use Telescope to look for files to load
+"  prime = use Telescope to look for files to load in the current directory
+"  subprime = use Telescope to look for files to load in the home directory
 "  L->h = load all headers in the current directory
 "  L->p = load all .py in the current directory
 "  L->c = load all .c/.cc/.cpp/.h/.hpp files in the current directory
 "  L->n = load a new empty buffer
-"nnoremap <leader>l :Files<cr>
 nnoremap <leader>l :Telescope find_files<cr>
+nnoremap <leader><C-l> :Telescope find_files search_dirs=~<cr>
 " using "next" on joined list rather than argdo because argdo disables syntax
 " autocmd for Syntax when it si running
 nnoremap <leader>Lh :call ExpandFilePatterns(['*.h'])<cr>:silent exe 'next ' . join(argv(), ' ' )<cr>
@@ -560,8 +555,8 @@ nnoremap <leader>Ln :enew<cr>
 " --- O --- Outline/Overview
 "  prime = open outline
 "  subprime = open the folder that contains the current document
-nnoremap <silent> <leader>o :SymbolsOutline<cr>
-nnoremap <silent> <leader><C-O> :call LuaCall("ExploreCurrentFileDir()")<cr>
+nnoremap <silent> <leader>o :AerialToggle<cr>
+nnoremap <silent> <leader><C-O> :Telescope file_browser path=%:p:h select_buffer=true<CR>
 
 " --- Q --- Quit
 "  prime = quit

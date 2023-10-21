@@ -18,81 +18,10 @@ end
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 require'lspconfig'.clangd.setup{on_attach = on_attach, capabilities=capabilities}
 require'lspconfig'.pyright.setup{on_attach = on_attach, capabilities=capabilities} --  install via pip install pyright
---require'clangd_extensions'.setup()
+require'clangd_extensions'.setup()
 
 -- General nvim settings
 
--- nvim-tree vinegar style setup
-require("nvim-tree").setup{
-  hijack_netrw = true,
-  hijack_unnamed_buffer_when_opening = true,
---view = {   # Seems to be deprecated by pluging... need to figure out how the
---new system works
-    --mappings = {
-      --list = {
-        --{ key = "<CR>", action = "edit_in_place" }
-      --}
-    --}
-  --},
-        renderer = {
-        highlight_opened_files = "all"
-      },
-        hijack_directories = {
-        enable = true,
-      },
-actions = {
-change_dir = {
--- NOTE: netrw-style, do not change the cwd when navigating
-enable = false,
-},
-},
-}
--- NOTE: disable fixed nvim-tree width and height
--- to allow creating splits naturally
-local winopts = require("nvim-tree.view").View.winopts
-winopts.winfixwidth = false
-winopts.winfixheight = false
-
-function ExploreCurrentFileDir()
-  require("nvim-tree").open_replacing_current_buffer()
-end
-
--- Outline viewer setup
-require("symbols-outline").setup{
-  relative_width = false,
-  width = 80,
-  auto_close = true,
-  symbols = {
-    File = { icon = "", hl = "@text.uri" },
-    Module = { icon = "", hl = "@namespace" },
-    Namespace = { icon = "", hl = "@namespace" },
-    Package = { icon = "", hl = "@namespace" },
-    Class = { icon = "𝓒", hl = "@type" },
-    Method = { icon = "ƒ", hl = "Function" },
-    Property = { icon = "", hl = "@method" },
-    Field = { icon = "", hl = "@field" },
-    Constructor = { icon = "", hl = "@constructor" },
-    Enum = { icon = "ℰ", hl = "@type" },
-    Interface = { icon = "ﰮ", hl = "@type" },
-    Function = { icon = "", hl = "Function" },
-    Variable = { icon = "", hl = "@constant" },
-    Constant = { icon = "", hl = "@constant" },
-    String = { icon = "𝓐", hl = "@string" },
-    Number = { icon = "#", hl = "@number" },
-    Boolean = { icon = "⊨", hl = "@boolean" },
-    Array = { icon = "", hl = "@constant" },
-    Object = { icon = "⦿", hl = "@type" },
-    Key = { icon = "🔐", hl = "@type" },
-    Null = { icon = "NULL", hl = "@type" },
-    EnumMember = { icon = "", hl = "@field" },
-    Struct = { icon = "𝓢", hl = "@type" },
-    Event = { icon = "🗲", hl = "@type" },
-    Operator = { icon = "+", hl = "@operator" },
-    TypeParameter = { icon = "𝙏", hl = "@parameter" },
-    Component = { icon = "", hl = "@function" },
-    Fragment = { icon = "", hl = "@constant" },
-  },
-}
 
 -- Status line setup
 require('lualine').setup()
@@ -117,7 +46,7 @@ vim.o.pumheight = 10;
  vim.cmd [[autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false})]]
 
 -- show pretty symbols in the gutter for diagnostics
-local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
+local signs = { Error = "ⓧ", Warn = "⚠", Hint = " ", Info = " " }
 for type, icon in pairs(signs) do
     local hl = "DiagnosticSign" .. type
       vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
@@ -285,3 +214,29 @@ require("scrollbar").setup({
 require('gitsigns').setup()
 
 require("luasnip.loaders.from_vscode").lazy_load()
+require('mini.files').setup()
+require("telescope").load_extension "file_browser"
+require("aerial").setup({
+  filter_kind = false,
+  backends = { "lsp", "treesitter", "markdown", "man" },
+
+--{
+    --"Class",
+    --"Constructor",
+    --"Enum",
+    --"Function",
+    --"Interface",
+    --"Module",
+    --"Method",
+    --"Struct",
+    --"Variable",
+    --"Property",
+    --"Field",
+    --"Object",
+    --"String",
+    --"Number",
+  --}
+  highlight_on_hover = true,
+  nerd_font = "false",
+}
+)
