@@ -1227,11 +1227,11 @@
 			<key>Name</key>
 			<string>brycedcarter</string>
 			<key>Non Ascii Font</key>
-			<string>Monaco 17</string>
+			<string>Monaco 14</string>
 			<key>Non-ASCII Anti Aliased</key>
 			<false/>
 			<key>Normal Font</key>
-			<string>OverpassMonoNerdFontComplete-Regular 20</string>
+			<string>OverpassMNFP-Reg 11</string>
 			<key>Only The Default BG Color Uses Transparency</key>
 			<true/>
 			<key>Open Password Manager Automatically</key>

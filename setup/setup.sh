@@ -101,10 +101,6 @@ CONFIG_DIR=$(dirname $SETUP_DIR)
 mkdir -p "$CONFIG_DIR/.tmp" 
 current_time=$(date "+%Y.%m.%d-%H.%M.%S")
 export PATH=$PATH:/usr/local/bin
-# If no ssh key is ready in the agent, load one
-if [ "$(ssh-add -l)" = "The agent has no identities." ]; then
-  ssh-add
-fi
 
 # Hide output from commands unless verbose mode is enabled
 exec 3>&1 4>&2 # create new fds for messages and errors
