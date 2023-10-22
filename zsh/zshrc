@@ -282,8 +282,8 @@ fi
 # From here: https://www.babushk.in/posts/renew-environment-tmux.html
 if [ -n "$TMUX" ]; then
 function refresh {
-  export $(tmux show-environment | grep "^SSH_AUTH_SOCK")
-  export $(tmux show-environment | grep "^DISPLAY")
+  export $(tmux show-environment | grep "^SSH_AUTH_SOCK" || echo "SSH_AUTH_SOCK=")
+  export $(tmux show-environment | grep "^DISPLAY" || echo "DISPLAY=")
   }
 else
   function refresh { }
