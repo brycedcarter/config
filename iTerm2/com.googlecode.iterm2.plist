@@ -12,6 +12,8 @@
 	<true/>
 	<key>BracketedPasteMode</key>
 	<true/>
+	<key>CheckTestRelease</key>
+	<true/>
 	<key>ClosingTmuxTabKillsTmuxWindows</key>
 	<false/>
 	<key>ClosingTmuxTabKillsTmuxWindows_selection</key>
@@ -370,6 +372,8 @@
 	<string>Basic dev (external)</string>
 	<key>Default Bookmark Guid</key>
 	<string>06FC50EC-19C3-451F-9EBE-C735CECCEF4C</string>
+	<key>DefaultWideMode</key>
+	<true/>
 	<key>DimBackgroundWindows</key>
 	<false/>
 	<key>DimInactiveSplitPanes</key>
@@ -1227,11 +1231,13 @@
 			<key>Name</key>
 			<string>brycedcarter</string>
 			<key>Non Ascii Font</key>
-			<string>Monaco 17</string>
+			<string>OverpassMNFM-Reg 15</string>
 			<key>Non-ASCII Anti Aliased</key>
 			<false/>
+			<key>Non-ASCII Ligatures</key>
+			<false/>
 			<key>Normal Font</key>
-			<string>OverpassMonoNerdFontComplete-Regular 20</string>
+			<string>OverpassNF-Reg 15</string>
 			<key>Only The Default BG Color Uses Transparency</key>
 			<true/>
 			<key>Open Password Manager Automatically</key>
@@ -1481,6 +1487,8 @@
 			<integer>4</integer>
 			<key>Transparency</key>
 			<real>0.0</real>
+			<key>Unicode Version</key>
+			<integer>9</integer>
 			<key>Unlimited Scrollback</key>
 			<true/>
 			<key>Use Bold Font</key>
@@ -2906,11 +2914,11 @@
 			<key>Name</key>
 			<string>tmux</string>
 			<key>Non Ascii Font</key>
-			<string>Monaco 18</string>
+			<string>Monaco 15</string>
 			<key>Non-ASCII Anti Aliased</key>
 			<false/>
 			<key>Normal Font</key>
-			<string>OverpassMonoNerdFontComplete-Regular 18</string>
+			<string>OverpassMonoNerdFontComplete-Regular 15</string>
 			<key>Only The Default BG Color Uses Transparency</key>
 			<true/>
 			<key>Open Toolbelt</key>

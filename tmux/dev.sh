@@ -19,6 +19,7 @@ TMUX_ATTACH="tmux -CC attach -t "
 LOCAL_SESSION=true
 SESSION_NAME="dev"
 HOST="localhost"
+TIMEOUT=10
 
 
 show_usage()
@@ -33,6 +34,7 @@ show_usage()
   [options]
     -n|--name NAME: Provide the name of the session that should be created or c
              onnected to. If not provided, will default to 'dev'
+    -t|--timeout SECOND: Connection timeout in seconds
     -h|--help: Show this help
   [host]: Provide the ip address or hostname to connect to. If not provided, 
           just use the current terminal instead of an ssh tunnel
@@ -45,6 +47,9 @@ do
     case "$1" in
     -n|--name) 
       SESSION_NAME="$2"
+      shift # consume 1 arg
+      ;;
+    -t|--timeout) TIMEOUT=$2
       shift # consume 1 arg
       ;;
     -h|--help) show_usage; exit 0;;
@@ -67,6 +72,7 @@ do
 #echo "local session=$LOCAL_SESSION"
 #echo "session name=$SESSION_NAME"
 #echo "host=$HOST"
+#echo $TIMEOUT
 
 if $LOCAL_SESSION; then 
   $($TMUX_SESSION_EXISTS  $SESSION_NAME)
@@ -75,5 +81,5 @@ if $LOCAL_SESSION; then
   fi 
   $TMUX_ATTACH $SESSION_NAME
 else
-  ssh -o ForwardX11=yes -o ForwardX11Trusted=yes -o ForwardAgent=yes -t $HOST "$TMUX_SESSION_EXISTS $SESSION_NAME || $TMUX_NEW $SESSION_NAME; $TMUX_ATTACH $SESSION_NAME"
+  ssh -o ConnectTimeout=$TIMEOUT -o ForwardX11=yes -o ForwardX11Trusted=yes -o ForwardAgent=yes -t $HOST "$TMUX_SESSION_EXISTS $SESSION_NAME || $TMUX_NEW $SESSION_NAME; $TMUX_ATTACH $SESSION_NAME"
 fi 
