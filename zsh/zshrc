@@ -39,6 +39,12 @@ export XDG_CONFIG_DIRS=$HOME/config:/etc/xdg
 export XDG_STATE_HOME=$HOME/.local/state
 export XDG_CACHE_HOME=$HOME/.cache
 
+export HISTFILE=$HOME/.zsh_history # Set the standard history location
+export HISTSIZE=1000000000 # Allow 1B entries in the internal (in mem) history list
+export SAVEHIST=1000000000 # Save 1B entries in history
+setopt inc_append_history # Don't wait for closing of the session before adding the command to history
+setopt share_history # All terminals use the same history
+
 
 #========================= POWERLEVEL 10K SETTINGS ============================
 #==============================================================================
@@ -278,8 +284,8 @@ fi
 # From here: https://www.babushk.in/posts/renew-environment-tmux.html
 if [ -n "$TMUX" ]; then
 function refresh {
-  export $(tmux show-environment | grep "^SSH_AUTH_SOCK")
-  export $(tmux show-environment | grep "^DISPLAY")
+  export $(tmux show-environment | grep "^SSH_AUTH_SOCK" || echo "SSH_AUTH_SOCK=")
+  export $(tmux show-environment | grep "^DISPLAY" || echo "DISPLAY=")
   }
 else
   function refresh { }

@@ -161,3 +161,12 @@ SymbolCacheSnapshot
 ethernet
 ip
 ipheartbeat
+PageMappingInfo
+pagemaps
+vm
+pagemap
+www
+txt
+kpageflags
+inode
+TODO
