@@ -1,0 +1,16 @@
+{
+  "snippet": {
+    "prefix": "snippet",
+    "body": [
+  "\t\"${1:name}\": {",
+    "\t\t\"prefix\": \"${1:name}\",",
+    "\t\t\"body\": [",
+    "],",
+    "\"description\": \"VS Code style snippet\"",
+  "\t}"
+    ],
+    "description": "VS Code style snippet"j
+  }
+
+}
+

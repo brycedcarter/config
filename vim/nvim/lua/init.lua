@@ -14,11 +14,26 @@ function TryLsp(lsp_command)
     print("No lsp server currently ready to process this command... Try :LspInfo for more information")
   end
 end
-
+-- old lsp management... I think we can replace this with mason now that we do
+-- not have to deal with 14.04
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 require'lspconfig'.clangd.setup{on_attach = on_attach, capabilities=capabilities}
 require'lspconfig'.pyright.setup{on_attach = on_attach, capabilities=capabilities} --  install via pip install pyright
 require'clangd_extensions'.setup()
+
+-- New management
+local lspconfig = require('lspconfig')
+require("mason").setup()
+require("mason-lspconfig").setup({
+  ensure_installed = {'clangd', 'lua_ls'}
+})
+require('mason-lspconfig').setup_handlers({
+  function(server)
+    lspconfig[server].setup({})
+  end,
+})
+
+
 
 -- General nvim settings
 
@@ -177,6 +192,7 @@ require'nvim-treesitter.configs'.setup {
 }
 
 require('telescope').setup{
+
     defaults = {
       sorting_strategy = "ascending",
       layout_strategy = 'vertical',
@@ -189,9 +205,22 @@ require('telescope').setup{
 
     },
     },
+extensions = {
+    file_browser = {
+      layout_strategy = "horizontal",
+      hijack_netrw = true,
+    },
+  },
   }
 
 require("smartcolumn").setup()
+require("Comment").setup( {
+  mappings = {
+    -- Disable default mappings
+    basic = false,
+    extra = false
+  }
+})
 require"gitlinker".setup({
   callbacks = {
         ["github.com"] = require"gitlinker.hosts".get_github_type_url,
@@ -213,9 +242,14 @@ require("scrollbar").setup({
 })
 require('gitsigns').setup()
 
+local snippets_paths = {vim.g.snippet_path, vim.g.work_snippet_path }
 require("luasnip.loaders.from_vscode").lazy_load()
-require('mini.files').setup()
+require("luasnip.loaders.from_vscode").lazy_load({paths = snippets_paths})
+require("luasnip.loaders.from_lua").lazy_load({paths = snippets_paths})
+
+
 require("telescope").load_extension "file_browser"
+require('telescope').load_extension('luasnip')
 require("aerial").setup({
   filter_kind = false,
   backends = { "lsp", "treesitter", "markdown", "man" },
@@ -240,3 +274,29 @@ require("aerial").setup({
   nerd_font = "false",
 }
 )
+
+require("SnippetGenie").setup({
+regex = [[-\+ SNIPPET GENIE LOC]],
+snippets_directory = vim.g.snippet_path, 
+file_name = "luasnip_snippets",
+            snippet_skeleton = [[
+s(
+    "{trigger}",
+    fmt([=[
+{body}
+]=], {{
+        {nodes}
+    }})
+),
+]],
+        })
+
+-- I could not figure out how to get this working with normal vim keybindings so
+-- i guess this is what we have for now
+vim.keymap.set("x", "<CR>", function()
+    require("SnippetGenie").create_new_snippet_or_add_placeholder()
+    vim.cmd("norm! ") -- exit Visual Mode, go back to Normal Mode
+end, {})
+vim.keymap.set("n", "<CR>", function()
+    require("SnippetGenie").finalize_snippet()
+end, {})
