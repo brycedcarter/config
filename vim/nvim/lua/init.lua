@@ -1,88 +1,115 @@
-
 -- Configure language servers for autocompletion and error checking
 local on_attach = function(client, bufnr)
   -- Setup the omnifunc that is can be used by completion tools
-  vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+  vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
 end
 
 -- Helper function that checks for a connected server before issuing an lsp
 -- command
 function TryLsp(lsp_command)
   if vim.lsp.buf.server_ready() then
-   vim.lsp.buf[lsp_command]()
+    vim.lsp.buf[lsp_command]()
   else
     print("No lsp server currently ready to process this command... Try :LspInfo for more information")
   end
 end
+
 -- old lsp management... I think we can replace this with mason now that we do
 -- not have to deal with 14.04
-local capabilities = require('cmp_nvim_lsp').default_capabilities()
-require'lspconfig'.clangd.setup{on_attach = on_attach, capabilities=capabilities}
-require'lspconfig'.pyright.setup{on_attach = on_attach, capabilities=capabilities} --  install via pip install pyright
-require'clangd_extensions'.setup()
+-- local capabilities = require('cmp_nvim_lsp').default_capabilities()
+-- require 'lspconfig'.clangd.setup { on_attach = on_attach, capabilities = capabilities }
+-- require 'lspconfig'.pyright.setup { on_attach = on_attach, capabilities = capabilities } --  install via pip install pyright
+-- require 'clangd_extensions'.setup()
 
 -- New management
-local lspconfig = require('lspconfig')
+local lspconfig = require("lspconfig")
 require("mason").setup()
-require("mason-lspconfig").setup({
-  ensure_installed = {'clangd', 'lua_ls'}
+require("mason-tool-installer").setup({
+  ensure_installed = {
+    "lua-language-server",
+    "vim-language-server",
+    "stylua",
+    "editorconfig-checker",
+    "luacheck",
+    "shellcheck",
+    "shfmt",
+    "clangd",
+    "pyright",
+    "cpplint",
+    "black",
+    "bzl"
+  },
+  auto_update = false,
+  run_on_start = false,
 })
-require('mason-lspconfig').setup_handlers({
+
+
+require("mason-lspconfig").setup()
+require("mason-lspconfig").setup_handlers({
   function(server)
     lspconfig[server].setup({})
   end,
 })
 
-
+require("formatter").setup({
+  filetype = {
+    lua = {
+      require("formatter.filetypes.lua").stylua,
+    },
+    python = {
+      require("formatter.filetypes.python").black,
+    },
+  },
+})
 
 -- General nvim settings
 
-
 -- Status line setup
-require('lualine').setup()
-require("bufferline").setup{
+require("lualine").setup()
+require("bufferline").setup({
   options = {
     diagnostics = "nvim_lsp",
     show_buffer_icons = true,
     color_icons = true,
-    separator_style = "thick", 
+    separator_style = "thick",
     show_buffer_close_icons = false,
     diagnostics_indicator = function(count, level)
-        local icon = level:match("error") and " " or ""
-        return " " .. icon .. count
-    end
-}}
+      local icon = level:match("error") and " " or ""
+      return " " .. icon .. count
+    end,
+  },
+})
 
 -- max popup height
-vim.o.pumheight = 10;
+vim.o.pumheight = 10
 
 -- Show line diagnostics automatically in hover window
- vim.o.updatetime = 250
- vim.cmd [[autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false})]]
+vim.o.updatetime = 250
+vim.cmd([[autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false})]])
 
 -- show pretty symbols in the gutter for diagnostics
 local signs = { Error = "ⓧ", Warn = "⚠", Hint = " ", Info = " " }
 for type, icon in pairs(signs) do
-    local hl = "DiagnosticSign" .. type
-      vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
+  local hl = "DiagnosticSign" .. type
+  vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
 end
 
- -- hide inline diagnostic
- vim.diagnostic.config({
-     virtual_text = false
-   })
+-- hide inline diagnostic
+vim.diagnostic.config({
+  virtual_text = false,
+})
 
 -- Set up nvim-cmp.
-local cmp = require'cmp'
+local cmp = require("cmp")
 
 cmp.setup({
   snippet = {
     expand = function(args)
-       require('luasnip').lsp_expand(args.body)
+      require("luasnip").lsp_expand(args.body)
     end,
   },
   window = {
-        completion = {
+    completion = {
       winhighlight = "Normal:Pmenu,FloatBorder:Pmenu,Search:None",
       col_offset = -3,
       side_padding = 0,
@@ -90,20 +117,20 @@ cmp.setup({
     documentation = cmp.config.window.bordered(),
   },
   mapping = cmp.mapping.preset.insert({
-    ['<tab>'] = cmp.mapping.select_next_item(),
-    ['<s-tab>'] = cmp.mapping.select_prev_item(),
-    ['<C-j>'] = cmp.mapping.select_next_item(),
-    ['<C-k>'] = cmp.mapping.select_prev_item(),
-    ['<esc>'] = cmp.mapping.abort(),
-    ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+    ["<tab>"] = cmp.mapping.select_next_item(),
+    ["<s-tab>"] = cmp.mapping.select_prev_item(),
+    ["<C-j>"] = cmp.mapping.select_next_item(),
+    ["<C-k>"] = cmp.mapping.select_prev_item(),
+    ["<esc>"] = cmp.mapping.abort(),
+    ["<CR>"] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
   }),
   sources = cmp.config.sources({
-    { name = 'nvim_lsp' }, -- LSP
-    { name = 'luasnip' }, -- For luasnip users.
+    { name = "nvim_lsp" }, -- LSP
+    { name = "luasnip" }, -- For luasnip users.
   }, {
-    { name = 'buffer' },
+    { name = "buffer" },
   }, {
-    { name = 'path' }
+    { name = "path" },
   }),
   formatting = {
     fields = { "kind", "abbr", "menu" },
@@ -124,28 +151,27 @@ cmp.setup({
 -- NOTE currently this does not work because we use magic search:
 -- https://github.com/hrsh7th/cmp-cmdline/issues/14
 --cmp.setup.cmdline({ '/', '?' }, {
-  --mapping = cmp.mapping.preset.cmdline(),
-  --sources = {
-    --{ name = 'buffer' }
-  --},
-  --view = {
-    --entries = {name = 'wildmenu', separator = '|' }
-  --},
+--mapping = cmp.mapping.preset.cmdline(),
+--sources = {
+--{ name = 'buffer' }
+--},
+--view = {
+--entries = {name = 'wildmenu', separator = '|' }
+--},
 --})
 
 -- Use cmdline & path source for ':'  (completion for in the vim command line)
-cmp.setup.cmdline(':', {
+cmp.setup.cmdline(":", {
   mapping = cmp.mapping.preset.cmdline(),
   sources = cmp.config.sources({
-    { name = 'path' }
+    { name = "path" },
   }, {
-    { name = 'cmdline' }
-  })
+    { name = "cmdline" },
+  }),
 })
 
-
 -- Syntax parser
-require'nvim-treesitter.configs'.setup {
+require("nvim-treesitter.configs").setup({
   -- A list of parser names, or "all" (the five listed parsers should always be installed)
   ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "cpp", "python", "markdown" },
 
@@ -164,11 +190,11 @@ require'nvim-treesitter.configs'.setup {
     disable = {},
     -- Don't highlight for huge files
     disable = function(lang, buf)
-        local max_filesize = 100 * 1024 -- 100 KB
-        local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
-        if ok and stats and stats.size > max_filesize then
-            return true
-        end
+      local max_filesize = 100 * 1024 -- 100 KB
+      local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
+      if ok and stats and stats.size > max_filesize then
+        return true
+      end
     end,
 
     -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
@@ -177,109 +203,105 @@ require'nvim-treesitter.configs'.setup {
     -- Instead of true it can also be a list of languages
     additional_vim_regex_highlighting = false,
   },
-}
+})
 
-require'nvim-treesitter.configs'.setup {
+require("nvim-treesitter.configs").setup({
   incremental_selection = {
     enable = true,
     keymaps = {
-            init_selection = '<C-Up>',
-            scope_incremental = '<C-Right>',
-            node_incremental = '<C-Up>',
-            node_decremental = '<C-Down>',
+      init_selection = "<C-Up>",
+      scope_incremental = "<C-Right>",
+      node_incremental = "<C-Up>",
+      node_decremental = "<C-Down>",
     },
   },
-}
+})
 
-require('telescope').setup{
+require("telescope").setup({
 
-    defaults = {
-      sorting_strategy = "ascending",
-      layout_strategy = 'vertical',
-      layout_config = { 
-        anchor = 'top',
-        height = 0.8,
-        width = 0.8,
-        mirror = false,
-        prompt_position = 'top',
-
+  defaults = {
+    sorting_strategy = "ascending",
+    layout_strategy = "vertical",
+    layout_config = {
+      anchor = "top",
+      height = 0.8,
+      width = 0.8,
+      mirror = false,
+      prompt_position = "top",
     },
-    },
-extensions = {
+  },
+  extensions = {
     file_browser = {
       layout_strategy = "horizontal",
       hijack_netrw = true,
     },
   },
-  }
+})
 
 require("smartcolumn").setup()
-require("Comment").setup( {
+require("Comment").setup({
   mappings = {
     -- Disable default mappings
     basic = false,
-    extra = false
-  }
+    extra = false,
+  },
 })
-require"gitlinker".setup({
+require("gitlinker").setup({
   callbacks = {
-        ["github.com"] = require"gitlinker.hosts".get_github_type_url,
-        ["git.zooxlabs.com"] = require"gitlinker.hosts".get_github_type_url,
+    ["github.com"] = require("gitlinker.hosts").get_github_type_url,
+    ["git.zooxlabs.com"] = require("gitlinker.hosts").get_github_type_url,
   },
   mappings = "<leader>Gl",
-}
-)
+})
 
 require("scrollbar").setup({
-      handlers = {
-        cursor = true,
-        diagnostic = true,
-        gitsigns = true, -- Requires gitsigns
-        handle = true,
-        search = false, -- Requires hlslens
-        ale = false, -- Requires ALE
-    },
+  handlers = {
+    cursor = true,
+    diagnostic = true,
+    gitsigns = true, -- Requires gitsigns
+    handle = true,
+    search = false, -- Requires hlslens
+    ale = false,   -- Requires ALE
+  },
 })
-require('gitsigns').setup()
+require("gitsigns").setup()
 
-local snippets_paths = {vim.g.snippet_path, vim.g.work_snippet_path }
+local snippets_paths = { vim.g.snippet_path, vim.g.work_snippet_path }
 require("luasnip.loaders.from_vscode").lazy_load()
-require("luasnip.loaders.from_vscode").lazy_load({paths = snippets_paths})
-require("luasnip.loaders.from_lua").lazy_load({paths = snippets_paths})
+require("luasnip.loaders.from_vscode").lazy_load({ paths = snippets_paths })
+require("luasnip.loaders.from_lua").lazy_load({ paths = snippets_paths })
 
-
-require("telescope").load_extension "file_browser"
-require('telescope').load_extension('luasnip')
+require("telescope").load_extension("file_browser")
+require("telescope").load_extension("luasnip")
 require("aerial").setup({
   filter_kind = false,
   backends = { "lsp", "treesitter", "markdown", "man" },
 
---{
-    --"Class",
-    --"Constructor",
-    --"Enum",
-    --"Function",
-    --"Interface",
-    --"Module",
-    --"Method",
-    --"Struct",
-    --"Variable",
-    --"Property",
-    --"Field",
-    --"Object",
-    --"String",
-    --"Number",
+  --{
+  --"Class",
+  --"Constructor",
+  --"Enum",
+  --"Function",
+  --"Interface",
+  --"Module",
+  --"Method",
+  --"Struct",
+  --"Variable",
+  --"Property",
+  --"Field",
+  --"Object",
+  --"String",
+  --"Number",
   --}
   highlight_on_hover = true,
   nerd_font = "false",
-}
-)
+})
 
 require("SnippetGenie").setup({
-regex = [[-\+ SNIPPET GENIE LOC]],
-snippets_directory = vim.g.snippet_path, 
-file_name = "luasnip_snippets",
-            snippet_skeleton = [[
+  regex = [[-\+ SNIPPET GENIE LOC]],
+  snippets_directory = vim.g.snippet_path,
+  file_name = "luasnip_snippets",
+  snippet_skeleton = [[
 s(
     "{trigger}",
     fmt([=[
@@ -289,14 +311,14 @@ s(
     }})
 ),
 ]],
-        })
+})
 
 -- I could not figure out how to get this working with normal vim keybindings so
 -- i guess this is what we have for now
 vim.keymap.set("x", "<CR>", function()
-    require("SnippetGenie").create_new_snippet_or_add_placeholder()
-    vim.cmd("norm! ") -- exit Visual Mode, go back to Normal Mode
+  require("SnippetGenie").create_new_snippet_or_add_placeholder()
+  vim.cmd("norm! ") -- exit Visual Mode, go back to Normal Mode
 end, {})
 vim.keymap.set("n", "<CR>", function()
-    require("SnippetGenie").finalize_snippet()
+  require("SnippetGenie").finalize_snippet()
 end, {})

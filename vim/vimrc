@@ -24,82 +24,16 @@ else
   let g:nvim = 0
 endif
 
+set nocompatible              " be iMproved, required
+filetype off                  " required
+
 " Plugins 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-set nocompatible              " be iMproved, required
-filetype off                  " required
+let g:plugins_vim = expand('~/config/vim/plugins.vim')
+execute 'source ' . g:plugins_vim
 
-" Auto install vim-plug plugin manager
-let data_dir = g:nvim ? stdpath('data') . '/site' : '~/.vim'
-if empty(glob(data_dir . '/autoload/plug.vim'))
-  silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
-endif
-
-call plug#begin()
-Plug 'editorconfig/editorconfig-vim' " Integration with editorconfig files
-Plug 'vim-scripts/indentpython.vim' " better auto indenting for python
-Plug 'mbbill/undotree' " better undo interface
-Plug 'tpope/vim-obsession' " Intelligent and automatic session management
-Plug 'tpope/vim-fugitive' " Git extension
-Plug 'psf/black' " Black formatter for python
-Plug 'rhysd/vim-clang-format' " clang-format formatter for C style 
-Plug 'kkoomen/vim-doge' " documentation generator
-Plug('chrisbra/Colorizer') " highlight color codes
-Plug('rickhowe/diffchar.vim') " improved diffing that allows showing multiple diffs on the same line
-
-if nvim " neovim only plugins
-  Plug 'numToStr/Comment.nvim' " Commenting improvements
-  Plug 'neovim/nvim-lspconfig' " language server protocol client std configs
-  Plug 'p00f/clangd_extensions.nvim'
-  Plug 'hrsh7th/nvim-cmp' " autocompletion for use with nvim lsp
-  " Completion sources for nvim-cmp
-  Plug('hrsh7th/cmp-nvim-lsp')
-  Plug('hrsh7th/cmp-buffer')
-  Plug('hrsh7th/cmp-path')
-  Plug('hrsh7th/cmp-cmdline')
-  " snippet tool used by nvim-cmp
-  Plug('saadparwaiz1/cmp_luasnip')
-  Plug('L3MON4D3/LuaSnip')
-  Plug 'rafamadriz/friendly-snippets' " snippet collection
-
-  Plug('onsails/lspkind.nvim') " LSP completion icons
-
-  Plug 'nvim-lualine/lualine.nvim'
-  Plug 'akinsho/bufferline.nvim'
-  Plug 'nvim-tree/nvim-web-devicons' " icons for bufferline
-  Plug 'simrat39/symbols-outline.nvim' " Outline viewer
-  Plug 'stevearc/aerial.nvim' " Outline viewer
-  
-  Plug 'kevinhwang91/nvim-bqf' " Better quick fix window
-  Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'} " syntax tree gen. Needs the update to keep the update the parsers
-
-  Plug 'nvim-lua/plenary.nvim' " Dep for telscope
-  Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.4' } " Fuzzy finder window
-  Plug 'm4xshen/smartcolumn.nvim' " Selectively enable 80 char line
-  Plug 'ruifm/gitlinker.nvim' " Github link gen
-  Plug 'petertriho/nvim-scrollbar' " Scrollbar 
-  Plug 'lewis6991/gitsigns.nvim' " show git status in gutter
-  Plug 'nvim-telescope/telescope-file-browser.nvim' " File browser
-  Plug 'benfowler/telescope-luasnip.nvim' " Snippet browser for telescope
-  Plug 'ziontee113/SnippetGenie' " Snippet generation tool to work in consort with luasnip
-  Plug 'williamboman/mason.nvim' " Tool for managing things like external LSP tools
-  Plug 'williamboman/mason-lspconfig.nvim' " Compatability plugin for lspconfg and mason
-else
-  Plug 'lifepillar/vim-mucomplete' " sets up completion sources (native)
-endif
-call plug#end()            " required
-"to ignore plugin indent changes, instead use:
-"filetype plugin on
-
-    " Brief help    
-    " :PlugStatus          - list configured plugins  
-    " :PlugInstall    - install plugins     
-    " :PlugClean(!)- confirm (or auto-approve) removal of unused plugins
-    "
-"put your non-plugin stuff after this line
 
 
 " Basic config settings
@@ -240,6 +174,22 @@ set eventignore-=Syntax
 " Custom functions and routines
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Heavy duty rc reload. Starts by reloading the plugins file and then installing
+" all new plugins. This helps to ensure that the
+" any plugin dependant configs have their plugins ready to go when they are set
+" up
+function! ReloadPlugins()
+  execute 'source ' . g:plugins_vim
+  PlugInstall
+endfunction
+
+" Reloads plugins as above, but then also installs any missing external tools
+" using Mason
+function! InstallExternal() 
+  call ReloadPlugins()
+  execute 'MasonToolsInstall'
+endfunction
 
 " For files with logical pairs such as .cpp and .h files, check if the pair
 " exists and if so, open/show it
@@ -435,8 +385,15 @@ nnoremap <C-H> <C-W><C-H>
 " F-Key mapping
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
 
-" Reload vimrc
+" Reload vimrc 
 nnoremap <F1> :so $MYVIMRC<cr>
+
+" Reload. First re-source the plugins, then install any new ones, then re-source
+" the vimrc
+nnoremap <F2> :call ReloadPlugins()<cr>:so $MYVIMRC<cr>
+
+" Install/Update all external tools 
+nnoremap <F3> :so $MYVIMRC<cr>:call InstallExternal()<cr>
 
 " Back formatter
 nnoremap <F4> :call FormatBuffer()<CR>
