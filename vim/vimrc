@@ -515,11 +515,13 @@ nnoremap <leader>i  :Telescope luasnip<CR>
 "  J->d = Jump to declaration using the language server
 "  J->r = Jump references using language server
 "  J->m = Jump to marks
+"  J->s = Jump to snippets file for this buffer (via a menu)
 nnoremap <leader>j :Telescope buffers<cr>
 nnoremap <silent> <leader><C-J> :call LuaCall("TryLsp('declaration')")<CR>
 nnoremap <silent> <leader>Jd :Telescope lsp_definitions<CR>
 nnoremap <leader>Jr :Telescope lsp_references<cr>
 nnoremap <leader>Jm :Telescope marks<cr>
+nnoremap <leader>Js :lua require("luasnip.loaders").edit_snippet_files()<CR>
 
 " --- L --- Load
 "  prime = use Telescope to look for files to load in the current directory
