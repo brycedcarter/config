@@ -3,35 +3,76 @@ local s = ls.snippet
 local i = ls.insert_node
 
 local snippets = {
-s(
-    "test",
-    fmt([=[
-from vehicle.deploy.build_assets.products.build_cache import build_cache_enable  # noqa: E402
-from vehicle.deploy.build_assets.products.build_product import (  # noqa: E402
-    BuildAssetGroup,
-    ProductBuilder,
-)
-from vehicle.deploy.build_assets.publishers import (  # noqa: E402
-    BuildPublisher,
-    FilesystemBuildPublisher,
-    S3BuildPublisher,
-)
-from vehicle.deploy.lib.caches import ASSET_CACHE_PATH  # noqa: E402
-from vehicle.deploy.lib.driving_os.lib import compute_imaging_source_checksum  # noqa: E402
 
+s(
+    "argparse positional",
+    fmt([=[
+parser.add_argument("{}", type={}, help="{}")
 ]=], {
-        
+        i(1, "position"),
+        i(2, "type"),
+        i(3, "help text"),
     })
 ),
 
 s(
-    "",
+    "argparse flag",
     fmt([=[
+parser.add_argument("-f", "--{}", action="store_true", type={}, help="{}")
+]=], {
+        i(1, "flag"),
+        i(2, "type"),
+        i(2, "help text"),
+    })
+),
+
+s(
+    "argparse choices",
+    fmt([=[
+parser.add_argument("--{}", choices=[], help="{}")
+]=], {
+        i(1, "choice"),
+        i(2, "help text"),
+    })
+),
+
+s(
+    "parse args",
+    fmt([=[
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.description = __doc__
+
+    {}
+
+    args = parser.parse_args()
+    return args
+]=], {
+        i(1, "# Arguments go here"),
+    })
+),
+
+s(
+    "argparse named",
+    fmt([=[
+parser.add_argument("--{}", default={}, type={}, help="{}")
+]=], {
+        i(1, "named"),
+        i(2, "default"),
+        i(3, "type"),
+        i(4, "help text"),
+    })
+),
+
+s(
+    "basic logger config",
+    fmt([=[
+import logging
+
 logging.basicConfig(
-    format="[%(asctime)s] %(levelname)s [%(name)s.%(filename)s:%(lineno)d] %(message)s",
-    level=logging.INFO,
+    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
-log = logging.getLogger("driving_build")
+logger = logging.getLogger(__name__)
 ]=], {
         
     })

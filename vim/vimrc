@@ -135,15 +135,6 @@ let g:tagbar_map_close = "<leader>o" " use same mapping to open and close
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:SimpylFold_docstring_preview=1
 
-
-" Black Formatter
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:black_linelength = 80 
-
-" calng-format Formatter
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:clang_format#command = 'clang-format'
-
 " floatterm setup
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:floaterm_width = 0.9
@@ -181,7 +172,7 @@ set eventignore-=Syntax
 " up
 function! ReloadPlugins()
   execute 'source ' . g:plugins_vim
-  PlugInstall
+  PlugInstall --sync
 endfunction
 
 " Reloads plugins as above, but then also installs any missing external tools
@@ -248,19 +239,6 @@ function! QuickfixMapping()
   nnoremap <buffer> <leader>r :cdo s///g \| update<C-Left><C-Left><Left><Left><Left><Left>
   " Begin search and replace with result from previous leader-R in main window
   nnoremap <buffer> <leader>R :cdo s/<C-R>r//g \| update<C-Left><C-Left><Left><Left><Left>
-endfunction
-
-" A wrapper function that selects the correct auto-formatter based on the
-" current file type
-function! FormatBuffer()
-  let l:currentExtension = expand("%:e")
-  if &filetype ==# 'c' || &filetype ==# 'cpp' || &filetype ==# 'proto'
-    execute 'ClangFormat'
-  elseif &filetype ==# 'python' 
-    execute 'Black'
-  else 
-    lua vim.lsp.buf.format()
-  endif
 endfunction
 
 " Helper to fill the arglist with all files in the current directory of a
@@ -395,11 +373,11 @@ nnoremap <F2> :call ReloadPlugins()<cr>:so $MYVIMRC<cr>
 " Install/Update all external tools 
 nnoremap <F3> :so $MYVIMRC<cr>:call InstallExternal()<cr>
 
-" Back formatter
-nnoremap <F4> :call FormatBuffer()<CR>
+" Format current buffer
+nnoremap <F4> :FormatLock<CR>
 
-" YouCompleteMe
-nnoremap <F5> :YcmForceCompileAndDiagnostics<CR>
+" Run linter for file
+nnoremap <F5> :lua require('lint').try_lint()<CR>
 
 " floatterm keys
 nnoremap   <silent>   <F12>   :FloatermToggle<CR>
@@ -507,6 +485,7 @@ nnoremap <leader>Hl  :LspInfo<CR>
 
 " --- I --- Insert
 "  prime = Insert snippet
+"  Can also use C-I in insert mode
 nnoremap <leader>i  :Telescope luasnip<CR>
 
 " --- J --- Jump

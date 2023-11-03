@@ -66,6 +66,7 @@ if nvim " neovim only plugins
   Plug 'williamboman/mason-lspconfig.nvim' " Compatability plugin for lspconfg and mason
   Plug 'WhoIsSethDaniel/mason-tool-installer.nvim' " Tool to provide and easy way to install all of the mason tools
   Plug 'mhartington/formatter.nvim' " formatter tools, pairs with mason for actually installing the formatters
+  Plug 'mfussenegger/nvim-lint' " Linter manager that integrates its output into the nvim LSP diagnostics
 else
   Plug 'lifepillar/vim-mucomplete' " sets up completion sources (native)
 endif

@@ -8,7 +8,7 @@
 LINUX_ZSH_PACKAGES=(zsh python-pygments)
 MAC_ZSH_PACKAGES=(zsh pygments)
 
-LINUX_VIM_PACKAGES=(build-essential cmake python3-dev python3-venv python-dev vim neovim universal-ctags golang openjdk-11-jdk)
+LINUX_VIM_PACKAGES=(build-essential cmake python3-dev python3-venv python-dev vim neovim universal-ctags golang openjdk-11-jdk luarocks)
 MAC_VIM_PACKAGES=(cmake nvim go python npm luarocks "--HEAD universal-ctags/universal-ctags/universal-ctags")
 
 LINUX_FZF_PACKAGES=(ripgrep fd-find)

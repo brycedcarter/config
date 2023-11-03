@@ -1,25 +1,31 @@
 {
-    "name": "personal-snippets",
-    "contributes": {
-        "snippets": [
-            {
-                "language": [ "json" ],
-                "path": "json/vscode_snippets.json"
-            },
-            {
-                "language": [ "python" ],
-                "path": "./python/vscode_snippets.json"
-            },
-    {
-        "language": [ "cpp" ],
+  "name": "personal-snippets",
+  "contributes": {
+    "snippets": [
+      {
+        "language": [
+          "json"
+        ],
+        "path": "json/vscode_snippets.json"
+      },
+      {
+        "language": [
+          "python"
+        ],
+        "path": "./python/vscode_snippets.json"
+      },
+      {
+        "language": [
+          "cpp"
+        ],
         "path": "./cpp/vscode_snippets.json"
-    },
-{
-    "language": [ "bzl" ],
-    "path": "./bzl/vscode_snippets.json"
-}
-
-
-        ]
-    }
+      },
+      {
+        "language": [
+          "bzl"
+        ],
+        "path": "./bzl/vscode_snippets.json"
+      }
+    ]
+  }
 }

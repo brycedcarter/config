@@ -1,6 +1,7 @@
 set substitute-path /proc/self/cwd /home/bryce/driving
 set history save on
 set directories /home/bryce/driving:/home/bryce/driving/bazel-driving:~/driving
+add-auto-load-safe-path /opt/zoox/zrte/
 layout src
 focus cmd
 
