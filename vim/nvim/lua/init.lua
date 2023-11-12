@@ -74,7 +74,7 @@ require("formatter").setup({
 			require("formatter.filetypes.python").black,
 		},
 		cpp = {
-			require("formatter.filetypes.cpp").clang_format,
+			require("formatter.filetypes.cpp").clangformat,
 		},
 		["*"] = {
 			-- This work formatter thing is not working yet
