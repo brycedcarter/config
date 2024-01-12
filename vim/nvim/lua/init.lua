@@ -21,17 +21,16 @@ end
 -- require 'lspconfig'.pyright.setup { on_attach = on_attach, capabilities = capabilities } --  install via pip install pyright
 -- require 'clangd_extensions'.setup()
 
-
 -- hackey workaround for slow pyright on 20.04... maybe a newer build will fix
 -- it?
 -- https://github.com/neovim/neovim/issues/23725#issuecomment-1561364086
- local ok, wf = pcall(require, "vim.lsp._watchfiles")
-  if ok then
-     -- disable lsp watcher. Too slow on linux
-     wf._watchfunc = function()
-       return function() end
-     end
-  end
+local ok, wf = pcall(require, "vim.lsp._watchfiles")
+if ok then
+	-- disable lsp watcher. Too slow on linux
+	wf._watchfunc = function()
+		return function() end
+	end
+end
 
 -- New management
 local lspconfig = require("lspconfig")
@@ -52,6 +51,7 @@ require("mason-tool-installer").setup({
 		"bzl",
 		"mypy",
 		"clang-format",
+		"buf",
 	},
 	auto_update = false,
 	run_on_start = false,
@@ -62,6 +62,7 @@ require("lint").linters_by_ft = {
 	python = { "mypy" },
 	cpp = { "cpplint" },
 	sh = { "shellcheck" },
+	proto = { "buf_lint" },
 }
 vim.api.nvim_create_autocmd({ "BufWritePost" }, {
 	callback = function()
@@ -87,6 +88,9 @@ require("formatter").setup({
 		},
 		cpp = {
 			require("formatter.filetypes.cpp").clangformat,
+		},
+		proto = {
+			require("formatter.filetypes.proto").buf_format,
 		},
 		["*"] = {
 			-- This work formatter thing is not working yet
