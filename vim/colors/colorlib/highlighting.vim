@@ -146,24 +146,42 @@ function! g:HighlightBasic(palette)
   call s:h("markdownHeadingDelimiter", { "fg": a:palette.accentprime })
   "call s:h("markdownRule", { "fg": s:comment_grey })
   "call s:h("markdownHeadingRule", { "fg": s:comment_grey })
-  call s:h("markdownH1", { "fg": a:palette.accent })
+  call s:h("markdownH1", { "fg": a:palette.accentprime })
   call s:h("markdownH2", { "fg": a:palette.accent })
-  call s:h("markdownH3", { "fg": a:palette.accent })
+  call s:h("markdownH3", { "fg": a:palette.accentprime })
   call s:h("markdownH4", { "fg": a:palette.accent })
-  call s:h("markdownH5", { "fg": a:palette.accent })
+  call s:h("markdownH5", { "fg": a:palette.accentprime })
   call s:h("markdownH6", { "fg": a:palette.accent })
   call s:h("markdownIdDelimiter", { "fg": a:palette.betaprime })
   call s:h("markdownId", { "fg": a:palette.beta })
-  call s:h("markdownBlockquote", { "fg": a:palette.gamma })
+  call s:h("markdownBlockquote", { "fg": a:palette.gammaprime, "bg": a:palette.aftweak })
   call s:h("markdownItalic", { "fg": a:palette.foreweak, "gui": "italic", "cterm": "italic" })
   call s:h("markdownBold", { "fg": a:palette.forestrong, "gui": "bold", "cterm": "bold" })
   call s:h("markdownListMarker", { "fg": a:palette.contrast })
   call s:h("markdownOrderedListMarker", { "fg": a:palette.contrast })
   call s:h("markdownIdDeclaration", { "fg": a:palette.beta })
-  call s:h("markdownLinkText", { "fg": a:palette.gammaprime })
+  call s:h("markdownLinkText", { "fg": a:palette.flare })
   call s:h("markdownLinkTextDelimiter", { "fg": a:palette.gammaprime })
   call s:h("markdownLinkDelimiter", { "fg": a:palette.gamma })
-  call s:h("markdownUrl", { "fg": a:palette.gamma })
+  call s:h("markdownUrl", { "fg": a:palette.foreweak })
+
+  "" Markup groups from tree-sitter
+  highlight! link @markup.heading.1 markdownH1
+  highlight! link @markup.heading.2 markdownH2
+  highlight! link @markup.heading.3 markdownH3
+  highlight! link @markup.heading.4 markdownH4
+  highlight! link @markup.heading.5 markdownH5
+  highlight! link @markup.heading.6 markdownH6
+  highlight! link @markup.heading markdownH1
+  highlight! link @markup.quote markdownBlockquote
+  highlight! link @markup.strong markdownBold
+  highlight! link @markup.italic markdownItalic
+  highlight! link @markup.link markdownLinkTextDelimiter
+  highlight! link @markup.link.label markdownLinkText
+  highlight! link @markup.link.url markdownUrl
+  highlight! link @markup.raw markdownCode
+  highlight! link @markup.raw.block markdownCode
+  highlight! link @markup.list markdownListMarker
 
 
   "" +---------------------+

@@ -49,7 +49,7 @@ py_library(
 
 s({
   trig = "cc_binary",
-  desc = "cpp binary bazel target"
+  desc = "CPP binary bazel target"
 },
     fmt([=[
 cc_binary(
@@ -70,7 +70,7 @@ cc_binary(
 
 s({
   trig = "cc_library",
-  desc = "cpp library bazel target"
+  desc = "CPP library bazel target"
 },
     fmt([=[
 cc_library(
@@ -78,9 +78,8 @@ cc_library(
     srcs = [
     "{1}.cpp",
     ],
-    hdrs = [
-    "{1}.h",
-    ],
+    hdrs = ["{1}.h"],
+    visibility = ["//visibility:public"],
     deps = [
         "//{2}",
     ],
@@ -98,7 +97,7 @@ cc_library(
 s(
     "",
     fmt([=[
-sqlite = ["@sqlite3//:sqlite3"],
+g = 1 << oparg;
 ]=], {
         
     })

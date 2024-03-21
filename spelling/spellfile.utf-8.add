@@ -173,3 +173,11 @@ TODO
 TimePoint
 Perfetto
 perfetto
+ZCI
+hyperperiods
+hyperperiod
+protobufs
+gantt
+ScheduleBuilder
+Accessor
+ProcessScheduler

@@ -52,6 +52,8 @@ require("mason-tool-installer").setup({
 		"mypy",
 		"clang-format",
 		"buf",
+		"marksman",
+		"prettierd",
 	},
 	auto_update = false,
 	run_on_start = false,
@@ -91,6 +93,12 @@ require("formatter").setup({
 		},
 		proto = {
 			require("formatter.filetypes.proto").buf_format,
+		},
+		json = {
+			require("formatter.filetypes.json").jq,
+		},
+		markdown = {
+			require("formatter.filetypes.markdown").prettierd,
 		},
 		["*"] = {
 			-- This work formatter thing is not working yet
