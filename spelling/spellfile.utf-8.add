@@ -174,3 +174,15 @@ hyperperiod
 hyperperiods
 ZCI
 hypercore
+TimePoint
+Perfetto
+perfetto
+ZCI
+hyperperiods
+hyperperiod
+protobufs
+gantt
+ScheduleBuilder
+Accessor
+ProcessScheduler
+coredump

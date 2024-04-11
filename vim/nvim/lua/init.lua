@@ -47,7 +47,9 @@ require("mason-tool-installer").setup({
 		"mypy",
 		"clang-format",
 		"typescript-language-server",
-		"prettier",
+		"buf",
+		"marksman",
+		"prettierd",
 	},
 	auto_update = false,
 	run_on_start = false,
@@ -58,6 +60,7 @@ require("lint").linters_by_ft = {
 	python = { "mypy" },
 	cpp = { "cpplint" },
 	sh = { "shellcheck" },
+	proto = { "buf_lint" },
 }
 vim.api.nvim_create_autocmd({ "BufWritePost" }, {
 	callback = function()
@@ -86,6 +89,14 @@ require("formatter").setup({
 		},
 		javascript = {
 			require("formatter.filetypes.javascript").prettier,
+		proto = {
+			require("formatter.filetypes.proto").buf_format,
+		},
+		json = {
+			require("formatter.filetypes.json").jq,
+		},
+		markdown = {
+			require("formatter.filetypes.markdown").prettierd,
 		},
 		["*"] = {
 			-- This work formatter thing is not working yet

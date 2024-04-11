@@ -23,7 +23,7 @@ Plug 'tpope/vim-obsession' " Intelligent and automatic session management
 Plug 'tpope/vim-fugitive' " Git extension
 Plug 'psf/black' " Black formatter for python
 Plug 'rhysd/vim-clang-format' " clang-format formatter for C style 
-Plug 'kkoomen/vim-doge' " documentation generator
+Plug 'kkoomen/vim-doge', { 'do': { -> doge#install() } } " documentation generator
 Plug('chrisbra/Colorizer') " highlight color codes
 Plug('rickhowe/diffchar.vim') " improved diffing that allows showing multiple diffs on the same line
 

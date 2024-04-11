@@ -447,9 +447,11 @@ nnoremap <leader>Dv :Telescope diagnostics bufnr=0<CR>
 "  prime = start case insensitive regex find 
 "  subprime = start a grep based search
 "  F->h = use telescope to find a recent search
+"  F->b = use telescope to do a live grep through open buffers
 "  F->o = find semantic items using telescope and treesitter (outline search)
 nnoremap <leader>f /\v\c
-nnoremap <leader><C-f> :Telescope live_grep<CR>
+nnoremap <leader><c-f> :Telescope live_grep<cr>
+nnoremap <leader>Fb :lua require('telescope.builtin').live_grep({grep_open_files=true})<CR>
 nnoremap <leader>Fh :Telescope search_history<cr>
 nnoremap <leader>Fo :Telescope treesitter<cr>
 

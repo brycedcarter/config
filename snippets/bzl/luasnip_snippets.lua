@@ -47,8 +47,61 @@ py_library(
     {repeat_duplicates = true})
 ),
 
+s({
+  trig = "cc_binary",
+  desc = "CPP binary bazel target"
+},
+    fmt([=[
+cc_binary(
+    name = "{1}",
+    srcs = [
+    "{1}.cpp",
+    ],
+    deps = [
+        "//{2}",
+    ],
+)
+]=], {
+      i(1, "name"),
+      i(2, "dep")
+    },
+    {repeat_duplicates = true})
+),
+
+s({
+  trig = "cc_library",
+  desc = "CPP library bazel target"
+},
+    fmt([=[
+cc_library(
+    name = "{1}",
+    srcs = [
+    "{1}.cpp",
+    ],
+    hdrs = ["{1}.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//{2}",
+    ],
+)
+]=], {
+      i(1, "name"),
+      i(2, "dep")
+    },
+    {repeat_duplicates = true})
+),
 
 
+
+
+s(
+    "",
+    fmt([=[
+g = 1 << oparg;
+]=], {
+        
+    })
+),
 
   ------------------------------------------------------ SNIPPET GENIE LOC
   -- At this line ^^ is where the SnippetGenie plugin will place its generated

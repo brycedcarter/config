@@ -194,7 +194,12 @@ export FZF_COMPLETION_TRIGGER='**'
 
 # setup VI Mode
 VI_MODE_RESET_PROMPT_ON_MODE_CHANGE=true
-V8I_MODE_SET_CURSOR=true
+VI_MODE_SET_CURSOR=true
+
+# disable focus event reporting. This is needed because tmux is turning on focus
+# event forwarding for vim. If we do not disable focus events, then our console
+# gets spammed with newlines whenever we lose focus
+print -n -- '\E[?1004l'
 
 # general purpose aliases
 # =============================================================================
