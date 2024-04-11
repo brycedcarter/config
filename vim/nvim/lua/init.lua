@@ -89,6 +89,7 @@ require("formatter").setup({
 		},
 		javascript = {
 			require("formatter.filetypes.javascript").prettier,
+		},
 		proto = {
 			require("formatter.filetypes.proto").buf_format,
 		},
@@ -387,8 +388,8 @@ vim.keymap.set("n", "<CR>", function()
 	require("SnippetGenie").finalize_snippet()
 end, {})
 
-vim.api.nvim_create_autocmd('TextYankPost', {
-  callback = function()
-   require("vim.ui.clipboard.osc52").copy("+")(vim.split(vim.fn.getreg(vim.v.event.regname),'\n'))
-  end
+vim.api.nvim_create_autocmd("TextYankPost", {
+	callback = function()
+		require("vim.ui.clipboard.osc52").copy("+")(vim.split(vim.fn.getreg(vim.v.event.regname), "\n"))
+	end,
 })
