@@ -14,27 +14,20 @@ function TryLsp(lsp_command)
 	end
 end
 
--- old lsp management... I think we can replace this with mason now that we do
--- not have to deal with 14.04
--- local capabilities = require('cmp_nvim_lsp').default_capabilities()
--- require 'lspconfig'.clangd.setup { on_attach = on_attach, capabilities = capabilities }
--- require 'lspconfig'.pyright.setup { on_attach = on_attach, capabilities = capabilities } --  install via pip install pyright
--- require 'clangd_extensions'.setup()
-
-
 -- hackey workaround for slow pyright on 20.04... maybe a newer build will fix
 -- it?
 -- https://github.com/neovim/neovim/issues/23725#issuecomment-1561364086
- local ok, wf = pcall(require, "vim.lsp._watchfiles")
-  if ok then
-     -- disable lsp watcher. Too slow on linux
-     wf._watchfunc = function()
-       return function() end
-     end
-  end
+local ok, wf = pcall(require, "vim.lsp._watchfiles")
+if ok then
+	-- disable lsp watcher. Too slow on linux
+	wf._watchfunc = function()
+		return function() end
+	end
+end
 
 -- New management
 local lspconfig = require("lspconfig")
+local configs = require("lspconfig.configs")
 require("mason").setup()
 require("mason-tool-installer").setup({
 	ensure_installed = {
@@ -46,12 +39,15 @@ require("mason-tool-installer").setup({
 		"shellcheck",
 		"shfmt",
 		"clangd",
-		"pyright",
+		"pyright", -- pyright is trouble, if having issues with high cpu, try disabling
+		"jedi-language-server",
 		"cpplint",
 		"black",
 		"bzl",
 		"mypy",
 		"clang-format",
+		"typescript-language-server",
+		"prettier",
 	},
 	auto_update = false,
 	run_on_start = false,
@@ -87,6 +83,9 @@ require("formatter").setup({
 		},
 		cpp = {
 			require("formatter.filetypes.cpp").clangformat,
+		},
+		javascript = {
+			require("formatter.filetypes.javascript").prettier,
 		},
 		["*"] = {
 			-- This work formatter thing is not working yet
@@ -376,3 +375,9 @@ end, {})
 vim.keymap.set("n", "<CR>", function()
 	require("SnippetGenie").finalize_snippet()
 end, {})
+
+vim.api.nvim_create_autocmd('TextYankPost', {
+  callback = function()
+   require("vim.ui.clipboard.osc52").copy("+")(vim.split(vim.fn.getreg(vim.v.event.regname),'\n'))
+  end
+})

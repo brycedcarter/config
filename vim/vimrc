@@ -55,7 +55,6 @@ else
 endif
 
 set backspace=2 " allow backspace to go over eol, indent, and start of insert
-set clipboard=unnamedplus " allows yank to go directly to the linux system CLIPBOARD (xclip -selection c -o) which is the one that is synced over XQuarts. using unnamed sends yank to the PRIMARY clipboard that is not synced
 set colorcolumn=80 " show the 80th column as a guide
 set cursorline " Highlight the line with the cursor
 set encoding=utf-8 " use utf-8 encoding
@@ -591,3 +590,5 @@ if nvim
   let &packpath=&runtimepath
   source ~/config/vim/nvim/lua/init.lua
 endif
+
+
