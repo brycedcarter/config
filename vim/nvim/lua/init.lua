@@ -7,11 +7,12 @@ end
 -- Helper function that checks for a connected server before issuing an lsp
 -- command
 function TryLsp(lsp_command)
-	if vim.lsp.buf.server_ready() then
+        -- NOTE: server_ready() was deprecated in nvim 10.0
+	-- if vim.lsp.buf.server_ready() then
 		vim.lsp.buf[lsp_command]()
-	else
-		print("No lsp server currently ready to process this command... Try :LspInfo for more information")
-	end
+	-- else
+		-- print("No lsp server currently ready to process this command... Try :LspInfo for more information")
+	-- end
 end
 
 -- hackey workaround for slow pyright on 20.04... maybe a newer build will fix

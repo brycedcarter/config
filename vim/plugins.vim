@@ -54,7 +54,7 @@ if nvim " neovim only plugins
   Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'} " syntax tree gen. Needs the update to keep the update the parsers
 
   Plug 'nvim-lua/plenary.nvim' " Dep for telscope
-  Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.4' } " Fuzzy finder window
+  Plug 'nvim-telescope/telescope.nvim', " Fuzzy finder window
   Plug 'm4xshen/smartcolumn.nvim' " Selectively enable 80 char line
   Plug 'ruifm/gitlinker.nvim' " Github link gen
   Plug 'petertriho/nvim-scrollbar' " Scrollbar 
