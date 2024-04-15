@@ -321,11 +321,25 @@ if $MANAGE_CONFIGS; then
   do 
 	  backup_filename="${dotfile#?}-$current_time"
     cd ~
-    if [ -f $dotfile ]; then
+    if [ -f "$dotfile" ]; then
       do_thing "cd ~; cp -L $dotfile .config-backups/$backup_filename; ln -fs .config-backups/$backup_filename .config-backups/${dotfile#?}-latest" "Backing up ~/$dotfile"
     fi
     do_thing  "cd ~; ln -fs $HOME/config/$filepath ./$dotfile"  "Linking managed version of ~/$dotfile from ~/config/$filepath"
-  done < $SETUP_DIR/managed_files.txt
+  done < "$SETUP_DIR/managed_files.txt"
+  while read -r filepath application config_file;
+  do 
+          base_backup_name="$application-${config_file#?}"
+	  backup_filename="$base_backup_name-$current_time"
+    cd ~
+    if [ ! -d "$XDG_CONFIG_HOME/$$application" ] ; then 
+      do_thing "mkdir -p $XDG_CONFIG_HOME/$application" "Creating XDG config dir for $application ($XDG_CONFIG_HOME/$application)" 
+    fi
+    xdg_config_path="$XDG_CONFIG_HOME/$application/$config_file"
+    if [ -f "$xdg_config_path" ]; then
+      do_thing "cd ~; cp -L $xdg_config_path .config-backups/$backup_filename; ln -fs .config-backups/$backup_filename .config-backups/${base_backup_name#?}-latest" "Backing up ~/$xdg_config_path"
+    fi
+    do_thing  "cd ~; ln -fs $HOME/config/$filepath $xdg_config_path"  "Linking managed version of ~/$xdg_config_path from ~/config/$filepath"
+  done < "$SETUP_DIR/xdg_configs.txt"
 fi
 
 
