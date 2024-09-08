@@ -324,8 +324,11 @@ inoremap jk <esc>
 
 " Auto closing of closures
 inoremap (( ()<esc>i
+inoremap ((<cr> ()<esc>i<cr><esc>k$a<cr>
 inoremap [[ []<esc>i
+inoremap [[<cr> []<esc>i<cr><esc>k$a<cr>
 inoremap {{ {}<esc>i
+inoremap {{<cr> {}<esc>i<cr><esc>k$a<cr>
 inoremap "" ""<esc>i
 inoremap '' ''<esc>i
 inoremap `` ``<esc>i
@@ -359,6 +362,10 @@ nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 
+nnoremap <C-Down> <C-W><C-J>
+nnoremap <C-Up> <C-W><C-K>
+nnoremap <C-Right> <C-W><C-L>
+nnoremap <C-Left> <C-W><C-H>
 " F-Key mapping
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
 
@@ -496,12 +503,14 @@ nnoremap <leader>i  :Telescope luasnip<CR>
 "  J->r = Jump references using language server
 "  J->m = Jump to marks
 "  J->s = Jump to snippets file for this buffer (via a menu)
+"  J->q = Jump to quickfix
 nnoremap <leader>j :Telescope buffers<cr>
 nnoremap <silent> <leader><C-J> :call LuaCall("TryLsp('declaration')")<CR>
 nnoremap <silent> <leader>Jd :Telescope lsp_definitions<CR>
 nnoremap <leader>Jr :Telescope lsp_references<cr>
 nnoremap <leader>Jm :Telescope marks<cr>
 nnoremap <leader>Js :lua require("luasnip.loaders").edit_snippet_files()<CR>
+nnoremap <leader>Jq :copen<CR>
 
 " --- L --- Load
 "  prime = use Telescope to look for files to load in the current directory
@@ -540,15 +549,13 @@ nnoremap <leader>Qa :silent bufdo bd<cr>
 " --- R --- Replace/Repair/Refactor
 "  prime = start find and replace
 "  prime-visual = start find and replace bounded by visual selection
-"  subprime = Open quickfix
+"  subprime = fixit
 "  R->d = perform DoGe document generation
-"  R->f = perform LSP fixit operation
 "  R->s = perform a sort on the selected lines
 nnoremap <leader>r viw"ry<cr>:%snomagic/<c-r>r//gc<Left><Left><Left>a<bs>
 vnoremap <leader>r :snomagic///gc<Left><Left><Left><Left>
-nnoremap <leader><C-r> :copen<CR>
+nnoremap <leader><C-r> :lua vim.lsp.buf.code_action{apply = true}<CR>
 nnoremap <leader>Rd  :DogeGenerate 1<CR>
-nnoremap <leader>Rf  :call LuaCall("TryLsp('code_action')")<CR>
 vnoremap <leader>Rg "ry/<C-r>r<cr>:exe "Grep " . shellescape(fnameescape(getreg("r")))<cr>
 vnoremap <leader>Rs  :sort<CR>
 
@@ -570,12 +577,14 @@ nnoremap <leader>u :UndotreeToggle<cr>
 "  V->n = toggle line numbers display
 "  V->c = use telescope to search for a color profile to load
 "  V->h = Toggle highlighting of color codes
+"  V->i = Toggle inlay hints
 "  V->g = Toggle git gutter display
 "  V->k = Searchable keymaps with telescope
 "  V->w = Toggle whitespace display
 nnoremap <leader>Vn :set number!<cr>
 nnoremap <leader>Vc :Telescope colorscheme<cr>
 nnoremap <leader>Vh :ColorToggle<cr>
+nnoremap <leader>Vi :lua vim.lsp.inlay_hint.enable(0, not vim.lsp.inlay_hint.is_enabled())<cr>
 nnoremap <leader>Vg :Gitsigns toggle_signs<cr>
 nnoremap <leader>Vk :Telescope keymaps<cr>
 nnoremap <leader>Vw :set list!<cr>

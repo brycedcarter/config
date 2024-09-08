@@ -7,11 +7,11 @@ end
 -- Helper function that checks for a connected server before issuing an lsp
 -- command
 function TryLsp(lsp_command)
-        -- NOTE: server_ready() was deprecated in nvim 10.0
+	-- NOTE: server_ready() was deprecated in nvim 10.0
 	-- if vim.lsp.buf.server_ready() then
-		vim.lsp.buf[lsp_command]()
+	vim.lsp.buf[lsp_command]()
 	-- else
-		-- print("No lsp server currently ready to process this command... Try :LspInfo for more information")
+	-- print("No lsp server currently ready to process this command... Try :LspInfo for more information")
 	-- end
 end
 
@@ -76,6 +76,10 @@ require("mason-lspconfig").setup_handlers({
 	end,
 })
 
+require("lspconfig").clangd.setup({
+	filetypes = { "c", "cpp", "objc", "objcpp", "cuda", "proto", "hpp" },
+})
+
 require("formatter").setup({
 	log_level = vim.log.levels.DEBUG,
 	filetype = {
@@ -123,6 +127,52 @@ require("formatter").setup({
 	},
 })
 
+-- -- init.lua or a similar file
+-- local lspconfig = require('lspconfig')
+--
+lspconfig.pyright.setup({
+	root_dir = lspconfig.util.root_pattern(".git", "WORKSPACE"),
+	settings = {
+		python = {
+			analysis = {
+				extraPaths = { "bazel-out" },
+				logLevel = "Trace",
+				log = {
+					directory = "/tmp/pyright_logs",
+					level = "trace",
+				},
+			},
+		},
+	},
+})
+--   on_attach = function(client, bufnr)
+--     -- Add bazel-out to the workspace folders if not already added
+--     local workspace_folders = client.workspace_folders
+--     local bazel_out_path = vim.fn.fnamemodify("bazel-out", ":p")
+--     local found = false
+--
+--     for _, folder in ipairs(workspace_folders) do
+--       if folder.name == bazel_out_path then
+--         found = true
+--         break
+--     end
+--
+--     if not found then
+--       client.workspace_folders[#client.workspace_folders + 1] = {
+--         uri = vim.uri_from_fname(bazel_out_path),
+--         name = bazel_out_path,
+--       }
+--       client.notify("workspace/didChangeWorkspaceFolders", {
+--         event = {
+--           added = { { uri = vim.uri_from_fname(bazel_out_path) } },
+--           removed = {},
+--         }
+--       })
+--     end
+--   end
+-- end
+-- }
+--
 -- General nvim settings
 
 -- Status line setup

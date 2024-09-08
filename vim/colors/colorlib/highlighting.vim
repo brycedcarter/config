@@ -130,6 +130,11 @@ function! g:HighlightBasic(palette)
   call s:h("WildMenu", {"fg": a:palette.contrast}) " current match in 'wildmenu' completion
 
   "" +--------------------------------+
+  "" | Lsp Highlighting |
+  "" +--------------------------------+
+  call s:h("LspInlayHint", { "fg": a:palette.deltaprime, "bg": a:palette.aftweak })
+
+  "" +--------------------------------+
   "" | Language-Specific Highlighting |
   "" +--------------------------------+
 
