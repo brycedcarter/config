@@ -187,3 +187,5 @@ Accessor
 ProcessScheduler
 coredump
 unevictable
+mem
+numa

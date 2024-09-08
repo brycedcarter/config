@@ -78,6 +78,30 @@ logger = logging.getLogger(__name__)
     })
 ),
 
+s(
+    "simple script",
+    fmt([=[
+import argparse
+
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.description = __doc__
+
+
+
+    args = parser.parse_args()
+    return args
+
+def main():
+    args = parse_args()
+
+if __name__ == "__main__":
+    main()
+]=], {
+        
+    })
+),
+
   --------------------------------- SNIPPET GENIE LOC -------------------------
   -- At this line ^^ is where the SnippetGenie plugin will place its generated
   -- snippets
