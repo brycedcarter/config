@@ -1,1 +1,2 @@
 gdb/gdbinit gdb gdbinit
+clangd/config.yaml clangd config.yaml

@@ -1,0 +1,71 @@
+CompileFlags:
+  Add: [-ferror-limit=0, -Wconversion, -Wshadow, -Werror, -Wpadded, -Wswitch-enum]
+  Remove: [-fno-lifetime-dse]
+Hover:
+  ShowAKA: true
+Index:
+  StandardLibrary: Yes
+InlayHints:
+  Enabled: true
+  Designators: true
+  ParameterNames: true
+  DeducedTypes: true
+  BlockEnd: true
+  LambdaCaptures: true
+  # DefaultInitializations: true
+  DefaultArguments: true
+Diagnostics:
+  UnusedIncludes: Strict
+  MissingIncludes: Strict
+  Includes:
+    IgnoreHeader:
+      [
+        '.*/external/boost/boost/regex/v4/.*',
+        '.*/external/eigen/.*',
+        '.*/external/gmock_repo/.*',
+        '.*/external/fmt/include/fmt/.*',
+      ]
+  ClangTidy:
+    FastCheckFilter: None
+    Add:
+      [
+        'readability*',
+        'performance*',
+        'bugprone*',
+        'cppcoreguidelines*',
+        'clang-analyzer*',
+        'modernize*',
+        # 'altera-struct-pack-align',
+        zoox-perf-*,
+        performance-vector-pessimization,
+        performance-vector-initializer-list
+      ]
+    Remove:
+      [
+        cppcoreguidelines-avoid-magic-numbers,
+        readability-magic-numbers,
+        modernize-use-trailing-return-type,
+        readability-identifier-length,
+        modernize-deprecated-headers,
+        cppcoreguidelines-avoid-do-while,
+        cppcoreguidelines-pro-type-vararg,
+        cppcoreguidelines-owning-memory,
+        cppcoreguidelines-avoid-c-arrays,
+        cppcoreguidelines-macro-usage,
+        modernize-avoid-c-arrays,
+        cppcoreguidelines-pro-bounds-pointer-arithmetic,
+        zoox-autosar-*,
+        zoox-perf-initializer-list,
+        # cppcoreguidelines-init-variables # TODO: put back
+      ]
+    CheckOptions:
+      readability-identifier-naming.NamespaceCase: lower_case
+      readability-identifier-naming.GlobalConstantCase: CamelCase
+      readability-identifier-naming.GlobalConstantPrefix: k
+      readability-identifier-naming.ClassCase: CamelCase
+      readability-identifier-naming.PrivateMemberSuffix: _
+      readability-identifier-naming.StructCase: CamelCase
+      readability-identifier-naming.FunctionCase: camelBack
+      readability-identifier-naming.VariableCase: lower_case
+      performance-unnecessary-value-param.AllowedTypes: ::std::function;::std::string_view
+      # readability-identifier-naming.GlobalConstantCase: UPPER_CASE
