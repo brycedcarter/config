@@ -65,7 +65,7 @@ if nvim " neovim only plugins
   Plug 'williamboman/mason.nvim' " Tool for managing things like external LSP tools
   Plug 'williamboman/mason-lspconfig.nvim' " Compatability plugin for lspconfg and mason
   Plug 'WhoIsSethDaniel/mason-tool-installer.nvim' " Tool to provide and easy way to install all of the mason tools
-  Plug 'mhartington/formatter.nvim' " formatter tools, pairs with mason for actually installing the formatters
+  Plug 'stevearc/conform.nvim' " formatter tools, pairs with mason for actually installing the formatters
   Plug 'mfussenegger/nvim-lint' " Linter manager that integrates its output into the nvim LSP diagnostics
   Plug 'stevearc/dressing.nvim' " improved ui input and selection
 else

@@ -80,52 +80,30 @@ require("lspconfig").clangd.setup({
 	filetypes = { "c", "cpp", "objc", "objcpp", "cuda", "proto", "hpp" },
 })
 
-require("formatter").setup({
-	log_level = vim.log.levels.DEBUG,
-	filetype = {
-		lua = {
-			require("formatter.filetypes.lua").stylua,
-		},
-		python = {
-			require("formatter.filetypes.python").black,
-		},
-		cpp = {
-			require("formatter.filetypes.cpp").clangformat,
-		},
-		javascript = {
-			require("formatter.filetypes.javascript").prettier,
-		},
-		proto = {
-			require("formatter.filetypes.proto").buf_format,
-		},
-		json = {
-			require("formatter.filetypes.json").jq,
-		},
-		markdown = {
-			require("formatter.filetypes.markdown").prettierd,
-		},
-		["*"] = {
-			-- This work formatter thing is not working yet
-			-- function()
-			-- 	local work_path = os.getenv("WORK_PATH")
-			-- 	local start_idx, _ = string.find(vim.api.nvim_buf_get_name(0), work_path, 1, true)
-			-- 	if start_idx == 1 then
-			-- 		return {
-			-- 			exe = os.getenv("WORK_FORMATTER"),
-			-- 			args = {
-			-- 				"--fix",
-			-- 				"--files",
-			-- 				vim.api.nvim_buf_get_name(0),
-			-- 			},
-			-- 			cwd = vim.fn.expand("%:h"),
-			-- 		}
-			-- 	else
-			-- 		return nil
-			-- 	end
-			-- end,
-		},
+require("conform").setup({
+	formatters_by_ft = {
+		lua = { "stylua" },
+		python = { "black" },
+		cpp = { "clang-format" },
+		javascript = { "prettier" },
+		proto = { "buf" },
+		json = { "jq" },
+		markdown = { "mdformat" },
+		swift = { "swiftformat" },
 	},
 })
+
+vim.api.nvim_create_user_command("Format", function(args)
+	local range = nil
+	if args.count ~= -1 then
+		local end_line = vim.api.nvim_buf_get_lines(0, args.line2 - 1, args.line2, true)[1]
+		range = {
+			start = { args.line1, 0 },
+			["end"] = { args.line2, end_line:len() },
+		}
+	end
+	require("conform").format({ async = true, lsp_format = "fallback", range = range })
+end, { range = true })
 
 -- -- init.lua or a similar file
 -- local lspconfig = require('lspconfig')
