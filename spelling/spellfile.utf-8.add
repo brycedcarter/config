@@ -189,3 +189,4 @@ coredump
 unevictable
 mem
 numa
+pprof

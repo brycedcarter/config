@@ -51,6 +51,7 @@ Diagnostics:
         cppcoreguidelines-pro-type-vararg,
         cppcoreguidelines-owning-memory,
         cppcoreguidelines-avoid-c-arrays,
+        cppcoreguidelines-pro-type-reinterpret-cast,
         cppcoreguidelines-macro-usage,
         modernize-avoid-c-arrays,
         cppcoreguidelines-pro-bounds-pointer-arithmetic,
