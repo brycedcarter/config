@@ -190,3 +190,11 @@ unevictable
 mem
 numa
 pprof
+nvim
+cmp
+lsp
+Github
+lspconfig
+bufferline
+luasnip
+ui

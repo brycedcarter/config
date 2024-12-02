@@ -3,10 +3,8 @@
 "######################################################################################
 "# This file should not be edited except in its original location of ~/config/vimrc
 "######################################################################################
-
 " BRYCE'S USAGE NOTES
-" <leader> = <space>
-"
+" <leader> = <space> "
 " Leader strategy is as follows:
 "   Actions are grouped together into roughly similar ideas ((D)ebug, (J)ump, 
 "   (L)oad, etc...). Each group is associated with a letter or key. 
@@ -26,30 +24,35 @@ endif
 
 set nocompatible              " be iMproved, required
 filetype off                  " required
+set termguicolors
 
-" Plugins 
+" Plugins come from lazy for nvim now. No native vim plugins are supported 
+
+" Custom Globals
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Path for where to find snippets
+let g:snippet_path = expand('~/config/snippets/')
+" Path where we should store temp data like c
+if g:nvim
+  let g:xdg_state_dir = $XDG_STATE_HOME . "/nvim/"
+else
+  let g:xdg_state_dir = $XDG_STATE_HOME . "/vim/"
+endif
 
-let g:plugins_vim = expand('~/config/vim/plugins.vim')
-execute 'source ' . g:plugins_vim
-
-
+if !isdirectory(g:xdg_state_dir) 
+  call mkdir(expand(g:xdg_state_dir), "p")
+endif
 
 " Basic config settings
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-set runtimepath+=~/config/vim/
+" This lets us find our color configurations (see :help runtimepath)
+verbose set runtimepath+=~/config/vim
 
-" TODO: probably remove this if tree-sitter highlighting is working well
-" syntax enable " enable syntax highlighting
-set termguicolors " use specific hex colors
-
-let g:tmp_dir = "~/config/.tmp/"
-let s:current_scheme_file = g:tmp_dir . "vim_current_scheme"
+let s:current_scheme_file = g:xdg_state_dir . "vim_current_scheme"
 if filereadable(expand(s:current_scheme_file))
   execute "colorscheme " . readfile(expand(s:current_scheme_file))[0]
-  call mkdir(expand(g:tmp_dir), "p")
 else
   colorscheme brycedcarter-cool-dark " use custom color scheme
 endif
@@ -96,64 +99,14 @@ set spell " enable spellcheck
 set spellfile=~/.spellfile.utf-8.add " personal spelling dictionary
 set spellsuggest=10 " limit the number of spelling suggestions
 
-" Native Package Add
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-packadd termdebug
-
-" Plugin Config 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-" Path for where to find snippets
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:snippet_path = expand('~/config/snippets/')
-
-" General completion
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-set completeopt=menu,menuone,noselect
-
-if !nvim
-  " MUcomplete basic completion
-  """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-  let g:mucomplete#enable_auto_at_startup = 1
-  let g:mucomplete#chains = {'default' : ['path', 'keyn', 'omni']}
-endif
 
 
-" tagbar customization
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:tagbar_autoclose=1 " close the tagbar after jumping to a tag
-let g:tagbar_autofocus=1 " jump to the tag bar when it is opened
-let g:tagbar_show_data_type = 1 " show the tag type to its right
-let g:no_status_line = 1 " don't display the status line
-let g:tagbar_sort = 0 " sort by docu:ment order rather than name (outline)
-let g:tagbar_map_close = "<leader>o" " use same mapping to open and close
-
-" SimpyFold
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:SimpylFold_docstring_preview=1
-
-" floatterm setup
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:floaterm_width = 0.9
-let g:floaterm_height = 0.9
-let g:floaterm_autoclose = 2
 
 " Workarounds
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 if $VIM_CRONTAB == "true"
 set backupcopy=yes
-endif
-
-hi debugPC term=reverse ctermbg=52 guibg=DarkRed
-
-if &term =~ '256color'
-      " COMES FROM" https://superuser.com/questions/457911/in-vim-background-color-changes-on-scrolling/588243
-      " Disable Background Color Erase (BCE) so that color schemes
-      "     " work properly when Vim is used inside tmux and GNU screen.
-      set t_ut=
 endif
 
 " Fixing up the grep command so that it can be used by our custom refactor
@@ -164,22 +117,6 @@ set eventignore-=Syntax
 " Custom functions and routines
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-" Heavy duty rc reload. Starts by reloading the plugins file and then installing
-" all new plugins. This helps to ensure that the
-" any plugin dependant configs have their plugins ready to go when they are set
-" up
-function! ReloadPlugins()
-  execute 'source ' . g:plugins_vim
-  PlugInstall --sync
-endfunction
-
-" Reloads plugins as above, but then also installs any missing external tools
-" using Mason
-function! InstallExternal() 
-  call ReloadPlugins()
-  execute 'MasonToolsInstall'
-endfunction
 
 " For files with logical pairs such as .cpp and .h files, check if the pair
 " exists and if so, open/show it
@@ -203,18 +140,6 @@ function ToggleIfPair()
   echo "No paired file found :-("
 endfunction
 
-" Converts a list that has been copied from OneNote into a valid markdown
-" This is required because anything more than the basic indentation does not 
-" copy to makrdown correctly. 
-" The list indentation is represented with tab indents rather than *s
-function ListToMarkdown()
-  %sno/\v^\s[-○§] (\S)/* \1/eg
-  %sno/\v^\s\s[-○§] (\S)/** \1/eg
-  %sno/\v^\s\s\s[-○§] (\S)/*** \1/eg
-  %sno/\v^\s\s\s\s[-○§] (\S)/**** \1/eg
-endfunction
-nnoremap <leader>@l :silent call ListToMarkdown()<cr>
-
 " Function to source only if file exists --- from here 
 " https://devel.tech/snippets/n/vIIMz8vZ/load-vim-source-files-only-if-they-exist
 function! SourceIfExists(file)
@@ -222,7 +147,6 @@ function! SourceIfExists(file)
     exe 'source' a:file
   endif
 endfunction
-
 
 " quickfix bindings modified from: https://vonheikemen.github.io/devlog/tools/vim-and-the-quickfix-list/
 function! QuickfixMapping()
@@ -240,36 +164,6 @@ function! QuickfixMapping()
   nnoremap <buffer> <leader>R :cdo s/<C-R>r//g \| update<C-Left><C-Left><Left><Left><Left>
 endfunction
 
-" Helper to fill the arglist with all files in the current directory of a
-" certain type. The main reason for this function is to prevent opening a buffer
-" call *.xx when there are no files with the extension of xx in the current
-" directory
-function! ExpandFilePatterns(patterns)
-  " first we clear out any existing entries in the arglist
-  silent! argdel *
-  for pattern in a:patterns
-    " expand the pattern here
-    silent! execute 'argadd ' . pattern
-    " don't expand here, so we can remove *.xx if it was not expanded before
-    silent! execute 'argdel \' . pattern 
-  endfor
-endfunction
-
-" This is a wrapper around a lua call. It will first check that it is being run
-" in Nvim, and then proceed to make the lua call provided by "lua_call"
-function! LuaCall(lua_call) 
-  if g:nvim
-      silent execute "lua " .. a:lua_call
-  else
-    echohl WarningMsg | echo "This key mapping is only valid in nvim" | echohl None
-  endif
-endfunction
-
-" Display syntax group 
-function! SynGroup()
-    let l:s = synID(line('.'), col('.'), 1)
-    echo synIDattr(l:s, 'name') . ' -> ' . synIDattr(synIDtrans(l:s), 'name')
-endfun
 
 " Auto Commands
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -301,8 +195,7 @@ augroup END
 " Record the current color scheme so that it can be loaded on the next open
 augroup remember_colorscheme
   autocmd!
-  call system('touch ' . s:current_scheme_file)
-  autocmd ColorScheme * call writefile([ g:colors_name,], expand(s:current_scheme_file))
+  autocmd ColorScheme * call system('touch ' . s:current_scheme_file) | call writefile([ g:colors_name,], expand(s:current_scheme_file))
 augroup END
 
 " Markdown can use trailing whitespace to present things like new lines in lists
@@ -372,22 +265,12 @@ nnoremap <C-Left> <C-W><C-H>
 " Reload vimrc 
 nnoremap <F1> :so $MYVIMRC<cr>
 
-" Reload. First re-source the plugins, then install any new ones, then re-source
-" the vimrc
-nnoremap <F2> :call ReloadPlugins()<cr>:so $MYVIMRC<cr>
-
-" Install/Update all external tools 
-nnoremap <F3> :so $MYVIMRC<cr>:call InstallExternal()<cr>
-
 " Format current buffer
-nnoremap <F4> :FormatLock<CR>
+nnoremap <F4> :Format<CR>
 
 " Run linter for file
-nnoremap <F5> :lua require('lint').try_lint()<CR>
+nnoremap <F5> :TryLint<CR>
 
-" floatterm keys
-nnoremap   <silent>   <F12>   :FloatermToggle<CR>
-tnoremap   <silent>   <F12>   <C-\><C-n>:FloatermToggle<CR>
 
 " LEADER raw
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
@@ -424,14 +307,11 @@ nnoremap <silent> <leader>= :call ToggleIfPair()<cr>
 "  prime = UNDEFINED
 "  C->w = Set snippet capture to work snippets dir
 "  C->p = Set snippet capture to personal snippets dir
-nnoremap <silent> <leader>Cw :lua require('SnippetGenie').setup({snippets_directory = vim.g.work_snippet_path})<cr>
-nnoremap <silent> <leader>Cp :lua require('SnippetGenie').setup({snippets_directory = vim.g.snippet_path})<cr>
+nnoremap <silent> <leader>Cw :SaveSnippetsToWork<cr>
+nnoremap <silent> <leader>Cp :SaveSnippetsToPersonal<cr>
 
 " --- D --- Debug/Diagnose
-"  prime = UNDEFINED
-"  subprime = Start gdb terminal debugger
-"  D->b = insert breakpoint at current line
-"  D->c = clear breakpoint at current line
+"  prime = show diagnostic information in floating panel
 "  D->h = show highlighting info at the current location
 "  D->H = show detailed highlighting ifromation in a new window
 "  D->n = Jump to the next diagnostic
@@ -440,13 +320,11 @@ nnoremap <silent> <leader>Cp :lua require('SnippetGenie').setup({snippets_direct
 "  D->m = start profiling of all functions. NOTE: need to exit vim before
 "  D->v = Use telescope to view all lsp diagnostic for the current buffer
 "  results will be written to /tmp/vim.profile
-nnoremap <leader><C-D> :Termdebug<cr>
-nnoremap <leader>Db :Break<cr>
-nnoremap <leader>Dc :Clear<cr>
+nnoremap <leader>d :LspShowDiag<CR>
 nnoremap <silent> <leader>Dh :Inspect<cr>
 nnoremap <silent> <leader>DH :so $VIMRUNTIME/syntax/hitest.vim<cr>
-nnoremap <silent> <leader>Dn :call LuaCall("vim.diagnostic.goto_next()")<CR>
-nnoremap <silent> <leader>DN :call LuaCall("vim.diagnostic.goto_prev()")<CR>
+nnoremap <silent> <leader>Dn :LspJumpDiagNext<CR>
+nnoremap <silent> <leader>DN :LspJumpDiagPrev<CR>
 nnoremap <leader>Dm :profile start /tmp/vim.profile<cr>:profile file *<cr>:profile func *<cr>
 nnoremap <leader>Dv :Telescope diagnostics bufnr=0<CR>
 
@@ -458,13 +336,11 @@ nnoremap <leader>Dv :Telescope diagnostics bufnr=0<CR>
 "  F->o = find semantic items using telescope and treesitter (outline search)
 nnoremap <leader>f /\v\c
 nnoremap <leader><c-f> :Telescope live_grep<cr>
-nnoremap <leader>Fb :lua require('telescope.builtin').live_grep({grep_open_files=true})<CR>
+nnoremap <leader>Fb :TelescopGrepOpenFiles<CR>
 nnoremap <leader>Fh :Telescope search_history<cr>
 nnoremap <leader>Fo :Telescope treesitter<cr>
 
 " --- G --- Git
-"  prime = Open fugitive
-"  G->p = initiate a git push
 "  G->b = initiate a git blame
 "  G->n = next git hunk
 "  G->N = previous git hunk
@@ -473,9 +349,7 @@ nnoremap <leader>Fo :Telescope treesitter<cr>
 "  G->a = stage the changes in the hunk under the cursor
 "  G->l = Get a git permalink to code under the cursor or currently selected
 "  G->d = Start git diff
-nnoremap <leader>g  :Git<CR>
-nnoremap <leader>Gp  :G push<CR>
-nnoremap <leader>Gb  :G blame<CR>
+nnoremap <leader>Gb  :BlameToggle<CR>
 nnoremap <leader>Gn  :Gitsigns next_hunk<CR>
 nnoremap <leader>GN  :Gitsigns prev_hunk<CR>
 nnoremap <leader>Gv  :Gitsigns preview_hunk<CR>
@@ -488,7 +362,7 @@ nnoremap <leader>Gd  :Gitsigns diffthis<CR>
 " --- H --- Help
 "  prime = LSP hover help
 "  H->l = get info about current LSP state
-nnoremap <leader>h  :call LuaCall("TryLsp('hover')")<CR>
+nnoremap <leader>h  :call LspHover<CR>
 nnoremap <leader>Hl  :LspInfo<CR>
 
 " --- I --- Insert
@@ -505,11 +379,10 @@ nnoremap <leader>i  :Telescope luasnip<CR>
 "  J->s = Jump to snippets file for this buffer (via a menu)
 "  J->q = Jump to quickfix
 nnoremap <leader>j :Telescope buffers<cr>
-nnoremap <silent> <leader><C-J> :call LuaCall("TryLsp('declaration')")<CR>
+nnoremap <silent> <leader><C-J> :LspJumpDecl<CR>
 nnoremap <silent> <leader>Jd :Telescope lsp_definitions<CR>
 nnoremap <leader>Jr :Telescope lsp_references<cr>
 nnoremap <leader>Jm :Telescope marks<cr>
-nnoremap <leader>Js :lua require("luasnip.loaders").edit_snippet_files()<CR>
 nnoremap <leader>Jq :copen<CR>
 
 " --- L --- Load
@@ -524,11 +397,8 @@ nnoremap <leader>l :Telescope find_files<cr>
 nnoremap <leader><C-l> :Telescope find_files search_dirs=~<cr>
 " using "next" on joined list rather than argdo because argdo disables syntax
 " autocmd for Syntax when it si running
-nnoremap <leader>Lh :call ExpandFilePatterns(['*.h'])<cr>:silent exe 'next ' . join(argv(), ' ' )<cr>
-nnoremap <leader>Lp :call ExpandFilePatterns(['*.py'])<cr>:silent exe 'next ' . join(argv(), ' ' )<cr>
-nnoremap <leader>Lc :call ExpandFilePatterns(['*.c', '*.cc', '*.cpp', '*.h', '*.hpp'])<cr>:silent exe 'next ' . join(argv(), ' ' )<cr>
 nnoremap <leader>Ln :enew<cr>
-nnoremap <leader>Ls :lua require('luasnip.loaders').edit_snippet_files()<cr>
+nnoremap <leader>Ls :EditSnippetFiles<cr>
 
 " --- O --- Outline/Overview
 "  prime = open outline
@@ -550,12 +420,10 @@ nnoremap <leader>Qa :silent bufdo bd<cr>
 "  prime = start find and replace
 "  prime-visual = start find and replace bounded by visual selection
 "  subprime = fixit
-"  R->d = perform DoGe document generation
 "  R->s = perform a sort on the selected lines
 nnoremap <leader>r viw"ry<cr>:%snomagic/<c-r>r//gc<Left><Left><Left>a<bs>
 vnoremap <leader>r :snomagic///gc<Left><Left><Left><Left>
-nnoremap <leader><C-r> :lua vim.lsp.buf.code_action{apply = true}<CR>
-nnoremap <leader>Rd  :DogeGenerate 1<CR>
+nnoremap <leader><C-r> :ApplyCodeAction<CR>
 vnoremap <leader>Rg "ry/<C-r>r<cr>:exe "Grep " . shellescape(fnameescape(getreg("r")))<cr>
 vnoremap <leader>Rs  :sort<CR>
 
@@ -567,15 +435,13 @@ nnoremap <leader>s :vsplit<cr>
 nnoremap <leader><C-S> :split<cr>
 nnoremap <leader>Ss <C-W><C-X><cr>
 
-" --- U --- Undo
-"  prime = open undo tree
-nnoremap <leader>u :UndotreeToggle<cr>
 
 " --- V --- Visualize (Display related actions)
 "  prime = UNDEFINED
 "  subprime = UNDEFINED
 "  V->n = toggle line numbers display
 "  V->c = use telescope to search for a color profile to load
+"  V->d = toggle display of diagnostic as virtual text
 "  V->h = Toggle highlighting of color codes
 "  V->i = Toggle inlay hints
 "  V->g = Toggle git gutter display
@@ -583,8 +449,9 @@ nnoremap <leader>u :UndotreeToggle<cr>
 "  V->w = Toggle whitespace display
 nnoremap <leader>Vn :set number!<cr>
 nnoremap <leader>Vc :Telescope colorscheme<cr>
+nnoremap <leader>Vd :Telescope colorscheme<cr>
 nnoremap <leader>Vh :ColorToggle<cr>
-nnoremap <leader>Vi :lua vim.lsp.inlay_hint.enable(0, not vim.lsp.inlay_hint.is_enabled())<cr>
+nnoremap <leader>Vi :ToggleInlayHints<cr>
 nnoremap <leader>Vg :Gitsigns toggle_signs<cr>
 nnoremap <leader>Vk :Telescope keymaps<cr>
 nnoremap <leader>Vw :set list!<cr>
@@ -597,8 +464,7 @@ nnoremap <leader>w :w<cr>
 call SourceIfExists("~/.config-work/vimrc")
 " run lua init script if we are running neovim
 if nvim
-  set runtimepath^=~/.vim runtimepath+=~/.vim/after
-  let &packpath=&runtimepath
+  set runtimepath+=~/config/vim/nvim
   source ~/config/vim/nvim/lua/init.lua
 endif
 

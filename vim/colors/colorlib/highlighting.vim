@@ -115,8 +115,8 @@ function! g:HighlightBasic(palette)
   call s:h("Search", { "fg": a:palette.flarefill, "bg": a:palette.accentprime }) " Last search pattern highlighting (see 'hlsearch'). Also used for highlighting the current line in the quickfix window and similar items that need to stand out.
   call s:h("SpecialKey", { "fg": a:palette.alphaprime }) " Meta and special keys listed with ":map", also for text used to show unprintable characters in the text, 'listchars'. Generally: text that is displayed differently from what it really is.
   call s:h("SpellBad", { "fg": a:palette.flare, "gui": "underline"}) " Word that is not recognized by the spellchecker. This will be combined with the highlighting used otherwise.
-  "call s:h("SpellCap", { "fg": a:palette.contrastprime }) " Word that should start with a capital. This will be combined with the highlighting used otherwise.
-  "call s:h("SpellLocal", { "fg": a:palette.contrastprime }) " Word that is recognized by the spellchecker as one that is used in another region. This will be combined with the highlighting used otherwise.
+  call s:h("SpellCap", { "fg": a:palette.contrastprime }) " Word that should start with a capital. This will be combined with the highlighting used otherwise.
+  call s:h("SpellLocal", { "fg": a:palette.contrastprime }) " Word that is recognized by the spellchecker as one that is used in another region. This will be combined with the highlighting used otherwise.
   "call s:h("SpellRare", { "fg": a:palette. }) " Word that is recognized by the spellchecker as one that is hardly ever used. spell This will be combined with the highlighting used otherwise.
   call s:h("StatusLine", { "fg": a:palette.fore, "bg": a:palette.aft }) " status line of current window
   call s:h("StatusLineNC", { "fg": a:palette.foreweak }) " status lines of not-current windows Note: if this is equal to "StatusLine" Vim will use "^^^" in the status line of the current window.
@@ -129,6 +129,7 @@ function! g:HighlightBasic(palette)
   call s:h("WarningMsg", { "fg": a:palette.flareprime }) " warning messages
   call s:h("WildMenu", {"fg": a:palette.contrast}) " current match in 'wildmenu' completion
 
+  if has("nvim")
   "" +--------------------------------+
   "" | Lsp Highlighting |
   "" +--------------------------------+
@@ -170,23 +171,6 @@ function! g:HighlightBasic(palette)
   call s:h("markdownLinkDelimiter", { "fg": a:palette.gamma })
   call s:h("markdownUrl", { "fg": a:palette.foreweak })
 
-  "" Markup groups from tree-sitter
-  highlight! link @markup.heading.1 markdownH1
-  highlight! link @markup.heading.2 markdownH2
-  highlight! link @markup.heading.3 markdownH3
-  highlight! link @markup.heading.4 markdownH4
-  highlight! link @markup.heading.5 markdownH5
-  highlight! link @markup.heading.6 markdownH6
-  highlight! link @markup.heading markdownH1
-  highlight! link @markup.quote markdownBlockquote
-  highlight! link @markup.strong markdownBold
-  highlight! link @markup.italic markdownItalic
-  highlight! link @markup.link markdownLinkTextDelimiter
-  highlight! link @markup.link.label markdownLinkText
-  highlight! link @markup.link.url markdownUrl
-  highlight! link @markup.raw markdownCode
-  highlight! link @markup.raw.block markdownCode
-  highlight! link @markup.list markdownListMarker
 
 
   "" +---------------------+
@@ -245,11 +229,29 @@ function! g:HighlightBasic(palette)
   hi link gitcommitSelectedArrow gitcommitSelectedFile
   hi link gitcommitUnmergedArrow gitcommitUnmergedFile
 
+
+  "" Markup groups from tree-sitter
+  highlight! link @markup.heading.1 markdownH1
+  highlight! link @markup.heading.2 markdownH2
+  highlight! link @markup.heading.3 markdownH3
+  highlight! link @markup.heading.4 markdownH4
+  highlight! link @markup.heading.5 markdownH5
+  highlight! link @markup.heading.6 markdownH6
+  highlight! link @markup.heading markdownH1
+  highlight! link @markup.quote markdownBlockquote
+  highlight! link @markup.strong markdownBold
+  highlight! link @markup.italic markdownItalic
+  highlight! link @markup.link markdownLinkTextDelimiter
+  highlight! link @markup.link.label markdownLinkText
+  highlight! link @markup.link.url markdownUrl
+  highlight! link @markup.raw markdownCode
+  highlight! link @markup.raw.block markdownCode
+  highlight! link @markup.list markdownListMarker
+
   "" +------------------------+
   "" | Neovim terminal colors |
   "" +------------------------+
 
-  if has("nvim")
     let g:terminal_color_0 =  a:palette.aft.gui
     let g:terminal_color_1 =  a:palette.red.gui
     let g:terminal_color_2 =  a:palette.green.gui
