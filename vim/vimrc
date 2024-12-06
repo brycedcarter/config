@@ -313,7 +313,7 @@ nnoremap <silent> <leader>Cp :SaveSnippetsToPersonal<cr>
 " --- D --- Debug/Diagnose
 "  prime = show diagnostic information in floating panel
 "  D->h = show highlighting info at the current location
-"  D->H = show detailed highlighting ifromation in a new window
+"  D->H = show detailed 
 "  D->n = Jump to the next diagnostic
 "  D->N = Jump to the previous diagnostic
 "  D->p = Jump to the previous
@@ -349,20 +349,29 @@ nnoremap <leader>Fo :Telescope treesitter<cr>
 "  G->a = stage the changes in the hunk under the cursor
 "  G->l = Get a git permalink to code under the cursor or currently selected
 "  G->d = Start git diff
+"  G->] = Jump to next conflict
+"  G->[ = Jump to previous conflict
+"  G->o = Choose ours from the current conflict
+"  G->t = Choose theirs from the current conflict
+"  G->l = Populate and open quickfix with conflicts
+"  G->y = Yank the github url
 nnoremap <leader>Gb  :BlameToggle<CR>
 nnoremap <leader>Gn  :Gitsigns next_hunk<CR>
 nnoremap <leader>GN  :Gitsigns prev_hunk<CR>
 nnoremap <leader>Gv  :Gitsigns preview_hunk<CR>
 nnoremap <leader>Gr  :Gitsigns reset_hunk<CR>
 nnoremap <leader>Ga  :Gitsigns stage_hunk<CR>
-nnoremap <leader>Gd  :Gitsigns diffthis<CR>
-"nnoremap <leader>Gl  Set in gitlinker plugin config because there was some
-"issue with normal mode
+nnoremap <leader>Gl  :GitConflictListQf<CR>
+nnoremap <leader>G]  :GitConflictNextConflict<CR>
+nnoremap <leader>G[  :GitConflictPrevConflict<CR>
+nnoremap <leader>Go  :GitConflictChooseOurs<CR>
+nnoremap <leader>Gt  :GitConflictChooseTheirs<CR>
+" nnoremap <leader>Gy  :YankGithubUrlN<CR> === SET IN gitlinker config
 
 " --- H --- Help
 "  prime = LSP hover help
 "  H->l = get info about current LSP state
-nnoremap <leader>h  :call LspHover<CR>
+nnoremap <leader>h  :LspHover<CR>
 nnoremap <leader>Hl  :LspInfo<CR>
 
 " --- I --- Insert
@@ -450,7 +459,7 @@ nnoremap <leader>Ss <C-W><C-X><cr>
 nnoremap <leader>Vn :set number!<cr>
 nnoremap <leader>Vc :Telescope colorscheme<cr>
 nnoremap <leader>Vd :Telescope colorscheme<cr>
-nnoremap <leader>Vh :ColorToggle<cr>
+nnoremap <leader>Vh :HighlightColors Toggle<cr>
 nnoremap <leader>Vi :ToggleInlayHints<cr>
 nnoremap <leader>Vg :Gitsigns toggle_signs<cr>
 nnoremap <leader>Vk :Telescope keymaps<cr>

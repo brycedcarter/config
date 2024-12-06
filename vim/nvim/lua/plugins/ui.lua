@@ -61,6 +61,12 @@ return {
 	},
 	-- improved ui input and selection
 	"stevearc/dressing.nvim",
-	-- Highlight colors for ui development
-	"brenoprata10/nvim-highlight-colors",
+	{
+		-- Highlight colors for ui development
+		"brenoprata10/nvim-highlight-colors",
+		config = function()
+			require("nvim-highlight-colors").setup({})
+                        require("nvim-highlight-colors").turnOff()
+		end,
+	},
 }

@@ -94,9 +94,10 @@ return {
 				"buf",
 				"marksman",
 				"prettierd",
+				"markdownlint",
 			},
 			auto_update = false,
-			run_on_start = false,
+			run_on_start = true,
 		},
 	},
 	{
@@ -128,7 +129,7 @@ return {
 					javascript = { "prettierd" },
 					proto = { "buf" },
 					json = { "jq" },
-					markdown = { "mdformat" },
+					markdown = { "markdownlint" },
 					swift = { "swiftformat" },
 				},
 			})
@@ -151,7 +152,7 @@ return {
 		config = function()
 			local lint = require("lint")
 			lint.linters_by_ft = {
-				markdown = { "vale" },
+				markdown = { "markdownlint" },
 				python = { "mypy" },
 				cpp = { "cpplint" },
 				sh = { "shellcheck" },

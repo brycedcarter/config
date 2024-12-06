@@ -229,6 +229,13 @@ function! g:HighlightBasic(palette)
   hi link gitcommitSelectedArrow gitcommitSelectedFile
   hi link gitcommitUnmergedArrow gitcommitUnmergedFile
 
+  " brenoprata10/nvim-highlight-colors
+  call s:h("GitConflictCurrent", { "bg": a:palette.bluefill })
+  call s:h("GitConflictCurrentLabel", { "fg": a:palette.blueprime,"bg": a:palette.bluefill })
+  call s:h("GitConflictIncoming", { "bg": a:palette.orangefill })
+  call s:h("GitConflictIncomingLabel", {"fg": a:palette.orangeprime, "bg": a:palette.orangefill })
+   
+
 
   "" Markup groups from tree-sitter
   highlight! link @markup.heading.1 markdownH1

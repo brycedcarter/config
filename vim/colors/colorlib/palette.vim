@@ -156,24 +156,31 @@ function g:GetPalette(colorset, alpha, beta, gamma, delta, accent, contrast, fla
   " basic colors
   let l:palette.red = s:red
   let l:palette.redprime = s:redprime
+  let l:palette.redfill = s:redfill
 
   let l:palette.green = s:green
   let l:palette.greenprime = s:greenprime
+  let l:palette.greenfill = s:greenfill
   
   let l:palette.yellow = s:yellow
   let l:palette.yellowprime = s:yellowprime
+  let l:palette.yellowfill = s:yellowfill
   
   let l:palette.orange = s:orange
   let l:palette.orangeprime = s:orangeprime
+  let l:palette.orangefill = s:orangefill
   
   let l:palette.blue = s:blue
   let l:palette.blueprime = s:blueprime
+  let l:palette.bluefill = s:bluefill
   
   let l:palette.purple = s:purple
   let l:palette.purpleprime = s:purpleprime
+  let l:palette.purplefill = s:purplefill
   
   let l:palette.cyan = s:cyan
   let l:palette.cyanprime = s:cyanprime
+  let l:palette.cyanfill = s:cyanfill
 
 
   return  l:palette
