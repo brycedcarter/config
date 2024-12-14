@@ -199,3 +199,10 @@ bufferline
 luasnip
 ui
 config
+LocationDictionary
+TraceTree
+myImplementationDetail
+SymbolDictionary
+ResolutionMap
+SymbolDetails
+kNotFoundError

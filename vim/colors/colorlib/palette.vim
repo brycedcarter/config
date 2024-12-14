@@ -6,6 +6,10 @@ function s:SetColorset(colorset_name, mode)
       let s:red = { "gui": "#E06C75"} 
       let s:redprime = { "gui": "#ff3c36"}
       let s:redfill = { "gui": "#450c01"}
+      
+      let s:pink = { "gui": "#f56cc3"} 
+      let s:pinkprime = { "gui": "#f547a7"}
+      let s:pinkfill = { "gui": "#7a2f5f"}
 
       let s:green = { "gui": "#98C379"}
       let s:greenprime = { "gui": "#6d9650"}
@@ -43,6 +47,11 @@ function s:SetColorset(colorset_name, mode)
       let s:red = { "gui": "#6e2e2c"} 
       let s:redprime = { "gui": "#ad0c07"}
       let s:redfill = { "gui": "#f5d0ce"}
+      
+      let s:pink = { "gui": "#a11b7b"} 
+      let s:pinkprime = { "gui": "#f2079c"}
+      let s:pinkfill = { "gui": "#f7c3e9"}
+
 
       let s:green = { "gui": "#448216"}
       let s:greenprime = { "gui": "#3b8c00"}
@@ -68,7 +77,7 @@ function s:SetColorset(colorset_name, mode)
       let s:cyanprime = { "gui": "#047180"} 
       let s:cyanfill = { "gui": "#b5fffb"} 
 
-      " aft = background, fore = forground
+      " aft = background, fore = foreground
       let s:aft = { "gui": "#ffffff"}
       let s:aftstrong = { "gui": "#dddddd"}
       let s:aftweak = { "gui": "#eeeeee"}
@@ -84,6 +93,8 @@ endfunction
 function s:GetColors(color_name)
   if a:color_name == "red"   
     return {"color": s:red, "colorprime": s:redprime, "colorfill": s:redfill}
+  elseif a:color_name == "pink"   
+    return {"color": s:pink, "colorprime": s:pinkprime, "colorfill": s:pinkfill}
   elseif a:color_name == "green"
     return {"color": s:green, "colorprime": s:greenprime, "colorfill": s:greenfill}
   elseif a:color_name == "yellow"
@@ -157,6 +168,10 @@ function g:GetPalette(colorset, alpha, beta, gamma, delta, accent, contrast, fla
   let l:palette.red = s:red
   let l:palette.redprime = s:redprime
   let l:palette.redfill = s:redfill
+  
+  let l:palette.pink = s:pink
+  let l:palette.pinkprime = s:pinkprime
+  let l:palette.pinkfill = s:pinkfill
 
   let l:palette.green = s:green
   let l:palette.greenprime = s:greenprime

@@ -42,7 +42,30 @@ function! s:h(group, style)
     "\ "cterm="   (has_key(a:style, "cterm") ? a:style.cterm    : "NONE")
 endfunction
 
+
 function! g:HighlightBasic(palette)
+  call s:CodeBasic(a:palette)
+  call s:UiBasic(a:palette)
+  call s:MarkdownBasic(a:palette)
+  call s:PluginCmpBasic(a:palette)
+  call s:PluginGitConflictBasic(a:palette)
+  call s:PluginTreeSitterBasic(a:palette)
+  call s:GitBasic(a:palette)
+endfunction
+
+function! g:HighlightSoft(palette)
+  " Designed to use less of the high range colors live delta, accent, and
+  " contrast and more of the low range variants like alphaprime and betaprime
+  call s:CodeSoft(a:palette)
+  call s:UiBasic(a:palette)
+  call s:MarkdownBasic(a:palette)
+  call s:PluginCmpBasic(a:palette)
+  call s:PluginGitConflictBasic(a:palette)
+  call s:PluginTreeSitterBasic(a:palette)
+  call s:GitBasic(a:palette)
+endfunction
+
+function! s:CodeBasic(palette)
   call s:h("Comment", { "fg": a:palette.deltaprime}) " any comment
   call s:h("Constant", { "fg": a:palette.gammaprime }) " any constant
   call s:h("String", { "fg": a:palette.delta }) " a string constant: "this is a string"
@@ -68,7 +91,7 @@ function! g:HighlightBasic(palette)
   call s:h("StorageClass", { "fg": a:palette.contrast }) " static, register, volatile, etc.
   call s:h("Structure", { "fg": a:palette.beta }) " struct, union, enum, etc.
   call s:h("Typedef", { "fg": a:palette.accentprime }) " A typedef
-  call s:h("Special", { "fg": a:palette.flareprime }) " any special symbol
+  call s:h("Special", { "fg": a:palette.flare }) " any special symbol
   call s:h("SpecialChar", {}) " special character in a constant
   call s:h("Tag", {}) " you can use CTRL-] on this
   call s:h("Delimiter", {}) " character that needs attention
@@ -78,11 +101,50 @@ function! g:HighlightBasic(palette)
   call s:h("Ignore", {}) " left blank, hidden
   call s:h("Error", { "fg": a:palette.flare }) " any erroneous construct
   call s:h("Todo", { "fg": a:palette.contrast }) " anything that needs extra attention; mostly the keywords TODO FIXME and XXX
+endfunction
+
+function! s:CodeSoft(palette)
+  call s:h("Comment", { "fg": a:palette.deltaprime}) " any comment
+  call s:h("Constant", { "fg": a:palette.gammaprime }) " any constant
+  call s:h("String", { "fg": a:palette.delta }) " a string constant: "this is a string"
+  call s:h("Character", { "fg": a:palette.delta }) " a character constant: 'c', '\n'
+  call s:h("Number", { "fg": a:palette.betaprime }) " a number constant: 234, 0xff
+  call s:h("boolean", { "fg": a:palette.betaprime }) " a boolean constant: TRUE, false
+  call s:h("Float", { "fg": a:palette.betaprime }) " a floating point constant: 2.3e10
+  call s:h("Identifier", { "fg": a:palette.beta }) " any variable name
+  call s:h("Function", { "fg": a:palette.alphaprime }) " function name (also: methods for classes)
+  call s:h("Statement", { "fg": a:palette.betaprime }) " any statement
+  call s:h("Conditional", { "fg": a:palette.gamma }) " if, then, else, endif, switch, etc.
+  call s:h("Repeat", { "fg": a:palette.beta }) " for, do, while, etc.
+  call s:h("Label", { "fg": a:palette.betaprime }) " case, default, etc.
+  call s:h("Operator", {}) " sizeof", "+", "*", etc.
+  call s:h("Keyword", { "fg": a:palette.alpha }) " any other keyword
+  call s:h("Exception", { "fg": a:palette.flareprime }) " try, catch, throw
+  call s:h("PreProc", { "fg": a:palette.gamma }) " generic Preprocessor
+  call s:h("Include", { "fg": a:palette.gammaprime }) " preprocessor #include
+  call s:h("Define", { "fg": a:palette.gamma }) " preprocessor #define
+  call s:h("Macro", { "fg": a:palette.gammaprime }) " same as Define
+  call s:h("PreCondit", { "fg": a:palette.gamma }) " preprocessor #if, #else, #endif, etc.
+  call s:h("Type", { "fg": a:palette.accent }) " int, long, char, etc.
+  call s:h("StorageClass", { "fg": a:palette.contrast }) " static, register, volatile, etc.
+  call s:h("Structure", { "fg": a:palette.beta }) " struct, union, enum, etc.
+  call s:h("Typedef", { "fg": a:palette.accentprime }) " A typedef
+  call s:h("Special", { "fg": a:palette.contrastprime }) " any special symbol
+  call s:h("SpecialChar", {}) " special character in a constant
+  call s:h("Tag", {}) " you can use CTRL-] on this
+  call s:h("Delimiter", {}) " character that needs attention
+  call s:h("SpecialComment", {}) " special things inside a comment
+  call s:h("Debug", {}) " debugging statements
+  call s:h("Underlined", {}) " text that stands out, HTML links
+  call s:h("Ignore", {}) " left blank, hidden
+  call s:h("Error", { "fg": a:palette.flare }) " any erroneous construct
+  call s:h("Todo", { "fg": a:palette.contrast }) " anything that needs extra attention; mostly the keywords TODO FIXME and XXX
+endfunction
 
   " +----------------------------------------------------------------------+
   " | Highlighting Groups (descriptions and ordering from `:h hitest.vim`) |
   " +----------------------------------------------------------------------+
-
+function! s:UiBasic(palette)
   call s:h("ColorColumn", { "bg": a:palette.aftstrong }) " used for the columns set with 'colorcolumn'
   call s:h("Conceal", {}) " placeholder characters substituted for concealed text (see 'conceallevel')
   call s:h("Cursor", { "fg": a:palette.aft, "bg": a:palette.alphaprime }) " the character under the cursor
@@ -112,7 +174,7 @@ function! g:HighlightBasic(palette)
   call s:h("PmenuSbar", { "bg": a:palette.foreweak }) " Popup menu: scrollbar.
   call s:h("PmenuThumb", { "bg": a:palette.forestrong }) " Popup menu: Thumb of the scrollbar.
   call s:h("Question", { "fg": a:palette.contrast }) " hit-enter prompt and yes/no questions
-  call s:h("Search", { "fg": a:palette.flarefill, "bg": a:palette.accentprime }) " Last search pattern highlighting (see 'hlsearch'). Also used for highlighting the current line in the quickfix window and similar items that need to stand out.
+  call s:h("Search", { "fg": a:palette.aft, "bg": a:palette.contrastprime }) " Last search pattern highlighting (see 'hlsearch'). Also used for highlighting the current line in the quickfix window and similar items that need to stand out.
   call s:h("SpecialKey", { "fg": a:palette.alphaprime }) " Meta and special keys listed with ":map", also for text used to show unprintable characters in the text, 'listchars'. Generally: text that is displayed differently from what it really is.
   call s:h("SpellBad", { "fg": a:palette.flare, "gui": "underline"}) " Word that is not recognized by the spellchecker. This will be combined with the highlighting used otherwise.
   call s:h("SpellCap", { "fg": a:palette.contrastprime }) " Word that should start with a capital. This will be combined with the highlighting used otherwise.
@@ -143,8 +205,33 @@ function! g:HighlightBasic(palette)
   call s:h("cCustomFunc", { "fg": a:palette.alphaprime, "gui": "bold" })
   call s:h("cCustomClass", { "fg": a:palette.alpha })
   highlight link cppFloat Float
+  
+  "" +------------------------+
+  "" | Neovim terminal colors |
+  "" +------------------------+
 
+    let g:terminal_color_0 =  a:palette.aft.gui
+    let g:terminal_color_1 =  a:palette.red.gui
+    let g:terminal_color_2 =  a:palette.green.gui
+    let g:terminal_color_3 =  a:palette.yellow.gui
+    let g:terminal_color_4 =  a:palette.blue.gui
+    let g:terminal_color_5 =  a:palette.purple.gui
+    let g:terminal_color_6 =  a:palette.cyan.gui
+    let g:terminal_color_7 =  a:palette.fore.gui
+    let g:terminal_color_8 =  a:palette.aftweak.gui
+    let g:terminal_color_9 =  a:palette.redprime.gui
+    "let g:terminal_color_10 = s:green.gui " No dark version
+    let g:terminal_color_11 = a:palette.yellowprime.gui
+    "let g:terminal_color_12 = s:blue.gui " No dark version
+    "let g:terminal_color_13 = s:purple.gui " No dark version
+    "let g:terminal_color_14 = s:cyan.gui " No dark version
+    let g:terminal_color_15 = a:palette.foreweak.gui
+    let g:terminal_color_background = g:terminal_color_0
+    let g:terminal_color_foreground = g:terminal_color_7
+  endif
+endfunction 
 
+function! s:MarkdownBasic(palette)
   "" Markdown
   call s:h("markdownCode", { "fg": a:palette.delta })
   call s:h("markdownCodeBlock", { "fg": a:palette.delta })
@@ -170,13 +257,14 @@ function! g:HighlightBasic(palette)
   call s:h("markdownLinkTextDelimiter", { "fg": a:palette.gammaprime })
   call s:h("markdownLinkDelimiter", { "fg": a:palette.gamma })
   call s:h("markdownUrl", { "fg": a:palette.foreweak })
-
+endfunction
 
 
   "" +---------------------+
   "" | Plugin Highlighting |
   "" +---------------------+
 
+function! s:PluginCmpBasic(palette)
   " hrsh7th/nvim-cmp
   call s:h("CmpItemKind", { "fg": a:palette.beta })
 
@@ -196,19 +284,43 @@ function! g:HighlightBasic(palette)
   highlight! link CmpItemKindKeyword Keyword
   highlight! link CmpItemKindProperty CmpItemKindKeyword
   highlight! link CmpItemKindUnit CmpItemKindKeyword
+endfunction
 
-  " tpope/vim-fugitive
-  call s:h("diffAdded", { "fg": a:palette.green })
-  call s:h("diffRemoved", { "fg": a:palette.red })
 
-  " simrat39/symbols-outline.nvim
-  call s:h("FocusedSymbol", { "bg": a:palette.flarefill })
+function! s:PluginGitConflictBasic(palette)
+  call s:h("GitConflictCurrent", { "bg": a:palette.bluefill })
+  call s:h("GitConflictCurrentLabel", { "fg": a:palette.blueprime,"bg": a:palette.bluefill })
+  call s:h("GitConflictIncoming", { "bg": a:palette.orangefill })
+  call s:h("GitConflictIncomingLabel", {"fg": a:palette.orangeprime, "bg": a:palette.orangefill })
+endfunction
+   
+
+
+function! s:PluginTreeSitterBasic(palette)
+  "" Markup groups from tree-sitter
+  highlight! link @markup.heading.1 markdownH1
+  highlight! link @markup.heading.2 markdownH2
+  highlight! link @markup.heading.3 markdownH3
+  highlight! link @markup.heading.4 markdownH4
+  highlight! link @markup.heading.5 markdownH5
+  highlight! link @markup.heading.6 markdownH6
+  highlight! link @markup.heading markdownH1
+  highlight! link @markup.quote markdownBlockquote
+  highlight! link @markup.strong markdownBold
+  highlight! link @markup.italic markdownItalic
+  highlight! link @markup.link markdownLinkTextDelimiter
+  highlight! link @markup.link.label markdownLinkText
+  highlight! link @markup.link.url markdownUrl
+  highlight! link @markup.raw markdownCode
+  highlight! link @markup.raw.block markdownCode
+  highlight! link @markup.list markdownListMarker
+endfunction
 
 
   "" +------------------+
   "" | Git Highlighting |
   "" +------------------+
-
+function! s:GitBasic(palette)
   call s:h("gitcommitComment", { "fg": a:palette.fore })
   call s:h("gitcommitUnmerged", { "fg": a:palette.green })
   call s:h("gitcommitOnBranch", {})
@@ -228,54 +340,4 @@ function! g:HighlightBasic(palette)
   hi link gitcommitDiscardedArrow gitcommitDiscardedFile
   hi link gitcommitSelectedArrow gitcommitSelectedFile
   hi link gitcommitUnmergedArrow gitcommitUnmergedFile
-
-  " brenoprata10/nvim-highlight-colors
-  call s:h("GitConflictCurrent", { "bg": a:palette.bluefill })
-  call s:h("GitConflictCurrentLabel", { "fg": a:palette.blueprime,"bg": a:palette.bluefill })
-  call s:h("GitConflictIncoming", { "bg": a:palette.orangefill })
-  call s:h("GitConflictIncomingLabel", {"fg": a:palette.orangeprime, "bg": a:palette.orangefill })
-   
-
-
-  "" Markup groups from tree-sitter
-  highlight! link @markup.heading.1 markdownH1
-  highlight! link @markup.heading.2 markdownH2
-  highlight! link @markup.heading.3 markdownH3
-  highlight! link @markup.heading.4 markdownH4
-  highlight! link @markup.heading.5 markdownH5
-  highlight! link @markup.heading.6 markdownH6
-  highlight! link @markup.heading markdownH1
-  highlight! link @markup.quote markdownBlockquote
-  highlight! link @markup.strong markdownBold
-  highlight! link @markup.italic markdownItalic
-  highlight! link @markup.link markdownLinkTextDelimiter
-  highlight! link @markup.link.label markdownLinkText
-  highlight! link @markup.link.url markdownUrl
-  highlight! link @markup.raw markdownCode
-  highlight! link @markup.raw.block markdownCode
-  highlight! link @markup.list markdownListMarker
-
-  "" +------------------------+
-  "" | Neovim terminal colors |
-  "" +------------------------+
-
-    let g:terminal_color_0 =  a:palette.aft.gui
-    let g:terminal_color_1 =  a:palette.red.gui
-    let g:terminal_color_2 =  a:palette.green.gui
-    let g:terminal_color_3 =  a:palette.yellow.gui
-    let g:terminal_color_4 =  a:palette.blue.gui
-    let g:terminal_color_5 =  a:palette.purple.gui
-    let g:terminal_color_6 =  a:palette.cyan.gui
-    let g:terminal_color_7 =  a:palette.fore.gui
-    let g:terminal_color_8 =  a:palette.aftweak.gui
-    let g:terminal_color_9 =  a:palette.redprime.gui
-    "let g:terminal_color_10 = s:green.gui " No dark version
-    let g:terminal_color_11 = a:palette.yellowprime.gui
-    "let g:terminal_color_12 = s:blue.gui " No dark version
-    "let g:terminal_color_13 = s:purple.gui " No dark version
-    "let g:terminal_color_14 = s:cyan.gui " No dark version
-    let g:terminal_color_15 = a:palette.foreweak.gui
-    let g:terminal_color_background = g:terminal_color_0
-    let g:terminal_color_foreground = g:terminal_color_7
-  endif
-  endfunction
+endfunction

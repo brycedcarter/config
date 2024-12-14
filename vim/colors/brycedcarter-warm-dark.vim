@@ -17,14 +17,13 @@ set background=dark
 
 highlight clear
 
-let g:colors_name = 'brycedcarter-cool-dark'
+let g:colors_name = 'brycedcarter-warm-dark'
 
 if exists("syntax_on")
   syntax reset
 endif
 
 set t_Co=256
-
 " ARGS:  colorset, alpha, beta, gamma, delta, accent, contrast, flare, mode
-let s:palette = GetPalette("basic", "blue", "purple", "cyan", "green", "yellow", "orange", "red", "dark")
-call HighlightBasic(s:palette)
+let s:palette = GetPalette("basic", "yellow", "orange", "purple", "green", "pink", "blue", "red", "dark")
+call HighlightSoft(s:palette)
