@@ -206,3 +206,5 @@ SymbolDictionary
 ResolutionMap
 SymbolDetails
 kNotFoundError
+ok
+ResolvedStackEvent
