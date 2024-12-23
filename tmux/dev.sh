@@ -81,5 +81,5 @@ if $LOCAL_SESSION; then
   fi 
   $TMUX_ATTACH $SESSION_NAME
 else
-  ssh -o ConnectTimeout=$TIMEOUT -o ForwardX11=yes -o ForwardX11Trusted=yes -o ForwardAgent=yes -t $HOST "$TMUX_SESSION_EXISTS $SESSION_NAME || $TMUX_NEW $SESSION_NAME; $TMUX_ATTACH $SESSION_NAME"
+  ssh -o ConnectTimeout=$TIMEOUT -o ForwardX11=yes -o ForwardX11Trusted=yes -o ForwardAgent=yes -L 8181:localhost:8181 -L 8250:localhost:8250 -L 9191:localhost:9191 -t $HOST "$TMUX_SESSION_EXISTS $SESSION_NAME || $TMUX_NEW $SESSION_NAME; $TMUX_ATTACH $SESSION_NAME"
 fi 
