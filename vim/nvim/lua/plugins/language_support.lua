@@ -24,6 +24,17 @@ return {
 			require("lspconfig").lua_ls.setup({
 				settings = { Lua = { diagnostics = { globals = { "vim" } } } },
 			})
+			require("lspconfig").sourcekit.setup({
+
+
+				capabilities = {
+					workspace = {
+						didChangeWatchedFiles = {
+							dynamicRegistration = true,
+						},
+					},
+				},
+			})
 
 			-- show pretty symbols in the gutter for diagnostics
 			local signs = { Error = "ⓧ", Warn = "⚠", Hint = " ", Info = " " }
@@ -95,6 +106,7 @@ return {
 				"marksman",
 				"prettierd",
 				"markdownlint",
+				"swiftlint",
 			},
 			auto_update = false,
 			run_on_start = true,
@@ -130,7 +142,7 @@ return {
 					proto = { "buf" },
 					json = { "jq" },
 					markdown = { "markdownlint" },
-					swift = { "swiftformat" },
+					swift = { "swiftformat" }, -- Need to install with `brew install swiftformat`
 				},
 			})
 			vim.api.nvim_create_user_command("Format", function(args)
@@ -157,6 +169,7 @@ return {
 				cpp = { "cpplint" },
 				sh = { "shellcheck" },
 				proto = { "buf_lint" },
+				swift = { "swiftlint" },
 			}
 			vim.api.nvim_create_autocmd({ "BufWritePost" }, {
 				callback = function()
@@ -166,7 +179,7 @@ return {
 
 			-- Add custom commands
 			vim.api.nvim_create_user_command("TryLint", function()
-                          require('lint').try_lint()
+				require("lint").try_lint()
 			end, {})
 		end,
 	},
