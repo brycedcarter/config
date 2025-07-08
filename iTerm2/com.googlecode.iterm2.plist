@@ -18,6 +18,8 @@
 	<true/>
 	<key>CheckTestRelease</key>
 	<false/>
+	<key>ClickToSelectCommand</key>
+	<false/>
 	<key>ClosingTmuxTabKillsTmuxWindows</key>
 	<false/>
 	<key>ClosingTmuxTabKillsTmuxWindows_selection</key>
