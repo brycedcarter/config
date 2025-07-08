@@ -140,7 +140,7 @@ plugins=(
 
 # User configuration
 
-export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/mysql/bin/:$HOME/.local/bin/"
+export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/mysql/bin/:$HOME/.local/bin/:$PATH"
 export EDITOR=vim  
 
 zstyle :omz:plugins:ssh-agent agent-forwarding on
