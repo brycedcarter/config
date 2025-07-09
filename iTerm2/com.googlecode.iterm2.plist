@@ -911,13 +911,13 @@
 				<key>Alpha Component</key>
 				<real>1</real>
 				<key>Blue Component</key>
-				<real>0.0048197554424405098</real>
+				<real>0.26276880502700806</real>
 				<key>Color Space</key>
-				<string>sRGB</string>
+				<string>P3</string>
 				<key>Green Component</key>
-				<real>0.60001039505004883</real>
+				<real>0.49626320600509644</real>
 				<key>Red Component</key>
-				<real>0.52156919240951538</real>
+				<real>0.25253981351852417</real>
 			</dict>
 			<key>Ansi 3 Color</key>
 			<dict>
@@ -1145,13 +1145,13 @@
 				<key>Alpha Component</key>
 				<real>1</real>
 				<key>Blue Component</key>
-				<real>0.20169290900230408</real>
+				<real>0.19329875707626343</real>
 				<key>Color Space</key>
-				<string>sRGB</string>
+				<string>P3</string>
 				<key>Green Component</key>
-				<real>0.15713045001029968</real>
+				<real>0.1575106680393219</real>
 				<key>Red Component</key>
-				<real>0.0</real>
+				<real>0.10527182370424271</real>
 			</dict>
 			<key>Ansi 9 Color</key>
 			<dict>
@@ -1462,13 +1462,13 @@
 				<key>Alpha Component</key>
 				<real>1</real>
 				<key>Blue Component</key>
-				<real>0.25332435965538025</real>
+				<real>0.29357701539993286</real>
 				<key>Color Space</key>
-				<string>sRGB</string>
+				<string>P3</string>
 				<key>Green Component</key>
-				<real>0.20616915822029114</real>
+				<real>0.24396580457687378</real>
 				<key>Red Component</key>
-				<real>0.0</real>
+				<real>0.13784661889076233</real>
 			</dict>
 			<key>Cursor Type</key>
 			<integer>0</integer>
@@ -1481,7 +1481,7 @@
 			<key>Description</key>
 			<string>Default</string>
 			<key>Disable Window Resizing</key>
-			<true/>
+			<false/>
 			<key>Draw Powerline Glyphs</key>
 			<true/>
 			<key>Faint Text Alpha (Dark)</key>
@@ -1521,13 +1521,13 @@
 				<key>Alpha Component</key>
 				<real>1</real>
 				<key>Blue Component</key>
-				<real>0.0</real>
+				<real>0.35501101613044739</real>
 				<key>Color Space</key>
 				<string>P3</string>
 				<key>Green Component</key>
-				<real>0.0</real>
+				<real>0.355010986328125</real>
 				<key>Red Component</key>
-				<real>0.0</real>
+				<real>0.355010986328125</real>
 			</dict>
 			<key>Guid</key>
 			<string>3D6BFBAD-9A13-41C6-A3CE-EAA134F5DEDC</string>
