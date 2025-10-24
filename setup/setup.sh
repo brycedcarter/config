@@ -9,7 +9,7 @@ LINUX_ZSH_PACKAGES=(zsh python-pygments)
 MAC_ZSH_PACKAGES=(zsh pygments)
 
 LINUX_VIM_PACKAGES=(build-essential cmake python3-dev python3-venv python-dev vim neovim universal-ctags golang openjdk-11-jdk luarocks)
-MAC_VIM_PACKAGES=(cmake nvim go python npm luarocks "--HEAD universal-ctags/universal-ctags/universal-ctags")
+MAC_VIM_PACKAGES=(cmake nvim go python npm luarocks swiftformat "--HEAD universal-ctags/universal-ctags/universal-ctags")
 
 LINUX_FZF_PACKAGES=(ripgrep fd-find)
 MAC_FZF_PACKAGES=(ripgrep fd)
@@ -340,6 +340,41 @@ if $MANAGE_CONFIGS; then
     fi
     do_thing  "cd ~; ln -fs $HOME/config/$filepath $xdg_config_path"  "Linking managed version of ~/$xdg_config_path from ~/config/$filepath"
   done < "$SETUP_DIR/xdg_configs.txt"
+if [ "$MACHINE_TYPE" = "Mac" ]; then
+  # Handle Cursor and VSCode configs in Application Support for settings.json and keybindings.json
+
+  # Cursor
+  CURSOR_APP_SUPPORT="$HOME/Library/Application Support/Cursor/User"
+  for file in settings.json keybindings.json; do
+    src="$CURSOR_APP_SUPPORT/$file"
+    xdg_src="$XDG_CONFIG_HOME/Cursor/User/$file"
+    if [ -f "$src" ] || [ -L "$src" ]; then
+      CURSOR_BACKUP="$HOME/.config-backups/cursor-$file-$current_time"
+      do_thing "cp -a \"$src\" \"$CURSOR_BACKUP\"" "Backing up existing Cursor $file from Application Support"
+      do_thing "rm -f \"$src\"" "Removing existing Cursor $file from Application Support"
+    fi
+    do_thing "mkdir -p \"$CURSOR_APP_SUPPORT\"" "Ensuring Cursor User directory exists"
+    do_thing "ln -sf \"$xdg_src\" \"$src\"" "Symlinking XDG Cursor $file to Application Support"
+
+    # just another random bit of helper to make VSCode and Cursor work better on mac:
+    do_thing "defaults write com.todesktop.230313mzl4w4u92  ApplePressAndHoldEnabled -bool false" "Disabling mac keypress hold"
+    do_thing "defaults write com.microsoft.VSCode ApplePressAndHoldEnabled -bool false" "Disabling mac keypress hold"
+  done
+
+  # VSCode
+  VSCODE_APP_SUPPORT="$HOME/Library/Application Support/Code/User"
+  for file in settings.json keybindings.json; do
+    src="$VSCODE_APP_SUPPORT/$file"
+    xdg_src="$XDG_CONFIG_HOME/Code/User/$file"
+    if [ -f "$src" ] || [ -L "$src" ]; then
+      VSCODE_BACKUP="$HOME/.config-backups/vscode-$file-$current_time"
+      do_thing "cp -a \"$src\" \"$VSCODE_BACKUP\"" "Backing up existing VSCode $file from Application Support"
+      do_thing "rm -f \"$src\"" "Removing existing VSCode $file from Application Support"
+    fi
+    do_thing "mkdir -p \"$VSCODE_APP_SUPPORT\"" "Ensuring VSCode User directory exists"
+    do_thing "ln -sf \"$xdg_src\" \"$src\"" "Symlinking XDG VSCode $file to Application Support"
+  done
+fi
 fi
 
 

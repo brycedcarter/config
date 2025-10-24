@@ -2,8 +2,32 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>AIFeatureFunctionCalling</key>
+	<true/>
+	<key>AIFeatureHostedCodeInterpeter</key>
+	<false/>
+	<key>AIFeatureHostedFileSearch</key>
+	<false/>
+	<key>AIFeatureHostedWebSearch</key>
+	<false/>
+	<key>AIFeatureStreamingResponses</key>
+	<true/>
+	<key>AITermAPI</key>
+	<integer>3</integer>
+	<key>AIVectorStore</key>
+	<integer>0</integer>
+	<key>AIVendor</key>
+	<integer>1</integer>
 	<key>AdjustWindowForFontSizeChange</key>
 	<false/>
+	<key>AiMaxTokens</key>
+	<integer>1048576</integer>
+	<key>AiModel</key>
+	<string>gemini-2.0-flash</string>
+	<key>AiResponseMaxTokens</key>
+	<integer>8192</integer>
+	<key>AitermURL</key>
+	<string>https://generativelanguage.googleapis.com/v1beta/models/{{MODEL}}</string>
 	<key>AllowClipboardAccess</key>
 	<true/>
 	<key>AlternateMouseScroll</key>
@@ -380,6 +404,8 @@
 	<string>Basic dev (external)</string>
 	<key>Default Bookmark Guid</key>
 	<string>3D6BFBAD-9A13-41C6-A3CE-EAA134F5DEDC</string>
+	<key>Default Browser Profile Guid</key>
+	<string>4F980496-8E04-49F7-A0F6-CD7FDAC38290</string>
 	<key>DefaultWideMode</key>
 	<true/>
 	<key>DimBackgroundWindows</key>
@@ -1347,6 +1373,8 @@
 			<integer>80</integer>
 			<key>Command</key>
 			<string>zsh</string>
+			<key>Composer Top Offset</key>
+			<real>0.0</real>
 			<key>Cursor Boost</key>
 			<real>0.0</real>
 			<key>Cursor Boost (Dark)</key>
@@ -1904,11 +1932,11 @@
 			<key>Name</key>
 			<string>brycedcarter</string>
 			<key>Non Ascii Font</key>
-			<string>OverpassMNF-Reg 16</string>
+			<string>OverpassMNF-Reg 15</string>
 			<key>Non-ASCII Anti Aliased</key>
 			<false/>
 			<key>Normal Font</key>
-			<string>OverpassMNF-Reg 16</string>
+			<string>OverpassMNF-Reg 15</string>
 			<key>Only The Default BG Color Uses Transparency</key>
 			<true/>
 			<key>Open Password Manager Automatically</key>
@@ -3333,12 +3361,16 @@
 	</array>
 	<key>UseBorder</key>
 	<false/>
+	<key>UseRecommendedAIModel</key>
+	<true/>
 	<key>VisualIndicatorForEsc</key>
 	<false/>
 	<key>Window Arrangements</key>
 	<dict/>
 	<key>WordCharacters</key>
 	<string>/-+\~_.</string>
+	<key>com.apple.WebPrivacy.ResourceMonitorURLsVersion</key>
+	<string>qrsAAAGXnXBrwGxMO6s=</string>
 	<key>findMode_iTerm</key>
 	<integer>4</integer>
 	<key>kCPKSelectionViewPreferredModeKey</key>

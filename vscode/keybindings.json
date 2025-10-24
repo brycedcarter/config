@@ -1,0 +1,18 @@
+{
+    "command": "vscode-neovim.send",
+    "key": "ctrl+l",
+    "when": "editorTextFocus && neovim.mode != insert",
+    "args": "<C-l>",
+},
+{
+    "command": "vscode-neovim.send",
+    "key": "ctrl+h",
+    "when": "editorTextFocus && neovim.mode != insert",
+    "args": "<C-h>",
+}
+{
+    "command": "vscode-neovim.send",
+    "key": "ctrl+j",
+    "when": "editorTextFocus && neovim.mode != insert",
+    "args": "<C-j>",
+}

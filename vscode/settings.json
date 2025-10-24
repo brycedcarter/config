@@ -1,0 +1,51 @@
+{
+    "window.commandCenter": true,
+
+  "remote.SSH.defaultExtensions": [
+    "llvm-vs-code-extensions.vscode-clangd"
+  ],
+
+  "C_Cpp.intelliSenseEngine": "disabled",
+  "workbench.preferredLightColorTheme": "Default Light Modern",
+  "window.systemColorTheme": "auto",
+  "window.autoDetectColorScheme": true,
+  "remote.SSH.remotePlatform": {
+    "desktop": "linux"
+  },
+  "terminal.integrated.fontLigatures.enabled": true,
+  "terminal.integrated.fontSize": 16,
+  "terminal.integrated.fontFamily": "\"OverpassM Nerd Font Mono\"",
+  "editor.fontFamily": "\"OverpassM Nerd Font Mono\", Monaco, 'Courier New', monospace",
+  "workbench.colorCustomizations": {
+
+    "terminal.ansiBlack":        "#1E1E1E",
+    "terminal.ansiBrightBlack":  "#686868",
+    "terminal.ansiRed":          "#FF5C57",
+    "terminal.ansiBrightRed":    "#FF5C57",
+    "terminal.ansiGreen":        "#5AF78E",
+    "terminal.ansiBrightGreen":  "#5AF78E",
+    "terminal.ansiYellow":       "#FFD866",
+    "terminal.ansiBrightYellow": "#FFEA80",
+    "terminal.ansiBlue":         "#57C7FF",
+    "terminal.ansiBrightBlue":   "#57C7FF",
+    "terminal.ansiMagenta":      "#FF6AC1",
+    "terminal.ansiBrightMagenta":"#FF6AC1",
+    "terminal.ansiCyan":         "#9AEDFE",
+    "terminal.ansiBrightCyan":   "#9AEDFE",
+    "terminal.ansiWhite":        "#F1F1F0",
+    "terminal.ansiBrightWhite":  "#FFFFFF"
+  },
+  "terminal.external.osxExec": "iTerm.app",
+
+  "vscode-neovim.compositeKeys": {
+        "jk": {
+            "command": "vscode-neovim.escape"
+        }
+    },
+    "remote.autoForwardPortsSource": "hybrid",
+    "extensions.experimental.affinity": {
+      "asvetliakov.vscode-neovim": 1
+    },
+
+
+}
