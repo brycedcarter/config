@@ -32,3 +32,5 @@
   clean = git-lfs clean -- %f
 [safe]
 	directory = /etc/zoox/calibration
+[rebase]
+        updateRefs = true
