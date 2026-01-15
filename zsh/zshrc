@@ -302,6 +302,25 @@ function mksubbin {
   touch "$1/README.md"
 }
 
+# gw: Fuzzy-search and change directory to a git worktree using fzf.
+gw() {
+  local wt_list
+  # Collect all worktrees and their latest commit comment
+  wt_list="$(git worktree list --porcelain | awk '/worktree /{w=$2} /branch /{sub("refs/heads/", "", $2); b=$2; printf "%s\0%s\n", w, b}' | while IFS= read -r -d '' wt && read -r branch; do
+    # If branch is empty, fall back to HEAD
+    if [ -z "$branch" ]; then
+      commit_msg=$(git -C "$wt" log -1 --pretty=%s 2>/dev/null || echo "No commits")
+    else
+      commit_msg=$(git -C "$wt" log "$branch" -1 --pretty=%s 2>/dev/null || echo "No commits")
+    fi
+    printf "%s: [%s] %s\n" "$wt" "${branch:-(detached)}" "$commit_msg"
+  done)"
+  # Let the user select a worktree, and cd to it
+  local sel sel_dir
+  sel="$(printf "%s\n" "$wt_list" | fzf)"
+  sel_dir="$(echo "$sel" | awk -F': ' '{print $1}')"
+  [ -n "$sel_dir" ] && cd "$sel_dir"
+}
 
 
 
