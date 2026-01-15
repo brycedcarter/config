@@ -43,8 +43,11 @@
         }
     },
     "remote.autoForwardPortsSource": "hybrid",
-    "extensions.experimental.affinity": {
-      "asvetliakov.vscode-neovim": 1
+    "[cpp]": {
+      "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd"
+    },
+    "[proto3]": {
+      "editor.defaultFormatter": "xaver.clang-format"
     },
 
 

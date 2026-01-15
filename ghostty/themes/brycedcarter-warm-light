@@ -1,0 +1,102 @@
+# Warm light theme derived from vim warm palette
+background = #FFFFFF
+foreground = #333333
+cursor-color = #000000
+selection-foreground = #000000
+selection-background = #EEEEEE
+
+# ============= Base 16 Colors =============
+palette = 0 = #000000
+palette = 1 = #6E2E2C
+palette = 2 = #448216
+palette = 3 = #63621F
+palette = 4 = #244580
+palette = 5 = #77328C
+palette = 6 = #23555C
+palette = 7 = #DDDDDD
+palette = 8 = #555555
+palette = 9 = #AD0C07
+palette = 10 = #3B8C00
+palette = 11 = #808205
+palette = 12 = #033A99
+palette = 13 = #6F0091
+palette = 14 = #047180
+palette = 15 = #FFFFFF
+
+# ============= Red Variants =============
+# red base
+palette = 16 = #6E2E2C
+# red prime
+palette = 17 = #AD0C07
+# red fill
+palette = 18 = #F5D0CE
+
+# ============= Pink Variants =============
+# pink base
+palette = 19 = #A11B7B
+# pink prime
+palette = 20 = #F2079C
+# pink fill
+palette = 21 = #F7C3E9
+
+# ============= Green Variants =============
+# green base
+palette = 22 = #448216
+# green prime
+palette = 23 = #3B8C00
+# green fill
+palette = 24 = #D4F5CE
+
+# ============= Yellow Variants =============
+# yellow base
+palette = 25 = #63621F
+# yellow prime
+palette = 26 = #808205
+# yellow fill
+palette = 27 = #F5F4CE
+
+# ============= Orange Variants =============
+# orange base
+palette = 28 = #82511D
+# orange prime
+palette = 29 = #BA6102
+# orange fill
+palette = 30 = #F5E5CE
+
+# ============= Blue Variants =============
+# blue base
+palette = 31 = #244580
+# blue prime
+palette = 32 = #033A99
+# blue fill
+palette = 33 = #CED5F5
+
+# ============= Purple Variants =============
+# purple base
+palette = 34 = #77328C
+# purple prime
+palette = 35 = #6F0091
+# purple fill
+palette = 36 = #E6CEF5
+
+# ============= Cyan Variants =============
+# cyan base
+palette = 37 = #23555C
+# cyan prime
+palette = 38 = #047180
+# cyan fill
+palette = 39 = #B5FFFB
+
+# ============= Foreground and Background Variants =============
+# aft (background)
+palette = 40 = #FFFFFF
+# aftstrong
+palette = 41 = #DDDDDD
+# aftweak
+palette = 42 = #EEEEEE
+# fore (foreground)
+palette = 43 = #333333
+# forestrong
+palette = 44 = #000000
+# foreweak
+palette = 45 = #555555

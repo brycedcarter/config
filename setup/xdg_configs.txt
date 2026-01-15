@@ -3,4 +3,7 @@ clangd/config.yaml clangd config.yaml
 vscode/settings.json Code/User settings.json
 vscode/settings.json Cursor/User settings.json
 vscode/keybindings.json Cursor/User keybindings.json
+ghostty/config ghostty config
+ghostty/themes ghostty themes
+
 

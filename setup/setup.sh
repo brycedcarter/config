@@ -14,8 +14,8 @@ MAC_VIM_PACKAGES=(cmake nvim go python npm luarocks swiftformat "--HEAD universa
 LINUX_FZF_PACKAGES=(ripgrep fd-find)
 MAC_FZF_PACKAGES=(ripgrep fd)
 
-LINUX_TOOLS_PACKAGES=(vim picocom git tldr tree tmux)
-MAC_TOOLS_PACKAGES=(macvim picocom git tldr tree tmux)
+LINUX_TOOLS_PACKAGES=(vim picocom git tldr tree tmux claude-code )
+MAC_TOOLS_PACKAGES=(macvim picocom git tldr tree tmux claude-code )
 
 OH_MY_ZSH_SETUP_COMMAND='sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)" "" --unattended'
 
@@ -315,6 +315,7 @@ fi
 ###############################################################################
 
 if $MANAGE_CONFIGS; then
+  # General managed files
   show_banner "Backing up and replacing managed config (rc) files"
   do_thing "cd ~; mkdir -p '.config-backups'" "Creating folder for storing backups"
   while read -r filepath dotfile;
@@ -326,9 +327,12 @@ if $MANAGE_CONFIGS; then
     fi
     do_thing  "cd ~; ln -fs $HOME/config/$filepath ./$dotfile"  "Linking managed version of ~/$dotfile from ~/config/$filepath"
   done < "$SETUP_DIR/managed_files.txt"
+
+  # XDG config files
   while read -r filepath application config_file;
   do 
           base_backup_name="$application-${config_file#?}"
+          base_backup_name="${base_backup_name//\//-}" # replace all slashes with dashes so we do not get nested directories in the backup file names
 	  backup_filename="$base_backup_name-$current_time"
     cd ~
     if [ ! -d "$XDG_CONFIG_HOME/$$application" ] ; then 

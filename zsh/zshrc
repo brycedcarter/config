@@ -16,7 +16,7 @@
 #
 # # Use hyper.is or iTerm2 as terminal emulators
 
-! [[ "$TERM" =~ ^.*256color.*$ ]] && echo "WARNING: \$TERM is does not seem to support 256 colors. Maybe you need to configure your terminal emulator to set \$TERM correctly"
+! [[ "$TERM" =~ ^.*256color.*$ ]] && [[ "$TERM" != "xterm-ghostty" ]] && echo "WARNING: \$TERM is does not seem to support 256 colors. Maybe you need to configure your terminal emulator to set \$TERM correctly"
 
 LANG="en_US.UTF-8"
 LC_COLLATE="en_US.UTF-8"
@@ -55,18 +55,17 @@ unset -m 'POWERLEVEL9K_*|DEFAULT_USER'
 POWERLEVEL9K_MODE=awesome-fontconfig
 ZSH_THEME="powerlevel10k/powerlevel10k"
 
-function prompt_current_project() {
-  if ! [ -z "$PRJACTIVE" ]; then
-    p10k segment -b black -f blue -t "$PRJACTIVE"
-  fi
- }
 
 
-POWERLEVEL9K_OS_ICON_FOREGROUND=15 # setting backgrounds for all so that they do not cause problems with hyper terminal
-POWERLEVEL9K_OS_ICON_BACKGROUND=237
+POWERLEVEL9K_OS_ICON_FOREGROUND=forground 
+POWERLEVEL9K_OS_ICON_BACKGROUND=21
+POWERLEVEL9K_DIR_FOREGROUND=foreground
+POWERLEVEL9K_DIR_BACKGROUND=33
+POWERLEVEL9K_VCS_FOREGROUND=foreground
+POWERLEVEL9K_VCS_BACKGROUND=30
 POWERLEVEL9K_SSH_BACKGROUND=237
-POWERLEVEL9K_PROMPT_CHAR_BACKGROUND=234
-POWERLEVEL9K_STATUS_OK_BACKGROUND=234
+POWERLEVEL9K_PROMPT_CHAR_BACKGROUND=41
+POWERLEVEL9K_STATUS_OK_BACKGROUND=24
 
 POWERLEVEL9K_ICON_PADDING=moderate
 # The list of segments shown on the left. Fill it with the most important segments.
@@ -77,7 +76,6 @@ POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
   dir                     # current directory
   dir_writable            # current directory writable status 
   vcs                     # git status
-  current_project         # show value of custom PRJACTIVE environment variable 
   # =========================[ Line #2 ]=========================
   newline                 # \n
   prompt_char             # prompt symbol
@@ -140,7 +138,7 @@ plugins=(
 
 # User configuration
 
-export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/mysql/bin/:$HOME/.local/bin/:$PATH"
+export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/mysql/bin/:$HOME/.local/bin/:$PATH"
 export EDITOR=vim  
 
 zstyle :omz:plugins:ssh-agent agent-forwarding on
@@ -227,21 +225,6 @@ function dhcp-stop() {
   fi
 }
 
-# For setting some environment variables that can be use as a quick way to set
-# where output data should be sent
-function setprj() {
-  if [ -d "$1" ]; then
-    export PRJACTIVE=$(basename $1) 
-    export PRJPATH=$1 
-  elif ! [ -z "$PRJBASE" ]; then
-    export $(cat "$PRJBASE/ACTIVE" | xargs)
-  else
-    echo "Project base not set"
-  fi
-}
-alias clearprj='export PRJACTIVE=;PRJPATH='
-setprj
-
 # Faster access to native shell on windows
 alias cmd=/mnt/c/Windows/System32/cmd.exe
 
@@ -321,3 +304,5 @@ function mksubbin {
 
 
 
+
+. "$HOME/.local/share/../bin/env"
