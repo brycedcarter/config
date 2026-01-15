@@ -16,7 +16,13 @@
 #
 # # Use hyper.is or iTerm2 as terminal emulators
 
+
+
 ! [[ "$TERM" =~ ^.*256color.*$ ]] && [[ "$TERM" != "xterm-ghostty" ]] && echo "WARNING: \$TERM is does not seem to support 256 colors. Maybe you need to configure your terminal emulator to set \$TERM correctly"
+
+if [[ "$TERM_PROGRAM" == "ghostty" && -z "$TMUX" && -o interactive ]]; then
+  exec tmux
+fi
 
 LANG="en_US.UTF-8"
 LC_COLLATE="en_US.UTF-8"

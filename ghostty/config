@@ -2,15 +2,23 @@ font-family = OverpassMono Nerd Font
 font-size = 14
 window-theme = auto
 theme = light:brycedcarter-warm-light,dark:brycedcarter-warm-dark
+font-thicken = true
 term = xterm-256color
 command = zsh
+
+# ======= Tmux keybindings ======
+# Tmux split pane
 keybind = cmd+d=text:\x02%
 keybind = cmd+shift+d=text:\x02"
+# Tmux close pane
 keybind = cmd+w=text:\x02x
+# Tmux zoom
 keybind = cmd+shift+enter=text:\x02z
+# Tmux pane navigation
 keybind = cmd+h=text:\x02h
 keybind = cmd+j=text:\x02j
 keybind = cmd+k=text:\x02k
 keybind = cmd+l=text:\x02l
+# Tmux find
 keybind = cmd+f=text:\x02/
 
