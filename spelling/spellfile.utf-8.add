@@ -208,3 +208,5 @@ SymbolDetails
 kNotFoundError
 ok
 ResolvedStackEvent
+bpf
+stderr
