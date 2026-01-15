@@ -2,6 +2,8 @@ font-family = OverpassMono Nerd Font
 font-size = 14
 window-theme = auto
 theme = light:brycedcarter-warm-light,dark:brycedcarter-warm-dark
+term = xterm-256color
+command = zsh
 keybind = cmd+d=text:\x02%
 keybind = cmd+shift+d=text:\x02"
 keybind = cmd+w=text:\x02x
@@ -11,4 +13,4 @@ keybind = cmd+j=text:\x02j
 keybind = cmd+k=text:\x02k
 keybind = cmd+l=text:\x02l
 keybind = cmd+f=text:\x02/
-command = /bin/zsh -l -c "tmux"
+
