@@ -65,7 +65,7 @@ do
   fi
 
 
-SSH_COMMAND="ssh -o ConnectTimeout=$TIMEOUT -o ForwardX11=yes -o ForwardX11Trusted=yes -o ForwardAgent=yes -L 8181:localhost:8181 -L 8250:localhost:8250 -L 9191:localhost:9191 -t $HOST \"$TMUX_SESSION_EXISTS $SESSION_NAME || $TMUX_NEW $SESSION_NAME; $TMUX_ATTACH $SESSION_NAME\""
+SSH_COMMAND="/usr/bin/ssh -o ConnectTimeout=$TIMEOUT -o ForwardX11=yes -o ForwardX11Trusted=yes -o ForwardAgent=yes -L 8181:localhost:8181 -L 8250:localhost:8250 -L 9191:localhost:9191 -t $HOST \"$TMUX_SESSION_EXISTS $SESSION_NAME || $TMUX_NEW $SESSION_NAME; $TMUX_ATTACH $SESSION_NAME\""
 if [ -z "$TMUX" ]; then
   # if we are not in a tmux session, then we can go ahead and connect to the remote host via ssh
   $SSH_COMMAND
@@ -79,9 +79,9 @@ else
     tmux switch-client -t "$SESSION_NAME"
     exit 0
   fi
-  # if we are in a tmux session, then we need to spawn a new terminal that is not a tmux session so that we do not end up with nested tmux sessions
-  # NOTE: we need to set TMUX=skip_auto_launch_tmux_zsh (just any nonzero string) so that ghostty does not automatically launch a new tmux session
-  nohup env TMUX=skip_auto_launch_tmux_zsh ghostty -e /bin/zsh -c "$SSH_COMMAND" >/dev/null 2>&1 & disown
+  # if we are in a tmux session, then we need to spawn a new terminal that is not a tmux session so that we do not end up with nested tmux sessions. We do this by using bash instead of zsh so that it does not magically make a new tmux 
+  # NOTE: we need to set TMUX= to an empty string so that ghostty will open a new tmux when cmd+n is used to open a new local window from the remote one
+  env TMUX= ghostty -e  /bin/bash -c "$SSH_COMMAND" > /dev/null 2>&1 & disown
 fi
 
 
