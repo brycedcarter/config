@@ -5,6 +5,7 @@ theme = light:brycedcarter-warm-light,dark:brycedcarter-warm-dark
 font-thicken = true
 term = xterm-256color
 command = zsh
+macos-icon = official
 
 # ======= Tmux keybindings ======
 # Tmux split pane

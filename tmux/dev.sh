@@ -81,7 +81,7 @@ else
   fi
   # if we are in a tmux session, then we need to spawn a new terminal that is not a tmux session so that we do not end up with nested tmux sessions. We do this by using bash instead of zsh so that it does not magically make a new tmux 
   # NOTE: we need to set TMUX= to an empty string so that ghostty will open a new tmux when cmd+n is used to open a new local window from the remote one
-  env TMUX= ghostty -e  /bin/bash -c "$SSH_COMMAND" > /dev/null 2>&1 & disown
+  env TMUX= ghostty -e /bin/bash -c "$SSH_COMMAND" > /dev/null 2>&1 & disown
 fi
 
 

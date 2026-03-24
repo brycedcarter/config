@@ -49,6 +49,7 @@
     "[proto3]": {
       "editor.defaultFormatter": "xaver.clang-format"
     },
+    "cursor.general.disableHttp2": true,
 
 
 }
