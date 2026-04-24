@@ -5,7 +5,7 @@
 ############## CONSTANTS SETUP ################################################
 ###############################################################################
 
-LINUX_ZSH_PACKAGES=(zsh python-pygments)
+LINUX_ZSH_PACKAGES=(zsh)
 MAC_ZSH_PACKAGES=(zsh pygments)
 
 LINUX_VIM_PACKAGES=(build-essential cmake python3-dev python3-venv python-dev vim neovim universal-ctags golang openjdk-11-jdk luarocks)
